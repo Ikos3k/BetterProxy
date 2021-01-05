@@ -1,11 +1,11 @@
-package me.ANONIMUS.proxy.utils.proxy;
+package me.ANONIMUS.proxy.utils;
 
 import me.ANONIMUS.proxy.protocol.data.scoreboard.ObjectiveMode;
 import me.ANONIMUS.proxy.protocol.data.scoreboard.ObjectiveType;
+import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerDisplayScoreboardPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerScoreboardObjectivePacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerUpdateScorePacket;
-import me.ANONIMUS.proxy.protocol.objects.Player;
 
 import java.text.DecimalFormat;
 

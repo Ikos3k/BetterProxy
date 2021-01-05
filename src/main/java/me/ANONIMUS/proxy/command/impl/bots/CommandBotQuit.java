@@ -1,11 +1,11 @@
 package me.ANONIMUS.proxy.command.impl.bots;
 
 import me.ANONIMUS.proxy.command.Command;
-import me.ANONIMUS.proxy.protocol.objects.Bot;
-import me.ANONIMUS.proxy.protocol.objects.Player;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
 import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
+import me.ANONIMUS.proxy.protocol.objects.Bot;
+import me.ANONIMUS.proxy.protocol.objects.Player;
+import me.ANONIMUS.proxy.utils.ChatUtil;
 
 public class CommandBotQuit extends Command {
     public CommandBotQuit() {
@@ -32,7 +32,7 @@ public class CommandBotQuit extends Command {
                 }
             }
             if (b == null) {
-                ChatUtil.sendChatMessage("&cThe bot you provided with the nickname &4" + args[1] + " &cdoes not exist", sender, true);
+                ChatUtil.sendChatMessage("&cThe bot with a nickname &4" + args[1] + " &cdoes not exist", sender, true);
                 return;
             }
             b.getSession().getChannel().close();

@@ -1,11 +1,11 @@
 package me.ANONIMUS.proxy.command.impl;
 
-import me.ANONIMUS.proxy.command.Command;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerChatPacket;
 import me.ANONIMUS.proxy.BetterProxy;
+import me.ANONIMUS.proxy.command.Command;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.protocol.objects.Player;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerChatPacket;
+import me.ANONIMUS.proxy.utils.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class CommandHelp extends Command {
     public CommandHelp() {
-        super("help", "pomoc", "helpful commands", "[page]", null, ConnectedType.NONE);
+        super("help", null, "helpful commands", "[page]", null, ConnectedType.NONE);
     }
 
     @Override

@@ -1,10 +1,10 @@
 package me.ANONIMUS.proxy.command.impl.admins;
 
 import me.ANONIMUS.proxy.command.Command;
-import me.ANONIMUS.proxy.protocol.objects.Player;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
 import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
+import me.ANONIMUS.proxy.protocol.objects.Player;
+import me.ANONIMUS.proxy.utils.ChatUtil;
 
 import javax.management.Attribute;
 import javax.management.AttributeList;
@@ -58,7 +58,7 @@ public class CommandStatus extends Command {
         if (bytes < 1536L) {
             return bytes + " B";
         }
-        int exp = (int) (Math.log((double) bytes) / Math.log((double) 1536.0));
+        int exp = (int) (Math.log((double) bytes) / Math.log(1536.0));
         String pre = String.valueOf("KMGTPE".charAt(exp - 1));
         return String.format("%.2f %sB", (double) bytes / Math.pow(1024.0, exp), pre);
     }

@@ -1,10 +1,10 @@
 package me.ANONIMUS.proxy.command.impl;
 
 import me.ANONIMUS.proxy.command.Command;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.protocol.objects.Player;
-import me.ANONIMUS.proxy.utils.proxy.WorldUtil;
+import me.ANONIMUS.proxy.utils.ChatUtil;
+import me.ANONIMUS.proxy.utils.WorldUtil;
 
 public class CommandLogin extends Command {
     public CommandLogin() {

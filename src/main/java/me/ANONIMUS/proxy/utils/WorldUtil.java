@@ -1,4 +1,4 @@
-package me.ANONIMUS.proxy.utils.proxy;
+package me.ANONIMUS.proxy.utils;
 
 import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.protocol.data.*;
@@ -9,8 +9,6 @@ import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.impl.CustomPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.*;
-import me.AlshainTeam.proxy.protocol.data.*;
-import me.AlshainTeam.proxy.protocol.packet.impl.server.play.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

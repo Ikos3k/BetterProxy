@@ -1,7 +1,7 @@
 package me.ANONIMUS.proxy.objects;
 
 import me.ANONIMUS.proxy.protocol.objects.Player;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
+import me.ANONIMUS.proxy.utils.ChatUtil;
 
 public class Option {
     private Player player;

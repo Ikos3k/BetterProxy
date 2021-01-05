@@ -6,8 +6,8 @@ import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.protocol.connection.PlayerConnection;
 import me.ANONIMUS.proxy.protocol.connection.ServerPinger;
 import me.ANONIMUS.proxy.protocol.objects.Player;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
-import me.ANONIMUS.proxy.utils.proxy.SRVResolver;
+import me.ANONIMUS.proxy.utils.ChatUtil;
+import me.ANONIMUS.proxy.utils.SRVResolver;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;

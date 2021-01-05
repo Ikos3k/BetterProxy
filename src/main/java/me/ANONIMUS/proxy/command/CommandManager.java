@@ -1,11 +1,11 @@
 package me.ANONIMUS.proxy.command;
 
-import me.ANONIMUS.proxy.protocol.objects.Player;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
-import me.ANONIMUS.proxy.utils.proxy.ScoreboardUtil;
 import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.enums.GroupType;
+import me.ANONIMUS.proxy.protocol.objects.Player;
+import me.ANONIMUS.proxy.utils.ChatUtil;
+import me.ANONIMUS.proxy.utils.ScoreboardUtil;
 import org.reflections.Reflections;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class CommandManager {
     private final List<Command> commands = new ArrayList<>();
 
     public void init() {
-        new Reflections("me.AlshainTeam.proxy.command.impl").getSubTypesOf(Command.class).forEach(cmd -> {
+        new Reflections("me.ANONIMUS.proxy.command.impl").getSubTypesOf(Command.class).forEach(cmd -> {
             try {
                 commands.add(cmd.newInstance());
             } catch (InstantiationException | IllegalAccessException e) {

@@ -1,4 +1,4 @@
-package me.ANONIMUS.proxy.utils.java;
+package me.ANONIMUS.proxy.utils;
 
 import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.enums.GroupType;

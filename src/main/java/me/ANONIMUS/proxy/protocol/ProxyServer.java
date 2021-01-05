@@ -8,15 +8,14 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import me.ANONIMUS.proxy.protocol.packet.Packet;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerKeepAlivePacket;
 import me.ANONIMUS.proxy.managers.PlayerManager;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
 import me.ANONIMUS.proxy.protocol.handlers.PacketCodec;
-import me.ANONIMUS.proxy.protocol.handlers.VarInt21FrameEncoder;
-import me.ANONIMUS.proxy.protocol.handlers.Varint21FrameDecoder;
+import me.ANONIMUS.proxy.protocol.handlers.VarInt21FrameCodec;
 import me.ANONIMUS.proxy.protocol.objects.Session;
+import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketDirection;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerKeepAlivePacket;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -36,11 +35,10 @@ public class ProxyServer {
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    protected void initChannel(SocketChannel socketChannel) throws Exception {
+                    protected void initChannel(SocketChannel socketChannel) {
                         final ChannelPipeline pipeline = socketChannel.pipeline();
                         pipeline.addLast("timer", new ReadTimeoutHandler(10));
-                        pipeline.addLast("varintEncoder", new VarInt21FrameEncoder());
-                        pipeline.addLast("varintDecoder", new Varint21FrameDecoder());
+                        pipeline.addLast("frameCodec", new VarInt21FrameCodec());
                         pipeline.addLast("packetCodec", new PacketCodec(ConnectionState.HANDSHAKE, PacketDirection.SERVERBOUND));
                         pipeline.addLast(new SimpleChannelInboundHandler<Packet>() {
                             @Override

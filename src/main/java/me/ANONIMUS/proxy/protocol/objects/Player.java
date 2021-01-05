@@ -1,18 +1,17 @@
 package me.ANONIMUS.proxy.protocol.objects;
 
 import lombok.Data;
+import me.ANONIMUS.proxy.enums.TimeType;
 import me.ANONIMUS.proxy.handler.impl.ServerLoginHandler;
 import me.ANONIMUS.proxy.handler.impl.ServerStatusHandler;
-import me.ANONIMUS.proxy.managers.PlayerManager;
-import me.ANONIMUS.proxy.protocol.data.ConnectionState;
-import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntry;
-import me.ANONIMUS.proxy.protocol.packet.Packet;
-import me.ANONIMUS.proxy.enums.BypassType;
-import me.ANONIMUS.proxy.enums.TimeType;
 import me.ANONIMUS.proxy.managers.OptionsManager;
+import me.ANONIMUS.proxy.managers.PlayerManager;
 import me.ANONIMUS.proxy.objects.Account;
 import me.ANONIMUS.proxy.objects.LastPacket;
 import me.ANONIMUS.proxy.objects.ServerData;
+import me.ANONIMUS.proxy.protocol.data.ConnectionState;
+import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntry;
+import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.HandshakePacket;
 
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ public class Player {
     private final Session session;
     private TimeType timeType = TimeType.DEFAULT;
     private Session remoteSession;
-    private BypassType bypassType;
     private Account account;
     private boolean mother;
     private boolean pluginsState;
@@ -37,7 +35,6 @@ public class Player {
     private List<String> players = new ArrayList<>();
     private List<PlayerListEntry> tabList = new ArrayList<>();
     private List<Bot> bots = new ArrayList<>();
-    private GameProfile gameProfile;
 
     public void packetReceived(final Packet packet) {
         if (packet instanceof HandshakePacket) {

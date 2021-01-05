@@ -3,15 +3,29 @@ package me.ANONIMUS.proxy.protocol.handlers;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.handler.codec.CorruptedFrameException;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 
 import java.util.List;
 
-public class Varint21FrameDecoder extends ByteToMessageDecoder {
+public class VarInt21FrameCodec extends ByteToMessageCodec<ByteBuf> {
     @Override
-    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
+    protected void encode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, ByteBuf byteBuf2) {
+        final int size = byteBuf.readableBytes();
+        final int j = PacketBuffer.getVarIntSize(size);
+        if (j > 3) {
+            throw new IllegalArgumentException("unable to fit " + size + " into 3");
+        }
+
+        final PacketBuffer packetbuffer = new PacketBuffer(byteBuf2);
+        packetbuffer.ensureWritable(j + size);
+        packetbuffer.writeVarInt(size);
+        packetbuffer.writeBytes(byteBuf, byteBuf.readerIndex(), size);
+    }
+
+    @Override
+    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) {
         byteBuf.markReaderIndex();
         final byte[] bytes = new byte[3];
 

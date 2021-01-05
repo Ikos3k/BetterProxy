@@ -9,19 +9,18 @@ import io.netty.handler.proxy.Socks4ProxyHandler;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import me.ANONIMUS.proxy.protocol.packet.Packet;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.status.ServerStatusPongPacket;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.status.ServerStatusResponsePacket;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
 import me.ANONIMUS.proxy.protocol.handlers.PacketCodec;
-import me.ANONIMUS.proxy.protocol.handlers.VarInt21FrameEncoder;
-import me.ANONIMUS.proxy.protocol.handlers.Varint21FrameDecoder;
+import me.ANONIMUS.proxy.protocol.handlers.VarInt21FrameCodec;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.objects.Session;
+import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketDirection;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.HandshakePacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.status.ClientStatusRequestPacket;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.status.ServerStatusPongPacket;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.status.ServerStatusResponsePacket;
+import me.ANONIMUS.proxy.utils.ChatUtil;
 
 import java.net.Proxy;
 import java.util.concurrent.TimeUnit;
@@ -42,20 +41,20 @@ public class ServerPinger {
                 .channel(NioSocketChannel.class)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    protected void initChannel(SocketChannel socketChannel) throws Exception {
+                    protected void initChannel(SocketChannel socketChannel) {
                         final ChannelPipeline pipeline = socketChannel.pipeline();
                         if (proxy != Proxy.NO_PROXY) {
                             pipeline.addFirst(new Socks4ProxyHandler(proxy.address()));
                         }
                         pipeline.addLast("timer", new ReadTimeoutHandler(20));
-                        pipeline.addLast("frameEncoder", new VarInt21FrameEncoder());
-                        pipeline.addLast("frameDecoder", new Varint21FrameDecoder());
+                        pipeline.addLast("frameCodec", new VarInt21FrameCodec());
                         pipeline.addLast("packetCodec", new PacketCodec(ConnectionState.LOGIN, PacketDirection.CLIENTBOUND));
                         pipeline.addLast("handler", new SimpleChannelInboundHandler<Packet>() {
 
                             @Override
-                            public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-                                group.shutdownGracefully();                            }
+                            public void channelInactive(ChannelHandlerContext ctx) {
+                                group.shutdownGracefully();
+                            }
 
                             @Override
                             public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -74,7 +73,7 @@ public class ServerPinger {
                                     group.shutdownGracefully();
                                 } else if (packet instanceof ServerStatusPongPacket) {
                                     session.getChannel().close();
-                                    group.shutdownGracefully();;
+                                    group.shutdownGracefully();
                                 }
                             }
                         });

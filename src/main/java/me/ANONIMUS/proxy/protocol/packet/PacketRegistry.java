@@ -1,7 +1,7 @@
 package me.ANONIMUS.proxy.protocol.packet;
 
-import me.ANONIMUS.proxy.protocol.packet.impl.CustomPacket;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
+import me.ANONIMUS.proxy.protocol.packet.impl.CustomPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.HandshakePacket;
 import org.reflections.Reflections;
 
@@ -19,7 +19,7 @@ public class PacketRegistry {
     private final HashMap<Protocol, Packet> SERVER_PLAY = new HashMap<>();
 
     public void registerPacket(ConnectionState connectionState, PacketDirection direction, Packet packet) {
-        for(Protocol protocol : packet.getProtocolList()) {
+        packet.getProtocolList().forEach(protocol -> {
             switch (direction) {
                 case SERVERBOUND:
                     switch (connectionState) {
@@ -48,19 +48,17 @@ public class PacketRegistry {
                     }
                     break;
             }
-        }
+        });
     }
 
     public void load() {
-        Arrays.asList(PacketDirection.values()).forEach(direction -> Arrays.stream(ConnectionState.values()).filter(connectionState -> connectionState != ConnectionState.HANDSHAKE).forEach(state -> {
-            new Reflections("me.AlshainTeam.proxy.protocol.packet.impl." + direction.packetsPackageName.toLowerCase() + "." + state.name().toLowerCase()).getSubTypesOf(Packet.class).forEach(p -> {
-                try {
-                    registerPacket(state, direction, p.newInstance());
-                } catch (InstantiationException | IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            });
-        }));
+        Arrays.asList(PacketDirection.values()).forEach(direction -> Arrays.stream(ConnectionState.values()).filter(connectionState -> connectionState != ConnectionState.HANDSHAKE).forEach(state -> new Reflections("me.ANONIMUS.proxy.protocol.packet.impl." + direction.packetsPackageName.toLowerCase() + "." + state.name().toLowerCase()).getSubTypesOf(Packet.class).forEach(p -> {
+            try {
+                registerPacket(state, direction, p.newInstance());
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        })));
     }
 
     public Packet createPacket(ConnectionState connectionState, PacketDirection direction, int id, int protocol){

@@ -1,15 +1,15 @@
 package me.ANONIMUS.proxy;
 
 import lombok.Data;
-import me.ANONIMUS.proxy.protocol.ProxyServer;
-import me.ANONIMUS.proxy.threads.MemoryFreeThread;
-import me.ANONIMUS.proxy.threads.MessageThread;
 import me.ANONIMUS.proxy.command.CommandManager;
 import me.ANONIMUS.proxy.config.ConfigManager;
 import me.ANONIMUS.proxy.objects.Account;
+import me.ANONIMUS.proxy.protocol.ProxyServer;
 import me.ANONIMUS.proxy.protocol.packet.PacketRegistry;
+import me.ANONIMUS.proxy.threads.MemoryFreeThread;
+import me.ANONIMUS.proxy.threads.MessageThread;
 import me.ANONIMUS.proxy.threads.TitleLagThread;
-import me.ANONIMUS.proxy.utils.java.FileUtil;
+import me.ANONIMUS.proxy.utils.FileUtil;
 
 import java.io.File;
 import java.util.ArrayList;

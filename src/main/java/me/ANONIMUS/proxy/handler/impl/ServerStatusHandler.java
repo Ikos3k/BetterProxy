@@ -1,18 +1,18 @@
 package me.ANONIMUS.proxy.handler.impl;
 
 import me.ANONIMUS.proxy.BetterProxy;
-import me.ANONIMUS.proxy.protocol.objects.GameProfile;
-import me.ANONIMUS.proxy.protocol.packet.Packet;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.status.ServerStatusPongPacket;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.status.ServerStatusResponsePacket;
 import me.ANONIMUS.proxy.handler.ServerHandler;
 import me.ANONIMUS.proxy.protocol.data.status.PlayerInfo;
 import me.ANONIMUS.proxy.protocol.data.status.ServerStatusInfo;
 import me.ANONIMUS.proxy.protocol.data.status.VersionInfo;
+import me.ANONIMUS.proxy.protocol.objects.GameProfile;
 import me.ANONIMUS.proxy.protocol.objects.Player;
+import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.status.ClientStatusPingPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.status.ClientStatusRequestPacket;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.status.ServerStatusPongPacket;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.status.ServerStatusResponsePacket;
+import me.ANONIMUS.proxy.utils.ChatUtil;
 import net.kyori.adventure.text.Component;
 
 import javax.imageio.ImageIO;
@@ -55,6 +55,7 @@ public class ServerStatusHandler extends ServerHandler {
                 final PlayerInfo playerInfo = new PlayerInfo(0, 0, gp);
                 final Component desc = Component.text(ChatUtil.fixColor(BetterProxy.getInstance().getConfigManager().getConfig().line1 + "&r\n" + BetterProxy.getInstance().getConfigManager().getConfig().line2));
                 final ByteArrayOutputStream os = new ByteArrayOutputStream();
+                assert bufferedImage != null;
                 ImageIO.write(bufferedImage, "png", Base64.getEncoder().wrap(os));
 
                 player.getSession().sendPacket(new ServerStatusResponsePacket(new ServerStatusInfo(versionInfo, playerInfo, desc, statusFile.exists() ? "data:image/png;base64," + os.toString(StandardCharsets.ISO_8859_1.name()) : null)));

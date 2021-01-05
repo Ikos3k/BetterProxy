@@ -6,7 +6,7 @@ import me.ANONIMUS.proxy.protocol.data.MessagePosition;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
+import me.ANONIMUS.proxy.utils.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 

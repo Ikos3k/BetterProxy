@@ -1,12 +1,12 @@
-package me.ANONIMUS.proxy.utils.proxy;
+package me.ANONIMUS.proxy.utils;
 
+import me.ANONIMUS.proxy.managers.PlayerManager;
+import me.ANONIMUS.proxy.protocol.data.MessagePosition;
 import me.ANONIMUS.proxy.protocol.data.TitleAction;
+import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerChatPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerTitlePacket;
-import me.ANONIMUS.proxy.managers.PlayerManager;
-import me.ANONIMUS.proxy.protocol.data.MessagePosition;
-import me.ANONIMUS.proxy.protocol.objects.Player;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 

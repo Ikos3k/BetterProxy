@@ -1,20 +1,19 @@
 package me.ANONIMUS.proxy.handler.impl;
 
 import me.ANONIMUS.proxy.BetterProxy;
-import me.ANONIMUS.proxy.protocol.objects.GameProfile;
-import me.ANONIMUS.proxy.protocol.packet.Packet;
-import me.ANONIMUS.proxy.protocol.packet.ProtocolType;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginDisconnectPacket;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSetCompressionPacket;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSuccessPacket;
-import me.ANONIMUS.proxy.utils.proxy.ScoreboardUtil;
 import me.ANONIMUS.proxy.handler.ServerHandler;
 import me.ANONIMUS.proxy.objects.Account;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
 import me.ANONIMUS.proxy.protocol.objects.Player;
+import me.ANONIMUS.proxy.protocol.packet.Packet;
+import me.ANONIMUS.proxy.protocol.packet.ProtocolType;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.login.ClientLoginStartPacket;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
-import me.ANONIMUS.proxy.utils.proxy.WorldUtil;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginDisconnectPacket;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSetCompressionPacket;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSuccessPacket;
+import me.ANONIMUS.proxy.utils.ChatUtil;
+import me.ANONIMUS.proxy.utils.ScoreboardUtil;
+import me.ANONIMUS.proxy.utils.WorldUtil;
 import net.kyori.adventure.text.Component;
 
 import java.util.UUID;
@@ -41,7 +40,6 @@ public class ServerLoginHandler extends ServerHandler {
                     player.getSession().sendPacket(new ServerLoginSuccessPacket(UUID.randomUUID(), account.getUsername()));
                     player.getSession().setConnectionState(ConnectionState.PLAY);
                     player.getSession().setPacketHandler(new ServerPlayHandler(player));
-                    player.setGameProfile(new GameProfile(UUID.nameUUIDFromBytes(("OfflinePlayer:" + account.getUsername()).getBytes()), account.getUsername()));
                     player.setAccount(account);
 
                     WorldUtil.emptyWorld(player);

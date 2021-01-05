@@ -1,16 +1,16 @@
 package me.ANONIMUS.proxy.command.impl.more;
 
 import me.ANONIMUS.proxy.command.Command;
-import me.ANONIMUS.proxy.protocol.data.ItemStack;
-import me.ANONIMUS.proxy.protocol.objects.Player;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerOpenWindowPacket;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerWindowItemsPacket;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
-import me.ANONIMUS.proxy.utils.proxy.ItemUtil;
 import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Option;
+import me.ANONIMUS.proxy.protocol.data.ItemStack;
 import me.ANONIMUS.proxy.protocol.data.WindowType;
+import me.ANONIMUS.proxy.protocol.objects.Player;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerOpenWindowPacket;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerWindowItemsPacket;
+import me.ANONIMUS.proxy.utils.ChatUtil;
+import me.ANONIMUS.proxy.utils.ItemUtil;
 
 import java.util.ArrayList;
 import java.util.List;

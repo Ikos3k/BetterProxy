@@ -1,11 +1,11 @@
 package me.ANONIMUS.proxy.command.impl.more;
 
 import me.ANONIMUS.proxy.command.Command;
-import me.ANONIMUS.proxy.protocol.objects.Player;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
-import me.ANONIMUS.proxy.utils.proxy.WorldUtil;
 import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
+import me.ANONIMUS.proxy.protocol.objects.Player;
+import me.ANONIMUS.proxy.utils.ChatUtil;
+import me.ANONIMUS.proxy.utils.WorldUtil;
 
 public class CommandLobby extends Command {
     public CommandLobby() { super("lobby", null, "teleport to lobby", "", CommandType.MORE, ConnectedType.DISCONNECTED); }

@@ -9,27 +9,25 @@ import io.netty.handler.proxy.Socks4ProxyHandler;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import me.ANONIMUS.proxy.protocol.packet.Packet;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginDisconnectPacket;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSetCompressionPacket;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSuccessPacket;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.play.*;
 import me.ANONIMUS.proxy.enums.TimeType;
 import me.ANONIMUS.proxy.objects.ServerData;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
 import me.ANONIMUS.proxy.protocol.handlers.PacketCodec;
-import me.ANONIMUS.proxy.protocol.handlers.VarInt21FrameEncoder;
-import me.ANONIMUS.proxy.protocol.handlers.Varint21FrameDecoder;
+import me.ANONIMUS.proxy.protocol.handlers.VarInt21FrameCodec;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.objects.Session;
+import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketDirection;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.HandshakePacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.login.ClientLoginStartPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.play.ClientKeepAlivePacket;
-import me.AlshainTeam.proxy.protocol.packet.impl.server.play.*;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
-import me.ANONIMUS.proxy.utils.proxy.ScoreboardUtil;
-import me.ANONIMUS.proxy.utils.proxy.WorldUtil;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginDisconnectPacket;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSetCompressionPacket;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSuccessPacket;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.play.*;
+import me.ANONIMUS.proxy.utils.ChatUtil;
+import me.ANONIMUS.proxy.utils.ScoreboardUtil;
+import me.ANONIMUS.proxy.utils.WorldUtil;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
 import java.net.Proxy;
@@ -51,14 +49,13 @@ public class PlayerConnection {
                 .channel(NioSocketChannel.class)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    protected void initChannel(SocketChannel socketChannel) throws Exception {
+                    protected void initChannel(SocketChannel socketChannel) {
                         final ChannelPipeline pipeline = socketChannel.pipeline();
                         if (proxy != Proxy.NO_PROXY) {
                             pipeline.addFirst(new Socks4ProxyHandler(proxy.address()));
                         }
                         pipeline.addLast("timer", new ReadTimeoutHandler(20));
-                        pipeline.addLast("frameEncoder", new VarInt21FrameEncoder());
-                        pipeline.addLast("frameDecoder", new Varint21FrameDecoder());
+                        pipeline.addLast("frameCodec", new VarInt21FrameCodec());
                         pipeline.addLast("packetCodec", new PacketCodec(ConnectionState.LOGIN, PacketDirection.CLIENTBOUND));
                         pipeline.addLast("handler", new SimpleChannelInboundHandler<Packet>() {
                             @Override

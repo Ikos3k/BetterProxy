@@ -4,7 +4,7 @@ import me.ANONIMUS.proxy.command.Command;
 import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.protocol.objects.Player;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
+import me.ANONIMUS.proxy.utils.ChatUtil;
 
 public class CommandFree extends Command {
     public CommandFree() {

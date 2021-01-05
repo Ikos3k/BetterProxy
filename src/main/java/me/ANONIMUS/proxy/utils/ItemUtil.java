@@ -1,9 +1,9 @@
-package me.ANONIMUS.proxy.utils.proxy;
+package me.ANONIMUS.proxy.utils;
 
+import me.ANONIMUS.proxy.objects.Option;
 import me.ANONIMUS.proxy.protocol.data.ItemStack;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerSetSlotPacket;
-import me.ANONIMUS.proxy.objects.Option;
 
 import java.util.ArrayList;
 import java.util.Arrays;

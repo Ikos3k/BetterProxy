@@ -30,7 +30,7 @@ public enum GroupType {
         return delayCMD;
     }
 
-    public static GroupType getByPermissionLevel(int permission) {
+    public static GroupType getByPermission(int permission) {
         return Arrays.stream(GroupType.values()).filter(gp -> gp.permission == permission).findFirst().orElse(GroupType.USER);
     }
 }

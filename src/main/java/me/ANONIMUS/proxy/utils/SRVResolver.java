@@ -1,4 +1,4 @@
-package me.ANONIMUS.proxy.utils.proxy;
+package me.ANONIMUS.proxy.utils;
 
 import javax.naming.directory.Attributes;
 import javax.naming.directory.InitialDirContext;

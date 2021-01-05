@@ -5,6 +5,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import me.ANONIMUS.proxy.command.Command;
+import me.ANONIMUS.proxy.enums.CommandType;
+import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
 import me.ANONIMUS.proxy.protocol.objects.Bot;
 import me.ANONIMUS.proxy.protocol.objects.Player;
@@ -18,10 +20,8 @@ import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSuccessPac
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerDisconnectPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerJoinGamePacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerKeepAlivePacket;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
-import me.ANONIMUS.proxy.utils.proxy.WorldUtil;
-import me.ANONIMUS.proxy.enums.CommandType;
-import me.ANONIMUS.proxy.enums.ConnectedType;
+import me.ANONIMUS.proxy.utils.ChatUtil;
+import me.ANONIMUS.proxy.utils.WorldUtil;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
 public class CommandStay extends Command {
@@ -44,7 +44,7 @@ public class CommandStay extends Command {
             }
 
             @Override
-            protected void channelRead0(ChannelHandlerContext channelHandlerContext, Packet packet) throws Exception {
+            protected void channelRead0(ChannelHandlerContext channelHandlerContext, Packet packet) {
                 if (packet instanceof ServerLoginSetCompressionPacket) {
                     bot.getSession().setCompressionThreshold(((ServerLoginSetCompressionPacket) packet).getThreshold());
                 } else if (packet instanceof ServerLoginSuccessPacket) {

@@ -1,7 +1,6 @@
 package me.ANONIMUS.proxy.protocol.data.util;
 
 import me.ANONIMUS.proxy.protocol.data.*;
-import me.AlshainTeam.proxy.protocol.data.*;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 
 import java.io.IOException;
@@ -10,13 +9,13 @@ import java.util.List;
 
 public class NetUtil {
     public static EntityMetadata[] readEntityMetadata(final PacketBuffer in) throws IOException {
-        final List<EntityMetadata> ret = new ArrayList<EntityMetadata>();
+        final List<EntityMetadata> ret = new ArrayList<>();
         byte b;
         while ((b = in.readByte()) != 127) {
             final int typeId = (b & 0xE0) >> 5;
             final int id = b & 0x1F;
             final MetadataType type = MetadataType.getActionById(typeId);
-            Object value = null;
+            Object value;
             switch (type) {
                 case BYTE: {
                     value = in.readByte();

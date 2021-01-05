@@ -1,7 +1,7 @@
 package me.ANONIMUS.proxy.threads;
 
 import me.ANONIMUS.proxy.managers.PlayerManager;
-import me.ANONIMUS.proxy.utils.proxy.ChatUtil;
+import me.ANONIMUS.proxy.utils.ChatUtil;
 
 import java.util.TimerTask;
 
