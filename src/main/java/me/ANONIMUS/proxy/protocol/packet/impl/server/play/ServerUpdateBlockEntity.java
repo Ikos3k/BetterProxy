@@ -1,0 +1,37 @@
+package me.ANONIMUS.proxy.protocol.packet.impl.server.play;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import me.ANONIMUS.proxy.protocol.packet.Packet;
+import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
+import me.ANONIMUS.proxy.protocol.data.Position;
+import me.ANONIMUS.proxy.protocol.packet.Protocol;
+import net.minecraft.nbt.NBTTagCompound;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ServerUpdateBlockEntity extends Packet {
+    private Position position;
+    private int action;
+    private NBTTagCompound nbt;
+
+    {
+        this.getProtocolList().add(new Protocol(0x09, 110));
+    }
+
+    @Override
+    public void write(PacketBuffer out, int protocol) throws Exception {
+        out.writePosition(position);
+        out.writeByte(action);
+        out.writeNBTTagCompoundToBuffer(nbt);
+    }
+
+    @Override
+    public void read(PacketBuffer in, int protocol) throws Exception {
+        this.position = in.readPosition();
+        this.action = in.readByte();
+        this.nbt = in.readNBTTagCompoundFromBuffer();
+    }
+}
