@@ -81,7 +81,6 @@ public class PlayerConnection {
                                 owner.setRemoteSession(null);
                                 owner.setServerData(null);
                                 group.shutdownGracefully();
-                                ScoreboardUtil.updateScoreboard(owner);
                             }
 
                             @Override
@@ -99,21 +98,11 @@ public class PlayerConnection {
                                     ChatUtil.sendChatMessage("&6>> &6Connected successfully&8!", owner, false);
                                     ScoreboardUtil.updateScoreboard(owner);
                                 } else if (packet instanceof ServerDisconnectPacket) {
-                                    owner.setConnected(false);
-                                    owner.setRemoteSession(null);
                                     ChatUtil.sendChatMessage("&6>> &8Connection to the server was lost: &6" + owner.getServerData().getHost() + " &8cause: &6" + ChatUtil.stripColor(GsonComponentSerializer.gson().serialize(((ServerDisconnectPacket) packet).getReason())), owner, false);
-                                    owner.setServerData(null);
-                                    WorldUtil.lobby(owner, true);
-                                    group.shutdownGracefully();
-                                    ScoreboardUtil.updateScoreboard(owner);
+                                    disconnect();
                                 } else if (packet instanceof ServerLoginDisconnectPacket) {
-                                    owner.setConnected(false);
-                                    owner.setRemoteSession(null);
                                     ChatUtil.sendChatMessage("&6>> &8Connection to the server was lost: &6" + owner.getServerData().getHost() + " &8cause: &6" + ChatUtil.stripColor(GsonComponentSerializer.gson().serialize(((ServerLoginDisconnectPacket) packet).getReason())), owner, false);
-                                    owner.setServerData(null);
-                                    WorldUtil.lobby(owner, true);
-                                    group.shutdownGracefully();
-                                    ScoreboardUtil.updateScoreboard(owner);
+                                    disconnect();
                                 } else if (packet instanceof ServerKeepAlivePacket) {
                                     owner.getRemoteSession().sendPacket(new ClientKeepAlivePacket(((ServerKeepAlivePacket) packet).getKeepaliveId()));
                                 } else if (packet instanceof ServerCustomPayloadPacket) {
@@ -177,5 +166,14 @@ public class PlayerConnection {
         owner.getRemoteSession().getChannel().config().setOption(ChannelOption.TCP_NODELAY, true);
         owner.getRemoteSession().getChannel().config().setOption(ChannelOption.IP_TOS, 0x18);
         owner.getRemoteSession().setUsername(username);
+    }
+
+    private void disconnect() {
+        owner.setConnected(false);
+        owner.setRemoteSession(null);
+        owner.setServerData(null);
+        WorldUtil.lobby(owner, true);
+        group.shutdownGracefully();
+        ScoreboardUtil.updateScoreboard(owner);
     }
 }

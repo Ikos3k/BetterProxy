@@ -39,8 +39,7 @@ public class CommandStay extends Command {
             @Override
             public void channelInactive(ChannelHandlerContext ctx) {
                 ChatUtil.sendChatMessage("&6>> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &c" + bot.getServerData().getHost() + ":" + bot.getServerData().getPort() + " &fcause: &c" + ctx.getClass(), bot.getOwner(), true);
-                group.shutdownGracefully();
-                bot.setServerData(null);
+                disconnect(bot, sender);
             }
 
             @Override
@@ -58,11 +57,11 @@ public class CommandStay extends Command {
                     bot.getSession().sendPacket(new ClientSettingsPacket("pl_PL", (byte) 32, (byte) 0, false, (byte) 1));
                 } else if (packet instanceof ServerDisconnectPacket) {
                     ChatUtil.sendChatMessage("&6>> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &c" + bot.getServerData().getHost() + ":" + bot.getServerData().getPort() + " &fcause: &c" + ChatUtil.stripColor(GsonComponentSerializer.gson().serialize(((ServerDisconnectPacket) packet).getReason())), bot.getOwner(), true);
-                    group.shutdownGracefully();
+                    disconnect(bot, sender);
 
                 } else if (packet instanceof ServerLoginDisconnectPacket) {
                     ChatUtil.sendChatMessage("&6>> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &c" + bot.getServerData().getHost() + ":" + bot.getServerData().getPort() + " &cause: &c" + ChatUtil.stripColor(GsonComponentSerializer.gson().serialize(((ServerLoginDisconnectPacket) packet).getReason())), bot.getOwner(), true);
-                    group.shutdownGracefully();
+                    disconnect(bot, sender);
                 }
             }
         });
@@ -75,5 +74,12 @@ public class CommandStay extends Command {
         sender.setConnected(false);
         sender.setServerData(null);
         WorldUtil.lobby(sender, true);
+    }
+
+    private void disconnect(Bot bot, Player owner) {
+        bot.getSession().getChannel().close();
+        bot.setSession(null);
+        owner.getBots().remove(bot);
+        group.shutdownGracefully();
     }
 }

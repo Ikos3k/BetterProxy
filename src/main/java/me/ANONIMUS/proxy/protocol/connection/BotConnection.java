@@ -14,6 +14,7 @@ import me.ANONIMUS.proxy.protocol.data.ConnectionState;
 import me.ANONIMUS.proxy.protocol.handlers.PacketCodec;
 import me.ANONIMUS.proxy.protocol.handlers.VarInt21FrameCodec;
 import me.ANONIMUS.proxy.protocol.objects.Bot;
+import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.objects.Session;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketDirection;
@@ -60,19 +61,16 @@ public class BotConnection {
                                 bot.getSession().sendPacket(new HandshakePacket(bot.getSession().getProtocolID(), "", port, 2));
                                 bot.getSession().sendPacket(new ClientLoginStartPacket(bot.getUsername()));
                                 bot.setServerData(new ServerData(host, port));
-
                             }
 
                             @Override
                             public void channelInactive(ChannelHandlerContext ctx) {
                                 ChatUtil.sendChatMessage("&6>> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &c" + host + ":" + port + " &fcause: &c" + ctx.getClass(), bot.getOwner(), true);
-                                bot.setServerData(null);
-                                bot.getSession().getChannel().close();
-                                group.shutdownGracefully();
+                                disconnect(bot, bot.getOwner());
                             }
 
                             @Override
-                            protected void channelRead0(ChannelHandlerContext channelHandlerContext, Packet packet) throws Exception {
+                            protected void channelRead0(ChannelHandlerContext channelHandlerContext, Packet packet) {
                                 if (packet instanceof ServerLoginSetCompressionPacket) {
                                     bot.getSession().setCompressionThreshold(((ServerLoginSetCompressionPacket) packet).getThreshold());
                                 } else if (packet instanceof ServerLoginSuccessPacket) {
@@ -86,15 +84,10 @@ public class BotConnection {
                                     bot.getSession().sendPacket(new ClientSettingsPacket("pl_PL", (byte) 32, (byte) 0, false, (byte) 1));
                                 } else if (packet instanceof ServerDisconnectPacket) {
                                     ChatUtil.sendChatMessage("&6>> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &c" + host + ":" + port + " &fcause: &c" + ChatUtil.stripColor(GsonComponentSerializer.gson().serialize(((ServerDisconnectPacket) packet).getReason())), bot.getOwner(), true);
-                                    bot.getSession().getChannel().close();
-                                    group.shutdownGracefully();
-                                    bot.setServerData(null);
-
+                                    disconnect(bot, bot.getOwner());
                                 } else if (packet instanceof ServerLoginDisconnectPacket) {
                                     ChatUtil.sendChatMessage("&6>> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &c" + host + ":" + port + " &cause: &c" + ChatUtil.stripColor(GsonComponentSerializer.gson().serialize(((ServerLoginDisconnectPacket) packet).getReason())), bot.getOwner(), true);
-                                    bot.getSession().getChannel().close();
-                                    group.shutdownGracefully();
-                                    bot.setServerData(null);
+                                    disconnect(bot, bot.getOwner());
                                 }
                             }
                         });
@@ -105,5 +98,12 @@ public class BotConnection {
         bot.getSession().setConnectionState(ConnectionState.LOGIN);
         bot.getSession().getChannel().config().setOption(ChannelOption.TCP_NODELAY, true);
         bot.getSession().getChannel().config().setOption(ChannelOption.IP_TOS, 0x18);
+    }
+
+    private void disconnect(Bot bot, Player owner) {
+        bot.getSession().getChannel().close();
+        bot.setSession(null);
+        owner.getBots().remove(bot);
+        group.shutdownGracefully();
     }
 }

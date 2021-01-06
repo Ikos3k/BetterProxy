@@ -43,7 +43,7 @@ public class ServerLoginHandler extends ServerHandler {
                     player.setAccount(account);
 
                     WorldUtil.emptyWorld(player);
-                    System.out.println("[" + account.getUsername() + "] Logged in!");
+                    System.out.println("[" + account.getUsername() + "] Connected!");
 
                     ChatUtil.clearChat(100, player);
                     ScoreboardUtil.sendScoreboard(player);

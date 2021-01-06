@@ -5,6 +5,9 @@ import me.ANONIMUS.proxy.protocol.data.TitleAction;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
+import me.ANONIMUS.proxy.utils.ChatUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
 @NoArgsConstructor
 public class ServerTitlePacket extends Packet {
@@ -16,14 +19,14 @@ public class ServerTitlePacket extends Packet {
     }
 
     private TitleAction titleAction;
-    private String title;
-    private String subTitle;
+    private Component title;
+    private Component subTitle;
 
     private int fadeIn;
     private int fadeOut;
     private int stay;
 
-    public ServerTitlePacket(TitleAction action, String message) {
+    public ServerTitlePacket(TitleAction action, Component message) {
         this.titleAction = action;
         if (action == TitleAction.TITLE) {
             this.title = message;
@@ -32,6 +35,10 @@ public class ServerTitlePacket extends Packet {
         } else {
             throw new IllegalArgumentException("Illegal use of ServerTitlePacket!");
         }
+    }
+
+    public ServerTitlePacket(TitleAction action, String message) {
+        this(action, Component.text(ChatUtil.fixColor(message)));
     }
 
     public ServerTitlePacket(TitleAction action, int fadeIn, int stay, int fadeOut) {
@@ -45,11 +52,6 @@ public class ServerTitlePacket extends Packet {
         }
     }
 
-    public ServerTitlePacket(TitleAction action) {
-        this.titleAction = action;
-    }
-
-
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
         if(titleAction == TitleAction.TIMES && protocol == 340) {
@@ -58,9 +60,9 @@ public class ServerTitlePacket extends Packet {
             out.writeVarInt(titleAction.getId());
         }
         if(titleAction == TitleAction.TITLE) {
-            out.writeString(this.title);
+            out.writeString(GsonComponentSerializer.gson().serialize(this.title));
         } else if (titleAction == TitleAction.SUBTITLE) {
-            out.writeString(this.subTitle);
+            out.writeString(GsonComponentSerializer.gson().serialize(this.subTitle));
         }
         if(titleAction == TitleAction.TIMES) {
             out.writeInt(this.fadeIn);
@@ -80,9 +82,9 @@ public class ServerTitlePacket extends Packet {
         }
 
         if(titleAction == TitleAction.TITLE) {
-            this.title = in.readString(32767);
+            this.title = GsonComponentSerializer.gson().deserialize(in.readString(32767));
         } else if (titleAction == TitleAction.SUBTITLE) {
-            this.subTitle = in.readString(32767);
+            this.subTitle = GsonComponentSerializer.gson().deserialize(in.readString(32767));
         } else if (titleAction == TitleAction.TIMES) {
             this.fadeIn = in.readInt();
             this.stay = in.readInt();

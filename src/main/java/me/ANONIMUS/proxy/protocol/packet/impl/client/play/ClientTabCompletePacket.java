@@ -1,10 +1,10 @@
 package me.ANONIMUS.proxy.protocol.packet.impl.client.play;
 
 import lombok.NoArgsConstructor;
+import me.ANONIMUS.proxy.protocol.data.Position;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
-import me.ANONIMUS.proxy.protocol.data.Position;
 
 @NoArgsConstructor
 public class ClientTabCompletePacket extends Packet {

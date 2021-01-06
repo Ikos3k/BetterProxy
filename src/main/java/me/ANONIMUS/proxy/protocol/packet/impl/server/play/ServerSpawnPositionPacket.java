@@ -1,16 +1,16 @@
 package me.ANONIMUS.proxy.protocol.packet.impl.server.play;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.ANONIMUS.proxy.protocol.data.Position;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
-import me.ANONIMUS.proxy.protocol.data.Position;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
 public class ServerSpawnPositionPacket extends Packet {
     {
         this.getProtocolList().add(new Protocol(0x05, 47));

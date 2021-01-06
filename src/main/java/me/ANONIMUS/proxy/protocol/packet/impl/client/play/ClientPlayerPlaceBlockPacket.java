@@ -2,12 +2,12 @@ package me.ANONIMUS.proxy.protocol.packet.impl.client.play;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.ANONIMUS.proxy.protocol.data.Face;
 import me.ANONIMUS.proxy.protocol.data.ItemStack;
+import me.ANONIMUS.proxy.protocol.data.Position;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
-import me.ANONIMUS.proxy.protocol.data.Face;
-import me.ANONIMUS.proxy.protocol.data.Position;
 
 @Getter
 @NoArgsConstructor
