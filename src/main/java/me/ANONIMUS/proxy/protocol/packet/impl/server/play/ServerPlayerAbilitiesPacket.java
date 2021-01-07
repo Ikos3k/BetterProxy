@@ -1,23 +1,19 @@
 package me.ANONIMUS.proxy.protocol.packet.impl.server.play;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
+import java.util.Arrays;
+import java.util.List;
+
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class ServerPlayerAbilitiesPacket extends Packet {
-
-    {
-        this.getProtocolList().add(new Protocol(0x39, 47));
-        this.getProtocolList().add(new Protocol(0x2B, 110));
-        this.getProtocolList().add(new Protocol(0x2C, 340));
-    }
-
     private boolean damage, flying, allowFlying, creative;
     private float flySpeed, walkSpeed;
 
@@ -50,5 +46,10 @@ public class ServerPlayerAbilitiesPacket extends Packet {
         this.creative = ((flags & 0x8) > 0);
         this.flySpeed = in.readFloat();
         this.walkSpeed = in.readFloat();
+    }
+
+    @Override
+    public List<Protocol> getProtocolList() {
+        return Arrays.asList(new Protocol(0x39, 47), new Protocol(0x2B, 110), new Protocol(0x2C, 340));
     }
 }

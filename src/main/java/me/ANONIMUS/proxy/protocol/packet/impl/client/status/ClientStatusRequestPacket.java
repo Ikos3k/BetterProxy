@@ -4,17 +4,20 @@ import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
-public class ClientStatusRequestPacket extends Packet {
+import java.util.Arrays;
+import java.util.List;
 
-    {
-        this.getProtocolList().add(new Protocol(0x00, 47));
-        this.getProtocolList().add(new Protocol(0x00, 110));
-        this.getProtocolList().add(new Protocol(0x00, 340));
+public class ClientStatusRequestPacket extends Packet {
+    @Override
+    public void write(PacketBuffer out, int protocol) throws Exception {
     }
 
     @Override
-    public void write(PacketBuffer out, int protocol) throws Exception { }
+    public void read(PacketBuffer in, int protocol) throws Exception {
+    }
 
     @Override
-    public void read(PacketBuffer in, int protocol) throws Exception { }
+    public List<Protocol> getProtocolList() {
+        return Arrays.asList(new Protocol(0x00, 47), new Protocol(0x00, 110), new Protocol(0x00, 340));
+    }
 }

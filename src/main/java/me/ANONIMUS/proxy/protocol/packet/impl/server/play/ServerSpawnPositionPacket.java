@@ -8,16 +8,13 @@ import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
+import java.util.Arrays;
+import java.util.List;
+
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 public class ServerSpawnPositionPacket extends Packet {
-    {
-        this.getProtocolList().add(new Protocol(0x05, 47));
-        this.getProtocolList().add(new Protocol(0x43, 110));
-        this.getProtocolList().add(new Protocol(0x46, 340));
-    }
-
     private Position position;
 
     @Override
@@ -28,5 +25,10 @@ public class ServerSpawnPositionPacket extends Packet {
     @Override
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.position = in.readPosition();
+    }
+
+    @Override
+    public List<Protocol> getProtocolList() {
+        return Arrays.asList(new Protocol(0x05, 47), new Protocol(0x43, 110), new Protocol(0x46, 340));
     }
 }

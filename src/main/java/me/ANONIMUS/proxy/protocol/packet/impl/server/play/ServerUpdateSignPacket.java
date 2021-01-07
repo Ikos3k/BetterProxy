@@ -8,15 +8,13 @@ import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
+import java.util.Collections;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ServerUpdateSignPacket extends Packet {
-
-    {
-        this.getProtocolList().add(new Protocol(0x33, 47));
-    }
-
     private Position position;
     private String line1, line2, line3, line4;
 
@@ -36,5 +34,10 @@ public class ServerUpdateSignPacket extends Packet {
         this.line2 = in.readString();
         this.line3 = in.readString();
         this.line4 = in.readString();
+    }
+
+    @Override
+    public List<Protocol> getProtocolList() {
+        return Collections.singletonList(new Protocol(0x33, 47));
     }
 }

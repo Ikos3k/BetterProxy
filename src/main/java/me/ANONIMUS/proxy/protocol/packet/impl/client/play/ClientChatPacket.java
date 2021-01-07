@@ -7,26 +7,19 @@ import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class ClientChatPacket extends Packet {
-
-    {
-        this.getProtocolList().add(new Protocol(0x01, 47));
-        this.getProtocolList().add(new Protocol(0x02, 110));
-        this.getProtocolList().add(new Protocol(0x02, 340));
-    }
-
     private String message;
 
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
-        if(protocol >= 110) {
-            if (message.length() > 100) {
-                message = message.substring(0, 100);
-            }
+        if (protocol >= 110 && message.length() > 100) {
+            message = message.substring(0, 100);
         }
         out.writeString(message);
     }
@@ -34,5 +27,10 @@ public class ClientChatPacket extends Packet {
     @Override
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.message = in.readString(32767);
+    }
+
+    @Override
+    public List<Protocol> getProtocolList() {
+        return Arrays.asList(new Protocol(0x01, 47), new Protocol(0x02, 110), new Protocol(0x02, 340));
     }
 }

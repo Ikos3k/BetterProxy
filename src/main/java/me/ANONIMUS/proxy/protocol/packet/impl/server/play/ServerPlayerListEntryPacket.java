@@ -1,5 +1,7 @@
 package me.ANONIMUS.proxy.protocol.packet.impl.server.play;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.ANONIMUS.proxy.protocol.data.Gamemode;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntry;
@@ -9,39 +11,32 @@ import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
+@Getter
+@AllArgsConstructor
 @NoArgsConstructor
 public class ServerPlayerListEntryPacket extends Packet {
-    public ServerPlayerListEntryPacket(final PlayerListEntryAction action, final PlayerListEntry[] entries) {
-        this.action = action;
-        this.entries = entries;
-    }
-
     private PlayerListEntryAction action;
     private PlayerListEntry[] entries;
-
-    {
-        this.getProtocolList().add(new Protocol(56, 47));
-        this.getProtocolList().add(new Protocol(0x2D, 110));
-        this.getProtocolList().add(new Protocol(0x2E, 340));
-    }
 
     @Override
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.action = PlayerListEntryAction.getById(in.readVarInt());
         this.entries = new PlayerListEntry[in.readVarInt()];
-        for(int count = 0; count < this.entries.length; count++) {
+        for (int count = 0; count < this.entries.length; count++) {
             UUID uuid = in.readUuid();
             GameProfile profile;
-            if(this.action == PlayerListEntryAction.ADD_PLAYER) {
+            if (this.action == PlayerListEntryAction.ADD_PLAYER) {
                 profile = new GameProfile(uuid, in.readString());
             } else {
                 profile = new GameProfile(uuid, null);
             }
 
             PlayerListEntry entry = null;
-            switch(this.action) {
+            switch (this.action) {
                 case ADD_PLAYER: {
                     for (int properties = in.readVarInt(), index = 0; index < properties; ++index) {
                         final String propertyName = in.readString();
@@ -74,7 +69,7 @@ public class ServerPlayerListEntryPacket extends Packet {
                 }
                 case UPDATE_DISPLAY_NAME: {
                     String displayName = null;
-                    if(in.readBoolean()) {
+                    if (in.readBoolean()) {
                         displayName = in.readString();
                     }
 
@@ -94,17 +89,17 @@ public class ServerPlayerListEntryPacket extends Packet {
     public void write(PacketBuffer out, int protocol) throws Exception {
         out.writeVarInt(this.action.getId());
         out.writeVarInt(this.entries.length);
-        for(PlayerListEntry entry : this.entries) {
+        for (PlayerListEntry entry : this.entries) {
             out.writeUuid(entry.getProfile().getId());
-            switch(this.action) {
+            switch (this.action) {
                 case ADD_PLAYER:
                     out.writeString(entry.getProfile().getName());
                     out.writeVarInt(entry.getProfile().getProperties().size());
-                    for(GameProfile.Property property : entry.getProfile().getProperties()) {
+                    for (GameProfile.Property property : entry.getProfile().getProperties()) {
                         out.writeString(property.getName());
                         out.writeString(property.getValue());
                         out.writeBoolean(property.hasSignature());
-                        if(property.hasSignature()) {
+                        if (property.hasSignature()) {
                             out.writeString(property.getSignature());
                         }
                     }
@@ -112,7 +107,7 @@ public class ServerPlayerListEntryPacket extends Packet {
                     out.writeVarInt(entry.getGameMode().getId());
                     out.writeVarInt(entry.getPing());
                     out.writeBoolean(entry.getDisplayName() != null);
-                    if(entry.getDisplayName() != null) {
+                    if (entry.getDisplayName() != null) {
                         out.writeString(entry.getDisplayName());
                     }
 
@@ -125,7 +120,7 @@ public class ServerPlayerListEntryPacket extends Packet {
                     break;
                 case UPDATE_DISPLAY_NAME:
                     out.writeBoolean(entry.getDisplayName() != null);
-                    if(entry.getDisplayName() != null) {
+                    if (entry.getDisplayName() != null) {
                         out.writeString(entry.getDisplayName());
                     }
 
@@ -134,5 +129,10 @@ public class ServerPlayerListEntryPacket extends Packet {
                     break;
             }
         }
+    }
+
+    @Override
+    public List<Protocol> getProtocolList() {
+        return Arrays.asList(new Protocol(56, 47), new Protocol(0x2D, 110), new Protocol(0x2E, 340));
     }
 }

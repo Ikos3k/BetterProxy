@@ -1,27 +1,20 @@
 package me.ANONIMUS.proxy.protocol.packet.impl.server.play;
 
+import io.netty.handler.codec.DecoderException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
+import java.util.Arrays;
+import java.util.List;
+
+@Getter
+@AllArgsConstructor
 @NoArgsConstructor
 public class ServerCustomPayloadPacket extends Packet {
-    {
-        this.getProtocolList().add(new Protocol(0x3F, 47));
-        this.getProtocolList().add(new Protocol(0x3F, 110));
-        this.getProtocolList().add(new Protocol(0x18, 340));
-    }
-
-    public ServerCustomPayloadPacket(String channelName, PacketBuffer dataIn) {
-        this.channel = channelName;
-        this.data = dataIn;
-
-        if (dataIn.writerIndex() > 1048576) {
-            throw new IllegalArgumentException("Payload may not be larger than 1048576 bytes");
-        }
-    }
-
     private String channel;
     private PacketBuffer data;
 
@@ -40,15 +33,13 @@ public class ServerCustomPayloadPacket extends Packet {
             if (i >= 0 && i <= 1048576) {
                 this.data = new PacketBuffer(in.readBytes(i));
             }
-        } catch (Exception ignored) { }
+        } catch (DecoderException ignored) {
+        }
     }
 
-    public String getChannelName() {
-        return this.channel;
-    }
-
-    public PacketBuffer getBufferData() {
-        return this.data;
+    @Override
+    public List<Protocol> getProtocolList() {
+        return Arrays.asList(new Protocol(0x3F, 47), new Protocol(0x3F, 110), new Protocol(0x18, 340));
     }
 
     public byte[] getByteData() {

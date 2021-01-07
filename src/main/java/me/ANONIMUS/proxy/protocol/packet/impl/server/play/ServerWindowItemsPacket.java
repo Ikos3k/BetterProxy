@@ -1,20 +1,22 @@
 package me.ANONIMUS.proxy.protocol.packet.impl.server.play;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.ANONIMUS.proxy.protocol.data.ItemStack;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
+import java.util.Arrays;
 import java.util.List;
 
+@Getter
+@AllArgsConstructor
 @NoArgsConstructor
 public class ServerWindowItemsPacket extends Packet {
-
-    {
-        this.getProtocolList().add(new Protocol(0x30, 47));
-        this.getProtocolList().add(new Protocol(0x14, 340));
-    }
+    private int windowId;
+    private ItemStack[] itemStacks;
 
     public ServerWindowItemsPacket(int windowIdIn, List<ItemStack> p_i45186_2_) {
         this.windowId = windowIdIn;
@@ -25,17 +27,12 @@ public class ServerWindowItemsPacket extends Packet {
             this.itemStacks[i] = itemstack;
         }
     }
-
     public ServerWindowItemsPacket(int windowIdIn, ItemStack p_i45186_2_) {
         this.windowId = windowIdIn;
-        this.itemStacks = new ItemStack[1];
 
+        this.itemStacks = new ItemStack[1];
         this.itemStacks[0] = p_i45186_2_;
     }
-
-    private int windowId;
-    private ItemStack[] itemStacks;
-
 
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
@@ -56,5 +53,10 @@ public class ServerWindowItemsPacket extends Packet {
         for (int j = 0; j < i; ++j) {
             this.itemStacks[j] = in.readItemStackFromBuffer();
         }
+    }
+
+    @Override
+    public List<Protocol> getProtocolList() {
+        return Arrays.asList(new Protocol(0x30, 47), new Protocol(0x14, 340));
     }
 }

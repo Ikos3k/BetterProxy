@@ -2,19 +2,68 @@ package me.ANONIMUS.proxy.protocol.data;
 
 import lombok.Getter;
 
-import java.util.Arrays;
-
 @Getter
 public enum TitleAction {
-    TITLE(0), SUBTITLE(1), TIMES(2), HIDE(3), RESET(4);
+    TITLE, SUBTITLE, TIMES, HIDE, ACTIONBAR, RESET;
 
-    private final int id;
-
-    TitleAction(int id) {
-        this.id = id;
+    public int getIdByProtocol(int protocol) {
+        switch (this) {
+            case TITLE:
+                return 0;
+            case SUBTITLE:
+                return 1;
+            case TIMES:
+                if(protocol == 340) {
+                    return 3;
+                }
+                return 2;
+            case HIDE:
+                if(protocol == 340) {
+                    return 4;
+                }
+                return 3;
+            case RESET:
+                if(protocol == 340) {
+                    return 5;
+                }
+                return 4;
+            case ACTIONBAR:
+                return 2;
+            default:
+                return -1;
+        }
     }
 
-    public static TitleAction getById(int id) {
-        return Arrays.stream(TitleAction.values()).filter(gm -> gm.id == id).findFirst().orElse(TitleAction.RESET);
+    public static TitleAction getById(int id, int protocol) {
+        if(protocol == 340) {
+            switch (id) {
+                case 0:
+                    return TITLE;
+                case 1:
+                    return SUBTITLE;
+                case 2:
+                    return ACTIONBAR;
+                case 3:
+                    return TIMES;
+                case 4:
+                    return HIDE;
+                case 5:
+                    return RESET;
+            }
+        } else {
+            switch (id) {
+                case 0:
+                    return TITLE;
+                case 1:
+                    return SUBTITLE;
+                case 2:
+                    return TIMES;
+                case 3:
+                    return HIDE;
+                case 4:
+                    return RESET;
+            }
+        }
+        return RESET;
     }
 }

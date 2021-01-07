@@ -1,11 +1,18 @@
 package me.ANONIMUS.proxy.protocol.packet.impl.server.play;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.ANONIMUS.proxy.protocol.data.WindowType;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
+import java.util.Arrays;
+import java.util.List;
+
+@Getter
+@AllArgsConstructor
 @NoArgsConstructor
 public class ServerOpenWindowPacket extends Packet {
     private int windowId;
@@ -16,19 +23,6 @@ public class ServerOpenWindowPacket extends Packet {
 
     public ServerOpenWindowPacket(int windowId, WindowType type, String name, int slots) {
         this(windowId, type, name, slots, 0);
-    }
-
-    public ServerOpenWindowPacket(int windowId, WindowType type, String name, int slots, int ownerEntityId) {
-        this.windowId = windowId;
-        this.type = type;
-        this.name = name;
-        this.slots = slots;
-        this.ownerEntityId = ownerEntityId;
-    }
-
-    {
-        this.getProtocolList().add(new Protocol(45, 47));
-        this.getProtocolList().add(new Protocol(0x13, 340));
     }
 
     @Override
@@ -51,5 +45,10 @@ public class ServerOpenWindowPacket extends Packet {
         if (this.type == WindowType.HORSE) {
             this.ownerEntityId = in.readInt();
         }
+    }
+
+    @Override
+    public List<Protocol> getProtocolList() {
+        return Arrays.asList(new Protocol(45, 47), new Protocol(0x13, 340));
     }
 }

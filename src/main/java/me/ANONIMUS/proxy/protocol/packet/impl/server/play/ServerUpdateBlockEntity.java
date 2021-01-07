@@ -9,6 +9,9 @@ import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.util.Collections;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,10 +19,6 @@ public class ServerUpdateBlockEntity extends Packet {
     private Position position;
     private int action;
     private NBTTagCompound nbt;
-
-    {
-        this.getProtocolList().add(new Protocol(0x09, 110));
-    }
 
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
@@ -33,5 +32,10 @@ public class ServerUpdateBlockEntity extends Packet {
         this.position = in.readPosition();
         this.action = in.readByte();
         this.nbt = in.readNBTTagCompoundFromBuffer();
+    }
+
+    @Override
+    public List<Protocol> getProtocolList() {
+        return Collections.singletonList(new Protocol(0x09, 110));
     }
 }

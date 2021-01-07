@@ -1,22 +1,19 @@
 package me.ANONIMUS.proxy.protocol.packet.impl.client.play;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
+import java.util.Arrays;
+import java.util.List;
+
+@Getter
+@AllArgsConstructor
 @NoArgsConstructor
 public class ClientHeldItemChangePacket extends Packet {
-
-    {
-        this.getProtocolList().add(new Protocol(0x09, 47));
-        this.getProtocolList().add(new Protocol(0x1A, 340));
-    }
-
-    public ClientHeldItemChangePacket(int slotId) {
-        this.slotId = slotId;
-    }
-
     private int slotId;
 
     @Override
@@ -29,7 +26,8 @@ public class ClientHeldItemChangePacket extends Packet {
         this.slotId = in.readShort();
     }
 
-    public int getSlotId() {
-        return this.slotId;
+    @Override
+    public List<Protocol> getProtocolList() {
+        return Arrays.asList(new Protocol(0x09, 47), new Protocol(0x1A, 340));
     }
 }

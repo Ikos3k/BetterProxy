@@ -10,22 +10,17 @@ import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
+import java.util.Arrays;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class ServerRespawnPacket extends Packet {
-
-    {
-        this.getProtocolList().add(new Protocol(0x07, 47));
-        this.getProtocolList().add(new Protocol(0x33, 110));
-        this.getProtocolList().add(new Protocol(0x35, 340));
-    }
-
     private Dimension dimension;
     private Difficulty difficulty;
     private Gamemode gamemode;
     private String level_type;
-
 
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
@@ -41,5 +36,10 @@ public class ServerRespawnPacket extends Packet {
         this.difficulty = Difficulty.getById(in.readUnsignedByte());
         this.gamemode = Gamemode.getById(in.readUnsignedByte());
         this.level_type = in.readString(16);
+    }
+
+    @Override
+    public List<Protocol> getProtocolList() {
+        return Arrays.asList(new Protocol(0x07, 47), new Protocol(0x33, 110), new Protocol(0x35, 340));
     }
 }

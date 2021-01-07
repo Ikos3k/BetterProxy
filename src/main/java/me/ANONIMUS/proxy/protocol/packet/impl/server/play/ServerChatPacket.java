@@ -1,6 +1,6 @@
 package me.ANONIMUS.proxy.protocol.packet.impl.server.play;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.ANONIMUS.proxy.protocol.data.MessagePosition;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
@@ -10,22 +10,14 @@ import me.ANONIMUS.proxy.utils.ChatUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
+import java.util.Arrays;
+import java.util.List;
+
+@Getter
 @NoArgsConstructor
-@Data
 public class ServerChatPacket extends Packet {
-
-    {
-        this.getProtocolList().add(new Protocol(0x02, 47));
-        this.getProtocolList().add(new Protocol(0x0F, 110));
-        this.getProtocolList().add(new Protocol(0x0F, 340));
-    }
-
     private Component message;
     private MessagePosition position;
-
-    public ServerChatPacket(String text) {
-        this(Component.text(ChatUtil.fixColor(text)), MessagePosition.CHATBOX);
-    }
 
     public ServerChatPacket(Component component) {
         this(component, MessagePosition.CHATBOX);
@@ -36,8 +28,12 @@ public class ServerChatPacket extends Packet {
         this.position = position;
     }
 
+    public ServerChatPacket(String text) {
+        this(Component.text(ChatUtil.fixColor(text)), MessagePosition.CHATBOX);
+    }
+
     public ServerChatPacket(String text, MessagePosition position) {
-        this(GsonComponentSerializer.gson().deserialize(text), position);
+        this(Component.text(ChatUtil.fixColor(text)), position);
     }
 
     @Override
@@ -50,5 +46,10 @@ public class ServerChatPacket extends Packet {
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.message = GsonComponentSerializer.gson().deserialize(in.readString());
         this.position = MessagePosition.getById(in.readByte());
+    }
+
+    @Override
+    public List<Protocol> getProtocolList() {
+        return Arrays.asList(new Protocol(0x02, 47), new Protocol(0x0F, 110), new Protocol(0x0F, 340));
     }
 }

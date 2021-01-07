@@ -1,11 +1,16 @@
 package me.ANONIMUS.proxy.protocol.packet.impl.client.play;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.ANONIMUS.proxy.protocol.data.Position;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
+import java.util.Arrays;
+import java.util.List;
+
+@Getter
 @NoArgsConstructor
 public class ClientTabCompletePacket extends Packet {
     private String text;
@@ -27,20 +32,10 @@ public class ClientTabCompletePacket extends Packet {
         this.position = position;
     }
 
-    public String getText() {
-        return this.text;
-    }
-
-    {
-        this.getProtocolList().add(new Protocol(20, 47));
-        this.getProtocolList().add(new Protocol(0x01, 110));
-        this.getProtocolList().add(new Protocol(0x01, 340));
-    }
-
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
         out.writeString(this.text);
-        if(protocol >= 110) {
+        if (protocol >= 110) {
             out.writeBoolean(this.assumeCMD);
         }
         out.writeBoolean(this.position != null);
@@ -52,9 +47,14 @@ public class ClientTabCompletePacket extends Packet {
     @Override
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.text = in.readString();
-        if(protocol >= 110) {
+        if (protocol >= 110) {
             this.assumeCMD = in.readBoolean();
         }
         this.position = (in.readBoolean() ? in.readPosition() : null);
+    }
+
+    @Override
+    public List<Protocol> getProtocolList() {
+        return Arrays.asList(new Protocol(0x14, 47), new Protocol(0x01, 110), new Protocol(0x01, 340));
     }
 }

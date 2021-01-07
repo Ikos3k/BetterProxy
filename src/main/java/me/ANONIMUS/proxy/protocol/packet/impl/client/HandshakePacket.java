@@ -1,23 +1,19 @@
 package me.ANONIMUS.proxy.protocol.packet.impl.client;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
-@Data
+import java.util.Collections;
+import java.util.List;
+
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class HandshakePacket extends Packet {
-
-    {
-        this.getProtocolList().add(new Protocol(0x00, 0));
-    }
-
     private int protocolId;
     private String host;
     private int port;
@@ -37,5 +33,10 @@ public class HandshakePacket extends Packet {
         this.host = in.readString(128);
         this.port = in.readShort();
         this.nextState = in.readVarInt();
+    }
+
+    @Override
+    public List<Protocol> getProtocolList() {
+        return Collections.singletonList(new Protocol(0x00, 0));
     }
 }

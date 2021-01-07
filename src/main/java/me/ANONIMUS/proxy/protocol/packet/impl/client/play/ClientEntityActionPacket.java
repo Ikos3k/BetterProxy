@@ -1,23 +1,19 @@
 package me.ANONIMUS.proxy.protocol.packet.impl.client.play;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
+import java.util.Arrays;
+import java.util.List;
+
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class ClientEntityActionPacket extends Packet {
-
-    {
-        this.getProtocolList().add(new Protocol(0x0B, 47));
-        this.getProtocolList().add(new Protocol(0x14, 110));
-        this.getProtocolList().add(new Protocol(0x15, 340));
-    }
-
     private int entityId, actionId, actionParameter;
 
     @Override
@@ -32,5 +28,10 @@ public class ClientEntityActionPacket extends Packet {
         this.entityId = in.readVarInt();
         this.actionId = in.readVarInt();
         this.actionParameter = in.readVarInt();
+    }
+
+    @Override
+    public List<Protocol> getProtocolList() {
+        return Arrays.asList(new Protocol(0x0B, 47), new Protocol(0x14, 110), new Protocol(0x15, 340));
     }
 }

@@ -1,23 +1,19 @@
 package me.ANONIMUS.proxy.protocol.packet.impl.server.play;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
+import java.util.Arrays;
+import java.util.List;
+
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class ServerUpdateScorePacket extends Packet {
-
-    {
-        this.getProtocolList().add(new Protocol(0x3C, 47));
-        this.getProtocolList().add(new Protocol(0x42, 110));
-        this.getProtocolList().add(new Protocol(0x45, 340));
-    }
-
     private String scoreName;
     private int action;
     private String objectiveName;
@@ -28,7 +24,7 @@ public class ServerUpdateScorePacket extends Packet {
         out.writeString(this.scoreName);
         out.writeByte(this.action);
         out.writeString(this.objectiveName);
-        if(action != 1){
+        if (action != 1) {
             out.writeVarInt(this.value);
         }
     }
@@ -38,8 +34,13 @@ public class ServerUpdateScorePacket extends Packet {
         this.scoreName = in.readString(128);
         this.action = in.readByte();
         this.objectiveName = in.readString(32767);
-        if(action != 1){
+        if (action != 1) {
             this.value = in.readVarInt();
         }
+    }
+
+    @Override
+    public List<Protocol> getProtocolList() {
+        return Arrays.asList(new Protocol(0x3C, 47), new Protocol(0x42, 110), new Protocol(0x45, 340));
     }
 }

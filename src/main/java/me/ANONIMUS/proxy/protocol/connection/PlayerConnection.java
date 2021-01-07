@@ -81,6 +81,7 @@ public class PlayerConnection {
                                 owner.setRemoteSession(null);
                                 owner.setServerData(null);
                                 group.shutdownGracefully();
+                                ScoreboardUtil.updateScoreboard(owner);
                             }
 
                             @Override
@@ -106,8 +107,8 @@ public class PlayerConnection {
                                 } else if (packet instanceof ServerKeepAlivePacket) {
                                     owner.getRemoteSession().sendPacket(new ClientKeepAlivePacket(((ServerKeepAlivePacket) packet).getKeepaliveId()));
                                 } else if (packet instanceof ServerCustomPayloadPacket) {
-                                    if (((ServerCustomPayloadPacket) packet).getChannelName().equals("MC|Brand")) {
-                                        ChatUtil.sendChatMessage("&6>> &8Engine: &6" + ((ServerCustomPayloadPacket) packet).getBufferData().readString().split(" ")[0], owner, false);
+                                    if (((ServerCustomPayloadPacket) packet).getChannel().equals("MC|Brand")) {
+                                        ChatUtil.sendChatMessage("&6>> &8Engine: &6" + ((ServerCustomPayloadPacket) packet).getData().readString().split(" ")[0], owner, false);
                                         ScoreboardUtil.updateScoreboard(owner);
                                     }
                                 } else if (owner.isConnected() && owner.getRemoteSession().getConnectionState() == ConnectionState.PLAY) {
