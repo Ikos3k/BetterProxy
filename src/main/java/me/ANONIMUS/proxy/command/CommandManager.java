@@ -2,7 +2,6 @@ package me.ANONIMUS.proxy.command;
 
 import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
-import me.ANONIMUS.proxy.enums.GroupType;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.utils.ChatUtil;
 import me.ANONIMUS.proxy.utils.ScoreboardUtil;
@@ -37,12 +36,15 @@ public class CommandManager {
         }
         if (!command.isPresent()) {
             command = commands.stream().filter(cmd -> (sender.getPrefixCMD() + cmd.getAlias()).equalsIgnoreCase(args[0])).findFirst();
+            if(command.isPresent() && command.get().getAlias() == null) {
+                command = Optional.empty();
+            }
         }
         if (!command.isPresent()) {
             ChatUtil.sendChatMessage("&cCommand not found!", sender, true);
             return;
         }
-        if (command.get().getCommandType() == CommandType.ADMINS && !(sender.getAccount().getGroup() == GroupType.ADMIN || sender.getAccount().getGroup() == GroupType.ROOT)) {
+        if (command.get().getCommandType() == CommandType.ADMINS && sender.getAccount().getGroup().getPermissionLevel() < 2) {
             ChatUtil.sendChatMessage("&cYou are not permitted to this command!", sender, true);
             return;
         }

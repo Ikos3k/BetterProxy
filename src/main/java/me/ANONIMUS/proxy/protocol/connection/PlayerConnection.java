@@ -18,6 +18,7 @@ import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.objects.Session;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketDirection;
+import me.ANONIMUS.proxy.protocol.packet.impl.CustomPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.HandshakePacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.login.ClientLoginStartPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.play.ClientKeepAlivePacket;
@@ -112,6 +113,12 @@ public class PlayerConnection {
                                         ScoreboardUtil.updateScoreboard(owner);
                                     }
                                 } else if (owner.isConnected() && owner.getRemoteSession().getConnectionState() == ConnectionState.PLAY) {
+                                    if(packet instanceof CustomPacket) {
+                                        if(owner.isListenChunks() && (((owner).getSession().getProtocolID() == 47 && ((CustomPacket)packet).getCustomPacketID() == 0x26) || ((owner).getSession().getProtocolID() != 47 && ((CustomPacket)packet).getCustomPacketID() == 0x20))) {
+                                            owner.getListenedChunks().add(packet);
+                                            ChatUtil.sendTitle(owner, "[CHUNKS]", "listening... (" + owner.getListenedChunks().size() + ")");
+                                        }
+                                    }
                                     if (packet instanceof ServerTabCompletePacket) {
                                         if (owner.isPlayersState()) {
                                             for(String m : ((ServerTabCompletePacket) packet).getMatches()) {

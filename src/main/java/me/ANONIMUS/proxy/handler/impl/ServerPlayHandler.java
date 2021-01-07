@@ -75,7 +75,7 @@ public class ServerPlayHandler extends ServerHandler {
             if (message.startsWith(player.getPrefixCMD())) {
                 BetterProxy.getInstance().getCommandManager().onCommand(message, player);
             } else if (player.isLogged() && message.startsWith("@")) {
-                ChatUtil.sendBroadcastMessage("&8(&f" + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8) &8[" + player.getAccount().getGroup().getPrefix() + "&8] &6" + player.getAccount().getUsername() + " &8>> &7" + message.replace("@", ""),false);
+                ChatUtil.sendBroadcastMessage("&8(&f" + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8) &8[" + player.getAccount().getGroup().getPrefix() + "&8] &6" + player.getAccount().getUsername() + " &8>> &7" + message.substring(1),false);
             } else {
                 forwardPacket(packet);
             }

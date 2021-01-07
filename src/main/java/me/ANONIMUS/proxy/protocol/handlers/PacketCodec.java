@@ -4,7 +4,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.handler.codec.DecoderException;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
@@ -16,7 +17,8 @@ import me.ANONIMUS.proxy.protocol.packet.impl.CustomPacket;
 import java.util.Arrays;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class PacketCodec extends ByteToMessageCodec<Packet> {
     private ConnectionState connectionState;
     private PacketDirection packetDirection;
@@ -36,7 +38,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
 
 
     @Override
-    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List list) {
+    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) {
         if (!byteBuf.isReadable()) return;
         try {
             final PacketBuffer packetBuffer = new PacketBuffer(byteBuf);

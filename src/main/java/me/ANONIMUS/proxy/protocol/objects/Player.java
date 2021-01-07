@@ -28,6 +28,8 @@ public class Player {
     private boolean playersState;
     private boolean connected;
     private boolean logged;
+    private boolean listenChunks = false;
+    private List<Packet> listenedChunks = new ArrayList<>();
     private LastPacket lastPacket = new LastPacket();
     private OptionsManager optionsManager = new OptionsManager();
     private ServerData serverData;

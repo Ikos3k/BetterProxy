@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.protocol.packet.impl.server.play;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.ANONIMUS.proxy.protocol.data.EntityMetadata;
@@ -8,13 +7,13 @@ import me.ANONIMUS.proxy.protocol.data.util.NetUtil;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
+import net.minecraft.util.MathHelper;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class ServerSpawnPlayerPacket extends Packet {
     private int entityID;
@@ -26,6 +25,19 @@ public class ServerSpawnPlayerPacket extends Packet {
     private float pitch;
     private int currentItem;
     private EntityMetadata[] metadata;
+
+    public ServerSpawnPlayerPacket(int entityID, UUID uuid, double x, double y, double z, float yaw, float pitch, int currentItem, EntityMetadata[] metadata)
+    {
+        this.entityID = entityID;
+        this.uuid = uuid;
+        this.x = MathHelper.floor_double(x * 32.0D);
+        this.y = MathHelper.floor_double(y * 32.0D);
+        this.z = MathHelper.floor_double(z * 32.0D);
+        this.yaw = yaw;
+        this.pitch = pitch;
+        this.currentItem = currentItem;
+        this.metadata = metadata;
+    }
 
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
