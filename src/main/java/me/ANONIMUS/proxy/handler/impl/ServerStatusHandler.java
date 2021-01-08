@@ -13,7 +13,8 @@ import me.ANONIMUS.proxy.protocol.packet.impl.client.status.ClientStatusRequestP
 import me.ANONIMUS.proxy.protocol.packet.impl.server.status.ServerStatusPongPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.status.ServerStatusResponsePacket;
 import me.ANONIMUS.proxy.utils.ChatUtil;
-import net.kyori.adventure.text.Component;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -53,7 +54,7 @@ public class ServerStatusHandler extends ServerHandler {
                     ++i;
                 }
                 final PlayerInfo playerInfo = new PlayerInfo(0, 0, gp);
-                final Component desc = Component.text(ChatUtil.fixColor(BetterProxy.getInstance().getConfigManager().getConfig().line1 + "&r\n" + BetterProxy.getInstance().getConfigManager().getConfig().line2));
+                final BaseComponent[] desc = new ComponentBuilder(ChatUtil.fixColor(BetterProxy.getInstance().getConfigManager().getConfig().line1 + "&r\n" + BetterProxy.getInstance().getConfigManager().getConfig().line2)).create();
                 final ByteArrayOutputStream os = new ByteArrayOutputStream();
                 assert bufferedImage != null;
                 ImageIO.write(bufferedImage, "png", Base64.getEncoder().wrap(os));

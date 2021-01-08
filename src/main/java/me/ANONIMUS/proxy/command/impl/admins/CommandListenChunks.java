@@ -14,7 +14,7 @@ import java.io.File;
 
 public class CommandListenChunks extends Command {
     public CommandListenChunks() {
-        super("listenchunks", "chunks", ":D", "[listen/save]", CommandType.ADMINS, ConnectedType.CONNECTED);
+        super("listenchunks", "chunks", ":D", "[listen/save]", CommandType.ADMINS, ConnectedType.NONE);
     }
 
     @Override
@@ -23,13 +23,11 @@ public class CommandListenChunks extends Command {
             sender.setListenChunks(!sender.isListenChunks());
             ChatUtil.sendChatMessage("listening chunks: &6" + sender.isListenChunks(), sender, false);
         } else if (args[1].equals("save")) {
+            sender.setListenChunks(false);
+
             if(sender.getListenedChunks().size() == 0) {
                 ChatUtil.sendChatMessage("&cThe list is empty", sender, false);
                 return;
-            }
-
-            if(sender.isListenChunks()) {
-                sender.setListenChunks(false);
             }
 
             int i = 0;

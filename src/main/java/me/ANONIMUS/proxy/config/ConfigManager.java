@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ConfigManager {
-    private File file;
-    private Config config;
+    private final File file;
+    private final Config config;
 
     public ConfigManager(File f){
         this.file = f;
@@ -31,7 +31,7 @@ public class ConfigManager {
             config.line1 = (String) motd.get("line1");
             config.line2 = (String) motd.get("line2");
             JSONArray playerList = (JSONArray) motd.get("playerList");
-            config.playerList = new ArrayList<>(playerList);
+            config.playerList = new ArrayList<String>(playerList);
             config.icon = (String) motd.get("icon");
             config.protocol = ((Long) motd.get("protocol")).intValue();
 

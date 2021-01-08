@@ -22,7 +22,7 @@ import me.ANONIMUS.proxy.protocol.packet.impl.client.status.ClientStatusRequestP
 import me.ANONIMUS.proxy.protocol.packet.impl.server.status.ServerStatusPongPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.status.ServerStatusResponsePacket;
 import me.ANONIMUS.proxy.utils.ChatUtil;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 import java.net.Proxy;
 import java.util.concurrent.TimeUnit;
@@ -75,7 +75,7 @@ public class ServerPinger {
                                     final ServerStatusInfo info = ((ServerStatusResponsePacket) packet).getInfo();
                                     ChatUtil.sendChatMessage("&7Max players: &6" + info.getPlayerInfo().getMaxPlayers(), owner, false);
                                     ChatUtil.sendChatMessage("&7Online players: &6" + info.getPlayerInfo().getOnlinePlayers(), owner, false);
-                                    ChatUtil.sendChatMessage("&7MOTD: &6" + GsonComponentSerializer.gson().serialize(info.getDescription()), owner, false);
+                                    ChatUtil.sendChatMessage("&7MOTD: &6" + BaseComponent.toLegacyText(info.getDescription()), owner, false);
                                     ChatUtil.sendChatMessage("&7Version: &6" + info.getVersionInfo().getVersionName() + "(" + info.getVersionInfo().getProtocolVersion() + ")", owner, false);
                                     session.getChannel().close();
                                     group.shutdownGracefully();

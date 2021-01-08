@@ -17,6 +17,7 @@ import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerWindowItemsPacke
 import me.ANONIMUS.proxy.utils.ChatUtil;
 import me.ANONIMUS.proxy.utils.ItemUtil;
 import me.ANONIMUS.proxy.utils.PacketUtil;
+import net.md_5.bungee.api.ChatColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +59,7 @@ public class ServerPlayHandler extends ServerHandler {
                     }
                     List<ItemStack> items = new ArrayList<>();
                     player.getOptionsManager().getOptions().forEach(options -> {
-                        if (window.getItem() != null && window.getMode() == WindowAction.CLICK_ITEM && options.getName().equalsIgnoreCase(ChatUtil.stripColor(window.getItem().getName()))) {
+                        if (window.getItem() != null && window.getMode() == WindowAction.CLICK_ITEM && options.getName().equalsIgnoreCase(ChatColor.stripColor(window.getItem().getName()))) {
                             options.toggle(player);
                         }
                         items.add(ItemUtil.option(options));

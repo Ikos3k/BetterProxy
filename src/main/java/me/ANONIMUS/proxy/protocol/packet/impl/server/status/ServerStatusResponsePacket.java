@@ -14,8 +14,8 @@ import me.ANONIMUS.proxy.protocol.objects.GameProfile;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -49,7 +49,7 @@ public class ServerStatusResponsePacket extends Packet {
 
         obj.add("version", ver);
         obj.add("players", plrs);
-        obj.add("description", new Gson().fromJson(GsonComponentSerializer.gson().serialize(this.info.getDescription()), JsonElement.class));
+        obj.add("description", new Gson().fromJson(ComponentSerializer.toString(this.info.getDescription()), JsonElement.class));
         if (this.info.getIcon() != null) {
             obj.addProperty("favicon", this.info.getIcon());
         }
@@ -77,7 +77,7 @@ public class ServerStatusResponsePacket extends Packet {
 
         PlayerInfo players = new PlayerInfo(plrs.get("max").getAsInt(), plrs.get("online").getAsInt(), profiles);
         JsonElement desc = obj.get("description");
-        Component description = GsonComponentSerializer.gson().deserialize(desc.toString());
+        BaseComponent[] description = ComponentSerializer.parse(desc.toString());
         String icon = null;
         if (obj.has("favicon")) {
             icon = obj.get("favicon").getAsString();

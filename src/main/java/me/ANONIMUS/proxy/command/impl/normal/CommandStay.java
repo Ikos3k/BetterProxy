@@ -22,7 +22,8 @@ import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerJoinGamePacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerKeepAlivePacket;
 import me.ANONIMUS.proxy.utils.ChatUtil;
 import me.ANONIMUS.proxy.utils.WorldUtil;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 public class CommandStay extends Command {
     public CommandStay() {
@@ -56,11 +57,11 @@ public class CommandStay extends Command {
                     bot.getSession().sendPacket(new ClientCustomPayloadPacket("MC|Brand", "vanilla".getBytes()));
                     bot.getSession().sendPacket(new ClientSettingsPacket("pl_PL", (byte) 32, (byte) 0, false, (byte) 1));
                 } else if (packet instanceof ServerDisconnectPacket) {
-                    ChatUtil.sendChatMessage("&6>> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &c" + bot.getServerData().getHost() + ":" + bot.getServerData().getPort() + " &fcause: &c" + ChatUtil.stripColor(GsonComponentSerializer.gson().serialize(((ServerDisconnectPacket) packet).getReason())), bot.getOwner(), true);
+                    ChatUtil.sendChatMessage("&6>> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &c" + bot.getServerData().getHost() + ":" + bot.getServerData().getPort() + " &fcause: &c" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerDisconnectPacket) packet).getReason())), bot.getOwner(), true);
                     disconnect(bot, sender);
 
                 } else if (packet instanceof ServerLoginDisconnectPacket) {
-                    ChatUtil.sendChatMessage("&6>> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &c" + bot.getServerData().getHost() + ":" + bot.getServerData().getPort() + " &cause: &c" + ChatUtil.stripColor(GsonComponentSerializer.gson().serialize(((ServerLoginDisconnectPacket) packet).getReason())), bot.getOwner(), true);
+                    ChatUtil.sendChatMessage("&6>> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &c" + bot.getServerData().getHost() + ":" + bot.getServerData().getPort() + " &cause: &c" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerLoginDisconnectPacket) packet).getReason())), bot.getOwner(), true);
                     disconnect(bot, sender);
                 }
             }

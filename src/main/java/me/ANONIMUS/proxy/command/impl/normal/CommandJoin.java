@@ -28,8 +28,7 @@ public class CommandJoin extends Command {
             port = Integer.parseInt(sp[1]);
         }
 
-        final boolean resolver = Boolean.parseBoolean(args[3]);
-        if(resolver) {
+        if(Boolean.parseBoolean(args[3])) {
             final String[] resolved = SRVResolver.getServerAddress(host);
             host = resolved[0];
             port = Integer.parseInt(resolved[1]);
@@ -43,14 +42,10 @@ public class CommandJoin extends Command {
             return;
         }
 
-        final String username = args[2];
-        final boolean ping = Boolean.parseBoolean(args[4]);
-
         final Proxy proxy = Proxy.NO_PROXY;
-
-        if (ping) {
+        if (Boolean.parseBoolean(args[4])) {
             new ServerPinger(sender, true).connect(host, port, proxy);
         }
-        new PlayerConnection(sender, username).connect(host, port, proxy);
+        new PlayerConnection(sender, args[2]).connect(host, port, proxy);
     }
 }

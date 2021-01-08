@@ -25,11 +25,11 @@ public class ServerCustomPayloadPacket extends Packet {
     }
 
     @Override
-    public void read(PacketBuffer in, int protocol) {
-        try {
-            this.channel = in.readString(20);
-            int i = in.readableBytes();
+    public void read(PacketBuffer in, int protocol) throws Exception{
+        this.channel = in.readString(20);
+        int i = in.readableBytes();
 
+        try {
             if (i >= 0 && i <= 1048576) {
                 this.data = new PacketBuffer(in.readBytes(i));
             }
@@ -37,12 +37,12 @@ public class ServerCustomPayloadPacket extends Packet {
         }
     }
 
+    public byte[] getByteData() {
+        return this.data.readByteArray();
+    }
+
     @Override
     public List<Protocol> getProtocolList() {
         return Arrays.asList(new Protocol(0x3F, 47), new Protocol(0x3F, 110), new Protocol(0x18, 340));
-    }
-
-    public byte[] getByteData() {
-        return this.data.readByteArray();
     }
 }

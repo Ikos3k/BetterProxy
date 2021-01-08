@@ -11,7 +11,7 @@ public enum Face {
     SOUTH(5),
     SPECIAL(255);
 
-    private int id;
+    private final int id;
 
     Face(int id) {
         this.id = id;

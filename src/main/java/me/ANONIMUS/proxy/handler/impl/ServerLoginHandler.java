@@ -14,7 +14,6 @@ import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSuccessPac
 import me.ANONIMUS.proxy.utils.ChatUtil;
 import me.ANONIMUS.proxy.utils.ScoreboardUtil;
 import me.ANONIMUS.proxy.utils.WorldUtil;
-import net.kyori.adventure.text.Component;
 
 import java.util.UUID;
 
@@ -54,7 +53,7 @@ public class ServerLoginHandler extends ServerHandler {
                     return;
                 }
             }
-            player.getSession().sendPacket(new ServerLoginDisconnectPacket(Component.text(ChatUtil.fixColor("&4You don't have access..."))));
+            player.getSession().sendPacket(new ServerLoginDisconnectPacket("&4You don't have access..."));
         }
     }
 }

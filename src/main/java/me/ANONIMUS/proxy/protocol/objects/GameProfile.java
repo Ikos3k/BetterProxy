@@ -46,7 +46,7 @@ public class GameProfile {
     
     public List<Property> getProperties() {
         if (this.properties == null) {
-            this.properties = new ArrayList<Property>();
+            this.properties = new ArrayList<>();
         }
         return this.properties;
     }
@@ -62,7 +62,7 @@ public class GameProfile {
 
     public Map<TextureType, Texture> getTextures() {
         if (this.textures == null) {
-            this.textures = new HashMap<TextureType, Texture>();
+            this.textures = new HashMap<>();
         }
         return this.textures;
     }
@@ -72,9 +72,9 @@ public class GameProfile {
     }
     
     public static class Property {
-        private String name;
-        private String value;
-        private String signature;
+        private final String name;
+        private final String value;
+        private final String signature;
         
         public Property(final String name, final String value) {
             this(name, value, null);
@@ -110,17 +110,17 @@ public class GameProfile {
     
     public enum TextureType {
         SKIN, 
-        CAPE;
+        CAPE
     }
     
     public enum TextureModel {
         NORMAL, 
-        SLIM;
+        SLIM
     }
     
     public static class Texture {
-        private String url;
-        private Map<String, String> metadata;
+        private final String url;
+        private final Map<String, String> metadata;
         
         public Texture(final String url, final Map<String, String> metadata) {
             this.url = url;

@@ -8,7 +8,6 @@ import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerPlayerAbilitiesP
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerPlayerListEntryPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerPlayerListHeaderFooter;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerSetSlotPacket;
-import net.kyori.adventure.text.Component;
 
 import java.util.stream.IntStream;
 
@@ -18,7 +17,7 @@ public class PacketUtil {
     }
 
     public static void headless(final Session session) {
-//        session.sendPacket(new ClientPlayerRotationPacket(false, 0.0f, 180.0f));
+
     }
 
     public static void speed(final Session session, final int speed) {
@@ -34,7 +33,7 @@ public class PacketUtil {
             playerListEntries[i] = player.getTabList().get(i);
         }
         player.getSession().sendPacket(new ServerPlayerListEntryPacket(PlayerListEntryAction.REMOVE_PLAYER, playerListEntries));
-        player.getSession().sendPacket(new ServerPlayerListHeaderFooter(Component.text(" "), Component.text(" ")));
+        player.getSession().sendPacket(new ServerPlayerListHeaderFooter(" ", " "));
         player.getTabList().clear();
     }
 }

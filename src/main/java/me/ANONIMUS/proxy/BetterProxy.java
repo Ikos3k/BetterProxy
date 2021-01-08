@@ -3,6 +3,7 @@ package me.ANONIMUS.proxy;
 import lombok.Data;
 import me.ANONIMUS.proxy.command.CommandManager;
 import me.ANONIMUS.proxy.config.ConfigManager;
+import me.ANONIMUS.proxy.exploits.ExploitManager;
 import me.ANONIMUS.proxy.objects.Account;
 import me.ANONIMUS.proxy.protocol.ProxyServer;
 import me.ANONIMUS.proxy.protocol.packet.PacketRegistry;
@@ -20,6 +21,7 @@ import java.util.Timer;
 public class BetterProxy {
     private final CommandManager commandManager;
     private final PacketRegistry packetRegistry;
+    private final ExploitManager exploitManager;
     private final ConfigManager configManager;
     private static BetterProxy instance;
     private final List<Account> accounts;
@@ -31,6 +33,7 @@ public class BetterProxy {
         dirFolder = new File("BetterProxy");
         commandManager = new CommandManager();
         packetRegistry = new PacketRegistry();
+        exploitManager = new ExploitManager();
         configManager = new ConfigManager(new File(dirFolder + "/config.json"));
         configManager.read();
         accounts = new ArrayList<>();
@@ -47,6 +50,8 @@ public class BetterProxy {
         FileUtil.createMissing();
         System.out.println("> Loading packets...");
         packetRegistry.load();
+        System.out.println("> Loading exploits...");
+        FileUtil.loadExploits();
         System.out.println("> Loading commands...");
         commandManager.init();
         System.out.println("> Loading accounts...");

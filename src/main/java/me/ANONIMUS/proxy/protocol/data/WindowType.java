@@ -17,9 +17,9 @@ public enum WindowType {
     VILLAGER("minecraft:villager"),
     HORSE("EntityHorse");
 
-    private String id;
+    private final String id;
 
-    private WindowType(String id) {
+    WindowType(String id) {
         this.id = id;
     }
 

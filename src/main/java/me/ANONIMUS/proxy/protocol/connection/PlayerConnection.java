@@ -29,7 +29,8 @@ import me.ANONIMUS.proxy.protocol.packet.impl.server.play.*;
 import me.ANONIMUS.proxy.utils.ChatUtil;
 import me.ANONIMUS.proxy.utils.ScoreboardUtil;
 import me.ANONIMUS.proxy.utils.WorldUtil;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 import java.net.Proxy;
 import java.util.ArrayList;
@@ -81,8 +82,8 @@ public class PlayerConnection {
                                 }
                                 owner.setRemoteSession(null);
                                 owner.setServerData(null);
-                                group.shutdownGracefully();
                                 ScoreboardUtil.updateScoreboard(owner);
+                                group.shutdownGracefully();
                             }
 
                             @Override
@@ -100,10 +101,10 @@ public class PlayerConnection {
                                     ChatUtil.sendChatMessage("&6>> &6Connected successfully&8!", owner, false);
                                     ScoreboardUtil.updateScoreboard(owner);
                                 } else if (packet instanceof ServerDisconnectPacket) {
-                                    ChatUtil.sendChatMessage("&6>> &8Connection to the server was lost: &6" + owner.getServerData().getHost() + " &8cause: &6" + ChatUtil.stripColor(GsonComponentSerializer.gson().serialize(((ServerDisconnectPacket) packet).getReason())), owner, false);
+                                    ChatUtil.sendChatMessage("&6>> &8Connection to the server was lost: &6" + owner.getServerData().getHost() + " &8cause: &6" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerDisconnectPacket) packet).getReason())), owner, false);
                                     disconnect();
                                 } else if (packet instanceof ServerLoginDisconnectPacket) {
-                                    ChatUtil.sendChatMessage("&6>> &8Connection to the server was lost: &6" + owner.getServerData().getHost() + " &8cause: &6" + ChatUtil.stripColor(GsonComponentSerializer.gson().serialize(((ServerLoginDisconnectPacket) packet).getReason())), owner, false);
+                                    ChatUtil.sendChatMessage("&6>> &8Connection to the server was lost: &6" + owner.getServerData().getHost() + " &8cause: &6" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerLoginDisconnectPacket) packet).getReason())), owner, false);
                                     disconnect();
                                 } else if (packet instanceof ServerKeepAlivePacket) {
                                     owner.getRemoteSession().sendPacket(new ClientKeepAlivePacket(((ServerKeepAlivePacket) packet).getKeepaliveId()));
@@ -181,7 +182,7 @@ public class PlayerConnection {
         owner.setRemoteSession(null);
         owner.setServerData(null);
         WorldUtil.lobby(owner, true);
-        group.shutdownGracefully();
         ScoreboardUtil.updateScoreboard(owner);
+        group.shutdownGracefully();
     }
 }

@@ -7,24 +7,40 @@ import java.util.UUID;
 
 public class MathHelper {
     public static final float field_180189_a = sqrt_float(2.0F);
-    private static final int SIN_BITS = 12;
-    private static final int SIN_MASK = 4095;
-    private static final int SIN_COUNT = 4096;
     public static final float PI = (float) Math.PI;
     public static final float PI2 = ((float) Math.PI * 2F);
     public static final float PId2 = ((float) Math.PI / 2F);
+    public static final float deg2Rad = 0.017453292F;
+    private static final int SIN_BITS = 12;
+    private static final int SIN_MASK = 4095;
+    private static final int SIN_COUNT = 4096;
     private static final float radFull = ((float) Math.PI * 2F);
     private static final float degFull = 360.0F;
     private static final float radToIndex = 651.8986F;
     private static final float degToIndex = 11.377778F;
-    public static final float deg2Rad = 0.017453292F;
     private static final float[] SIN_TABLE_FAST = new float[4096];
-    public static boolean fastMath = false;
-
     private static final float[] SIN_TABLE = new float[65536];
-
     private static final int[] multiplyDeBruijnBitPosition;
     private static final String __OBFID = "CL_00001496";
+    public static boolean fastMath = false;
+
+    static {
+        int i;
+
+        for (i = 0; i < 65536; ++i) {
+            SIN_TABLE[i] = (float) Math.sin((double) i * Math.PI * 2.0D / 65536.0D);
+        }
+
+        multiplyDeBruijnBitPosition = new int[]{0, 1, 28, 2, 29, 14, 24, 3, 30, 22, 20, 15, 25, 17, 4, 8, 31, 27, 13, 23, 21, 19, 16, 7, 26, 12, 18, 6, 11, 5, 10, 9};
+
+        for (i = 0; i < 4096; ++i) {
+            SIN_TABLE_FAST[i] = (float) Math.sin(((float) i + 0.5F) / 4096.0F * ((float) Math.PI * 2F));
+        }
+
+        for (i = 0; i < 360; i += 90) {
+            SIN_TABLE_FAST[(int) ((float) i * 11.377778F) & 4095] = (float) Math.sin((float) i * 0.017453292F);
+        }
+    }
 
     public static float sin(float p_76126_0_) {
         return fastMath ? SIN_TABLE_FAST[(int) (p_76126_0_ * 651.8986F) & 4095] : SIN_TABLE[(int) (p_76126_0_ * 10430.378F) & 65535];
@@ -84,15 +100,15 @@ public class MathHelper {
     }
 
     public static int clamp_int(int p_76125_0_, int p_76125_1_, int p_76125_2_) {
-        return p_76125_0_ < p_76125_1_ ? p_76125_1_ : (p_76125_0_ > p_76125_2_ ? p_76125_2_ : p_76125_0_);
+        return p_76125_0_ < p_76125_1_ ? p_76125_1_ : (Math.min(p_76125_0_, p_76125_2_));
     }
 
     public static float clamp_float(float p_76131_0_, float p_76131_1_, float p_76131_2_) {
-        return p_76131_0_ < p_76131_1_ ? p_76131_1_ : (p_76131_0_ > p_76131_2_ ? p_76131_2_ : p_76131_0_);
+        return p_76131_0_ < p_76131_1_ ? p_76131_1_ : (Math.min(p_76131_0_, p_76131_2_));
     }
 
     public static double clamp_double(double p_151237_0_, double p_151237_2_, double p_151237_4_) {
-        return p_151237_0_ < p_151237_2_ ? p_151237_2_ : (p_151237_0_ > p_151237_4_ ? p_151237_4_ : p_151237_0_);
+        return p_151237_0_ < p_151237_2_ ? p_151237_2_ : (Math.min(p_151237_0_, p_151237_4_));
     }
 
     public static double denormalizeClamp(double p_151238_0_, double p_151238_2_, double p_151238_4_) {
@@ -108,7 +124,7 @@ public class MathHelper {
             p_76132_2_ = -p_76132_2_;
         }
 
-        return p_76132_0_ > p_76132_2_ ? p_76132_0_ : p_76132_2_;
+        return Math.max(p_76132_0_, p_76132_2_);
     }
 
     public static int bucketInt(int p_76137_0_, int p_76137_1_) {
@@ -129,11 +145,8 @@ public class MathHelper {
 
     public static double average(long[] p_76127_0_) {
         long var1 = 0L;
-        long[] var3 = p_76127_0_;
-        int var4 = p_76127_0_.length;
 
-        for (int var5 = 0; var5 < var4; ++var5) {
-            long var6 = var3[var5];
+        for (long var6 : p_76127_0_) {
             var1 += var6;
         }
 
@@ -253,8 +266,8 @@ public class MathHelper {
         int var3 = (p_180188_1_ & 16711680) >> 16;
         int var4 = (p_180188_0_ & 65280) >> 8;
         int var5 = (p_180188_1_ & 65280) >> 8;
-        int var6 = (p_180188_0_ & 255) >> 0;
-        int var7 = (p_180188_1_ & 255) >> 0;
+        int var6 = (p_180188_0_ & 255);
+        int var7 = (p_180188_1_ & 255);
         int var8 = (int) ((float) var2 * (float) var3 / 255.0F);
         int var9 = (int) ((float) var4 * (float) var5 / 255.0F);
         int var10 = (int) ((float) var6 * (float) var7 / 255.0F);
@@ -275,24 +288,6 @@ public class MathHelper {
         long var1 = p_180182_0_.nextLong() & -61441L | 16384L;
         long var3 = p_180182_0_.nextLong() & 4611686018427387903L | Long.MIN_VALUE;
         return new UUID(var1, var3);
-    }
-
-    static {
-        int i;
-
-        for (i = 0; i < 65536; ++i) {
-            SIN_TABLE[i] = (float) Math.sin((double) i * Math.PI * 2.0D / 65536.0D);
-        }
-
-        multiplyDeBruijnBitPosition = new int[]{0, 1, 28, 2, 29, 14, 24, 3, 30, 22, 20, 15, 25, 17, 4, 8, 31, 27, 13, 23, 21, 19, 16, 7, 26, 12, 18, 6, 11, 5, 10, 9};
-
-        for (i = 0; i < 4096; ++i) {
-            SIN_TABLE_FAST[i] = (float) Math.sin(((float) i + 0.5F) / 4096.0F * ((float) Math.PI * 2F));
-        }
-
-        for (i = 0; i < 360; i += 90) {
-            SIN_TABLE_FAST[(int) ((float) i * 11.377778F) & 4095] = (float) Math.sin((float) i * 0.017453292F);
-        }
     }
 }
 

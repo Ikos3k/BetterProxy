@@ -137,7 +137,7 @@ public class PacketBuffer extends ByteBuf {
         return ret;
     }
 
-    public void writeBytes(byte[] b, int length) throws IOException {
+    public void writeBytes(byte[] b, int length) {
         this.writeBytes(b, 0, length);
     }
 
@@ -219,7 +219,7 @@ public class PacketBuffer extends ByteBuf {
 
 
     public <T extends Enum<T>> T readEnumValue(Class<T> enumClass) {
-        return (T) enumClass.getEnumConstants()[this.readVarInt()];
+        return enumClass.getEnumConstants()[this.readVarInt()];
     }
 
     public PacketBuffer writeEnumValue(Enum<?> value) {
