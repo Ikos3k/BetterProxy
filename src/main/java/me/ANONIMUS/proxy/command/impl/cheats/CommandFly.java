@@ -9,13 +9,12 @@ import me.ANONIMUS.proxy.utils.PacketUtil;
 
 public class CommandFly extends Command {
     public CommandFly() {
-        super("fly", null, null, "[true/false]", CommandType.CHEATS, ConnectedType.CONNECTED);
+        super("fly", null, null, "[true/false]", CommandType.CHEATS, ConnectedType.NONE);
     }
 
     @Override
     public void onCommand(Player sender, String cmd, String[] args) throws Exception {
-        boolean b = Boolean.parseBoolean(args[1]);
-        PacketUtil.fly(sender.getSession(), b);
-        ChatUtil.sendChatMessage("&6Flying is " + (b ? "&aon" : "&coff") + "&7!", sender, true);
+        PacketUtil.fly(sender.getSession(), Boolean.parseBoolean(args[1]));
+        ChatUtil.sendChatMessage("&7Flying is successfully set to &6" + args[1] + "&7!", sender, true);
     }
 }

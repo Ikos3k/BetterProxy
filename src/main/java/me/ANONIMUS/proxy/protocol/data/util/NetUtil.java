@@ -4,6 +4,9 @@ import me.ANONIMUS.proxy.protocol.data.*;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +79,7 @@ public class NetUtil {
                     break;
                 }
                 case INT: {
-                    out.writeInt((int) meta.getValue());
+                    out.writeInt((int)meta.getValue());
                     break;
                 }
                 case FLOAT: {
@@ -97,9 +100,9 @@ public class NetUtil {
                 }
                 case POSITION: {
                     final Position pos = (Position)meta.getValue();
-                    out.writeInt((int) pos.getX());
-                    out.writeInt((int) pos.getY());
-                    out.writeInt((int) pos.getZ());
+                    out.writeInt((int)pos.getX());
+                    out.writeInt((int)pos.getY());
+                    out.writeInt((int)pos.getZ());
                     break;
                 }
                 case ROTATION: {
@@ -115,5 +118,94 @@ public class NetUtil {
             }
         }
         out.writeByte(127);
+    }
+
+    public static ParsedChunkData dataToChunks(NetworkChunkData data, boolean checkForSky) {
+        Chunk[] chunks = new Chunk[16];
+        int pos = 0;
+        int expected = 0;
+        boolean sky = false;
+        ShortBuffer buf = ByteBuffer.wrap(data.getData()).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer();
+        for (int pass = 0; pass < 4; ++pass) {
+            for (int ind = 0; ind < 16; ++ind) {
+                if ((data.getMask() & 1 << ind) == 0) continue;
+                if (pass == 0) {
+                    expected += 10240;
+                }
+                if (pass == 1) {
+                    chunks[ind] = new Chunk(sky || data.hasSkyLight());
+                    ShortArray3d blocks = chunks[ind].getBlocks();
+                    buf.position(pos / 2);
+                    buf.get(blocks.getData(), 0, blocks.getData().length);
+                    pos += blocks.getData().length * 2;
+                }
+                if (pass == 2) {
+                    NibbleArray3d blocklight = chunks[ind].getBlockLight();
+                    System.arraycopy(data.getData(), pos, blocklight.getData(), 0, blocklight.getData().length);
+                    pos += blocklight.getData().length;
+                }
+                if (pass != 3 || !sky && !data.hasSkyLight()) continue;
+                NibbleArray3d skylight = chunks[ind].getSkyLight();
+                System.arraycopy(data.getData(), pos, skylight.getData(), 0, skylight.getData().length);
+                pos += skylight.getData().length;
+            }
+            if (pass != 0 || data.getData().length <= expected) continue;
+            sky = checkForSky;
+        }
+        byte[] biomeData = null;
+        if (data.isFullChunk()) {
+            biomeData = new byte[256];
+            System.arraycopy(data.getData(), pos, biomeData, 0, biomeData.length);
+            pos += biomeData.length;
+        }
+        return new ParsedChunkData(chunks, biomeData);
+    }
+
+    public static NetworkChunkData chunksToData(ParsedChunkData chunks) {
+        int chunkMask = 0;
+        boolean fullChunk = chunks.getBiomes() != null;
+        boolean sky = false;
+        int length = fullChunk ? chunks.getBiomes().length : 0;
+        byte[] data = null;
+        int pos = 0;
+        ShortBuffer buf = null;
+        for (int pass = 0; pass < 4; ++pass) {
+            for (int ind = 0; ind < chunks.getChunks().length; ++ind) {
+                Chunk chunk = chunks.getChunks()[ind];
+                if (chunk == null || fullChunk && chunk.isEmpty()) continue;
+                if (pass == 0) {
+                    chunkMask |= 1 << ind;
+                    length += chunk.getBlocks().getData().length * 2;
+                    length += chunk.getBlockLight().getData().length;
+                    if (chunk.getSkyLight() != null) {
+                        length += chunk.getSkyLight().getData().length;
+                    }
+                }
+                if (pass == 1) {
+                    short[] blocks = chunk.getBlocks().getData();
+                    buf.position(pos / 2);
+                    buf.put(blocks, 0, blocks.length);
+                    pos += blocks.length * 2;
+                }
+                if (pass == 2) {
+                    byte[] blocklight = chunk.getBlockLight().getData();
+                    System.arraycopy(blocklight, 0, data, pos, blocklight.length);
+                    pos += blocklight.length;
+                }
+                if (pass != 3 || chunk.getSkyLight() == null) continue;
+                byte[] skylight = chunk.getSkyLight().getData();
+                System.arraycopy(skylight, 0, data, pos, skylight.length);
+                pos += skylight.length;
+                sky = true;
+            }
+            if (pass != 0) continue;
+            data = new byte[length];
+            buf = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer();
+        }
+        if (fullChunk) {
+            System.arraycopy(chunks.getBiomes(), 0, data, pos, chunks.getBiomes().length);
+            pos += chunks.getBiomes().length;
+        }
+        return new NetworkChunkData(chunkMask, fullChunk, sky, data);
     }
 }

@@ -26,9 +26,11 @@ public class FileUtil {
             final File f1 = new File(BetterProxy.getInstance().getDirFolder() + "/accounts.txt");
             final File f2 = new File(BetterProxy.getInstance().getDirFolder() + "/world");
             final File f3 = new File(BetterProxy.getInstance().getDirFolder() + "/exploits");
+            final File f4 = new File(BetterProxy.getInstance().getDirFolder() + "/schematics");
             if (!f1.exists()) { f1.createNewFile(); }
             if (!f2.exists()) { f2.mkdir(); }
             if (!f3.exists()) { f3.mkdir(); }
+            if (!f3.exists()) { f4.mkdir(); }
         } catch (Exception e) {
             e.printStackTrace();
         }

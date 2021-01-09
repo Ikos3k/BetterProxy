@@ -5,29 +5,31 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.handler.codec.DecoderException;
+import lombok.Setter;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 
 import java.util.List;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
+@Setter
 public class CompressionCodec extends ByteToMessageCodec<ByteBuf> {
     private final byte[] buffer = new byte[8192];
     private final Deflater deflater;
     private final Inflater inflater;
-    private int threshold;
+    private int compressionThreshold;
 
     public CompressionCodec(int thresholdIn) {
-        this.threshold = thresholdIn;
+        this.compressionThreshold = thresholdIn;
         this.deflater = new Deflater();
         this.inflater = new Inflater();
     }
 
     @Override
-    protected void encode(ChannelHandlerContext channelHandlerContext, ByteBuf in, ByteBuf out) throws Exception {
+    protected void encode(ChannelHandlerContext channelHandlerContext, ByteBuf in, ByteBuf out) {
         int readable = in.readableBytes();
         PacketBuffer output = new PacketBuffer(out);
-        if (readable < this.threshold) {
+        if (readable < this.compressionThreshold) {
             output.writeVarInt(0);
             out.writeBytes(in);
         } else {
@@ -53,8 +55,8 @@ public class CompressionCodec extends ByteToMessageCodec<ByteBuf> {
             if (size == 0) {
                 out.add(buf.readBytes(buf.readableBytes()));
             } else {
-                if (size < this.threshold) {
-                    throw new DecoderException("Badly compressed packet: size of " + size + " is below threshold of " + this.threshold + ".");
+                if (size < this.compressionThreshold) {
+                    throw new DecoderException("Badly compressed packet: size of " + size + " is below threshold of " + this.compressionThreshold + ".");
                 }
 
                 if (size > 2097152) {
@@ -70,9 +72,5 @@ public class CompressionCodec extends ByteToMessageCodec<ByteBuf> {
                 this.inflater.reset();
             }
         }
-    }
-
-    public void setCompressionThreshold(int thresholdIn) {
-        threshold = thresholdIn;
     }
 }

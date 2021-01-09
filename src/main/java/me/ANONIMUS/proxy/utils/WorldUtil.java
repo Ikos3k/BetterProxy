@@ -1,6 +1,8 @@
 package me.ANONIMUS.proxy.utils;
 
+import lombok.SneakyThrows;
 import me.ANONIMUS.proxy.BetterProxy;
+import me.ANONIMUS.proxy.objects.Schematic;
 import me.ANONIMUS.proxy.protocol.data.*;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntry;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntryAction;
@@ -9,6 +11,7 @@ import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.impl.CustomPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.*;
+import net.minecraft.nbt.NBTTagCompound;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,11 +21,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class WorldUtil {
     public static void dimSwitch(Player player, ServerJoinGamePacket packet) {
-        player.getSession().sendPacket(new ServerRespawnPacket(Dimension.END, Difficulty.PEACEFULL, Gamemode.ADVENTURE, "default_1_1"));
+        player.getSession().sendPacket(new ServerRespawnPacket(Dimension.END, Difficulty.PEACEFULL, Gamemode.SURVIVAL, "default_1_1"));
         player.getSession().sendPacket(packet);
         player.getSession().sendPacket(new ServerRespawnPacket(packet.getDimension(), packet.getDifficulty(), packet.getGamemode(), packet.getLevelType()));
     }
@@ -30,10 +34,11 @@ public class WorldUtil {
     public static void emptyWorld(Player player) {
         dimSwitch(player, new ServerJoinGamePacket(0, Gamemode.SURVIVAL, Dimension.OVERWORLD, Difficulty.PEACEFULL, 1, "default_1_1", false));
         player.getSession().sendPacket(new ServerSpawnPositionPacket(new Position(0, 1, 0)));
-        player.getSession().sendPacket(new ServerPlayerPositionRotationPacket(0, 1, 0, 0.0f, 0.0f));
-        player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, false, false, false, 0f, 0f));
+        player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, true, false, false, 2f, 2f));
+        player.getSession().sendPacket(new ServerPlayerPositionRotationPacket(0, 0, 0, 180, 90));
     }
 
+    @SneakyThrows
     public static void lobby(Player player, boolean clear) {
         if (clear) { emptyWorld(player); }
         PacketUtil.clearInventory(player);
@@ -48,6 +53,8 @@ public class WorldUtil {
             }
         } catch (IOException ignored) { }
 
+//        testLoadSchematic(player, new Schematic(BetterProxy.getInstance().getDirFolder() + "/schematics/example.schematic"), 0, 0);
+
         player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, false, false, false, 0f, 0f));
         player.getSession().sendPacket(new ServerPlayerPositionRotationPacket(0.5, 70, 0.5, 0.0f, 0.0f));
 
@@ -58,9 +65,40 @@ public class WorldUtil {
         ItemUtil.loadStartItems(player);
     }
 
-    private static void spawnPlayers(Player p) {
-        PacketUtil.clearTabList(p);
+    private static void testLoadSchematic(final Player player, final Schematic schematic, final int posX, final int posZ) {
+        NBTTagCompound nbt = schematic.getNbtTagCompound();
+        final int width = nbt.getShort("Width");
+        final int height = nbt.getShort("Height");
+        final int length = nbt.getShort("Length");
+        final byte[] blocksBytes = nbt.getByteArray("Blocks");
+        final byte[] dataBytes = nbt.getByteArray("Data");
 
+        Chunk[] chunks = new Chunk[16];
+
+        byte[] biomes = new byte[256];
+        Arrays.fill(biomes, (byte) ((Math.sin(posX * posZ) + 1.0D) * 10.0D));
+
+        ShortArray3d blocks = new ShortArray3d(4096);
+        NibbleArray3d blockLight = new NibbleArray3d(4096);
+        NibbleArray3d skylight = new NibbleArray3d(4096);
+        for (int x = 0; x < width; x++) {
+            for (int z = 0; z < length; z++) {
+                for (int y = 0; y < height; y++) {
+                    final int blockIndex = y * width * length + z * width + x;
+                    final int block = blocksBytes[blockIndex];
+                    blocks.setBlockAndData(x, y, z, block, dataBytes[blockIndex]);
+                    if (block == 0) {
+                        skylight.set(x, y, z, 15);
+                    }
+                    skylight.set(x + 1, y + 1, z + 1, 15);
+                }
+            }
+        }
+        chunks[0] = new Chunk(blocks, blockLight, skylight);
+        player.getSession().sendPacket(new ServerChunkDataPacket(posX, posZ, chunks, biomes));
+    }
+
+    private static void spawnPlayers(Player p) {
         JSONParser parser = new JSONParser();
         try {
             Object obj = parser.parse(new FileReader(new File(BetterProxy.getInstance().getDirFolder() + "/world/players.json")));

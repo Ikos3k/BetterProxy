@@ -1,6 +1,6 @@
 package me.ANONIMUS.proxy;
 
-import lombok.Data;
+import lombok.Getter;
 import me.ANONIMUS.proxy.command.CommandManager;
 import me.ANONIMUS.proxy.config.ConfigManager;
 import me.ANONIMUS.proxy.exploits.ExploitManager;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
-@Data
+@Getter
 public class BetterProxy {
     private final CommandManager commandManager;
     private final PacketRegistry packetRegistry;

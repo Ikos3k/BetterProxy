@@ -43,9 +43,15 @@ public class ServerSpawnPlayerPacket extends Packet {
     public void write(PacketBuffer out, int protocol) throws Exception {
         out.writeVarInt(this.entityID);
         out.writeUuid(this.uuid);
-        out.writeInt((int) (this.x));
-        out.writeInt((int) (this.y));
-        out.writeInt((int) (this.z));
+        if(protocol == 47) {
+            out.writeInt((int) (this.x));
+            out.writeInt((int) (this.y));
+            out.writeInt((int) (this.z));
+        } else {
+            out.writeDouble(this.x);
+            out.writeDouble(this.y);
+            out.writeDouble(this.z);
+        }
         out.writeByte((byte) (this.yaw));
         out.writeByte((byte) (this.pitch));
         out.writeShort(this.currentItem);
@@ -56,9 +62,15 @@ public class ServerSpawnPlayerPacket extends Packet {
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.entityID = in.readVarInt();
         this.uuid = in.readUuid();
-        this.x = in.readInt();
-        this.y = in.readInt();
-        this.z = in.readInt();
+        if(protocol == 47) {
+            this.x = in.readInt();
+            this.y = in.readInt();
+            this.z = in.readInt();
+        } else {
+            this.x = in.readDouble();
+            this.y = in.readDouble();
+            this.z = in.readDouble();
+        }
         this.yaw = in.readByte();
         this.pitch = in.readByte();
         this.currentItem = in.readShort();
