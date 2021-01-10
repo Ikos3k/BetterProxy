@@ -49,7 +49,7 @@ public class BetterProxy {
         System.out.println("> Creating files...");
         FileUtil.createMissing();
         System.out.println("> Loading packets...");
-        packetRegistry.load();
+        packetRegistry.init();
         System.out.println("> Loading exploits...");
         FileUtil.loadExploits();
         System.out.println("> Loading commands...");
@@ -58,6 +58,7 @@ public class BetterProxy {
         FileUtil.loadAccounts();
         System.out.println("> Starting the server...");
         server.bind();
+        System.out.println();
 
         final Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TitleLagThread(), 1000L, 1000L);

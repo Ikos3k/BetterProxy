@@ -36,6 +36,7 @@ public class ServerStatusHandler extends ServerHandler {
     @Override
     public void handlePacket(Packet packet) {
         if (packet instanceof ClientStatusRequestPacket) {
+            System.out.println("> Ping packet received from: " + player.getSession().getChannel().localAddress());
             try {
                 final File statusFile = new File(BetterProxy.getInstance().getDirFolder() + "/" + BetterProxy.getInstance().getConfigManager().getConfig().icon);
                 BufferedImage bufferedImage = null;

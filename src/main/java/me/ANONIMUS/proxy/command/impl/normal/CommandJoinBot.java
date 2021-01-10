@@ -62,8 +62,7 @@ public class CommandJoinBot extends Command {
                 final String username = (usernames + i);
 
                 if(ping){
-                    final ServerPinger pinger = new ServerPinger(sender,false);
-                    pinger.connect(host, port, Proxy.NO_PROXY);
+                   new ServerPinger(sender,false).connect(host, port, Proxy.NO_PROXY);
                 }
                 new BotConnection().connect(host, port, Proxy.NO_PROXY, new Bot(username, sender));
                 try {

@@ -6,6 +6,7 @@ import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerChatPacket;
 import me.ANONIMUS.proxy.utils.ChatUtil;
+import me.ANONIMUS.proxy.utils.StringUtil;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -23,8 +24,7 @@ public class CommandHelp extends Command {
     public void onCommand(Player sender, String cmd, String[] args) throws Exception {
         List<Command> list = new ArrayList<>();
         BetterProxy.getInstance().getCommandManager().getCommands().stream().filter(command -> command.getCommandType() != null).forEach(list::add);
-        list.sort(Comparator.comparingInt(s -> ChatUtil.getStringWidth(s.getPrefix())));
-
+        list.sort(Comparator.comparingInt(s -> StringUtil.getStringWidth(s.getPrefix())));
 
         int i = 1;
         if(args.length == 2) {

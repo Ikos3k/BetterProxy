@@ -36,7 +36,6 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
         packet.write(packetbuffer, protocol);
     }
 
-
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) {
         if (!byteBuf.isReadable()) return;

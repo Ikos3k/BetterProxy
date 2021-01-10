@@ -139,8 +139,8 @@ public class PlayerConnection {
                                             List<String> matches = new ArrayList<>();
                                             for(String m : ((ServerTabCompletePacket) packet).getMatches()) {
                                                 if (m.contains(":")) {
-                                                    final String[] splitted = m.split(":", 2);
-                                                    String plugin = splitted[0].replace("/", "");
+                                                    final String[] split = m.split(":", 2);
+                                                    String plugin = split[0].replace("/", "");
                                                     if (!matches.contains(plugin)) {
                                                         matches.add(plugin);
                                                     }

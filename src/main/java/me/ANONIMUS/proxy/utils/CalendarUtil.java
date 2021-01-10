@@ -9,11 +9,10 @@ public class CalendarUtil {
     public static HolidayType getHoliday() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        if (calendar.get(Calendar.MONTH) + 1 == 12 && calendar.get(Calendar.DATE) == 24) {
-            return HolidayType.XMAS;
-        }
-        if (calendar.get(Calendar.MONTH) + 1 == 1 && calendar.get(Calendar.DATE) == 1) {
-            return HolidayType.NEW_YEAR;
+        for(HolidayType holidayType : HolidayType.values()) {
+            if(calendar.get(Calendar.MONTH) + 1 == holidayType.getMonth() && calendar.get(Calendar.DATE) == holidayType.getDay()) {
+                return holidayType;
+            }
         }
         return null;
     }
@@ -21,6 +20,6 @@ public class CalendarUtil {
     public static boolean isHoliday() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        return calendar.get(Calendar.MONTH) + 1 == 12 && calendar.get(Calendar.DATE) == 24 || calendar.get(Calendar.MONTH) + 1 == 1 && calendar.get(Calendar.DATE) == 1;
+        return getHoliday() != null;
     }
 }

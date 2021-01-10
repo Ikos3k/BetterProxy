@@ -14,6 +14,6 @@ public class CommandMother extends Command {
     @Override
     public void onCommand(Player sender, String cmd, String[] args) throws Exception {
         sender.setMother(!sender.isMother());
-        ChatUtil.sendTitle(sender, "[MOTHER]", String.valueOf(sender.isMother()));
+        ChatUtil.sendChatMessage("&7Mother is successfully set to &6" + sender.isMother() + "&7!", sender, true);
     }
 }

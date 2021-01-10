@@ -16,10 +16,6 @@ public class PacketUtil {
         session.sendPacket(new ServerPlayerAbilitiesPacket(false, fly, fly, fly, 0.1f, 0.1f));
     }
 
-    public static void headless(final Session session) {
-
-    }
-
     public static void speed(final Session session, final int speed) {
         session.sendPacket(new ServerPlayerAbilitiesPacket(false, false, false, false, 1.0f, (float) speed));
     }

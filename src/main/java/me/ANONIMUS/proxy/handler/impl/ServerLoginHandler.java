@@ -1,7 +1,6 @@
 package me.ANONIMUS.proxy.handler.impl;
 
 import me.ANONIMUS.proxy.BetterProxy;
-import me.ANONIMUS.proxy.enums.HolidayType;
 import me.ANONIMUS.proxy.handler.ServerHandler;
 import me.ANONIMUS.proxy.managers.SkinManager;
 import me.ANONIMUS.proxy.objects.Account;
@@ -58,7 +57,7 @@ public class ServerLoginHandler extends ServerHandler {
                     ChatUtil.clearChat(100, player);
                     ScoreboardUtil.sendScoreboard(player);
                     if(CalendarUtil.isHoliday()) {
-                        ChatUtil.sendTitle(player, ";D", "&6" + (CalendarUtil.getHoliday() == HolidayType.XMAS ? "Merry Christmas" : "Happy New Year") + "!");
+                        ChatUtil.sendTitle(player, ";D", "&6" + CalendarUtil.getHoliday().getWishes() + "!");
                     }
                     ChatUtil.sendBroadcastMessage("&6>> &8Player &6" + playerName + " &8has connected to the &6BetterProxy &8(&e" + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8)", false);
                     ChatUtil.sendChatMessage("&6>> &8Welcome to &6BetterProxy &8by &4ANONIMUS", player, false);

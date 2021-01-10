@@ -7,7 +7,7 @@ import java.util.Hashtable;
 public class SRVResolver {
     public static String[] getServerAddress(final String p_78863_0_) {
         try {
-            final Hashtable var2 = new Hashtable();
+            final Hashtable<String, String> var2 = new Hashtable<>();
             var2.put("java.naming.factory.initial", "com.sun.jndi.dns.DnsContextFactory");
             var2.put("java.naming.provider.url", "dns:");
             var2.put("com.sun.jndi.dns.timeout.retries", "1");

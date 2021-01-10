@@ -6,9 +6,9 @@ import java.util.List;
 
 @Data
 public abstract class Packet {
+    public abstract List<Protocol> getProtocolList();
+
     public abstract void write(PacketBuffer out, int protocol) throws Exception;
 
     public abstract void read(PacketBuffer in, int protocol) throws Exception;
-
-    public abstract List<Protocol> getProtocolList();
 }
