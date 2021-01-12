@@ -11,5 +11,6 @@ public abstract class ServerHandler {
     }
 
     public abstract void disconnected();
+
     public abstract void handlePacket(final Packet packet);
 }

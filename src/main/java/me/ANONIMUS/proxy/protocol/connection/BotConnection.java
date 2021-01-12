@@ -45,6 +45,8 @@ public class BotConnection {
         final Bootstrap bootstrap = new Bootstrap()
                 .group(group)
                 .channel(NioSocketChannel.class)
+                .option(ChannelOption.TCP_NODELAY, true)
+                .option(ChannelOption.IP_TOS, 0x18)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) {
@@ -52,7 +54,7 @@ public class BotConnection {
                         if (proxy != Proxy.NO_PROXY) {
                             pipeline.addFirst(new Socks4ProxyHandler(proxy.address()));
                         }
-                        pipeline.addLast("timer", new ReadTimeoutHandler(20));
+                        pipeline.addLast("timer", new ReadTimeoutHandler(30));
                         pipeline.addLast("frameCodec", new VarInt21FrameCodec());
                         pipeline.addLast("packetCodec", new PacketCodec(ConnectionState.LOGIN, PacketDirection.CLIENTBOUND));
                         pipeline.addLast("handler", new SimpleChannelInboundHandler<Packet>() {
@@ -97,8 +99,6 @@ public class BotConnection {
         bot.setSession(new Session(bootstrap.connect(host, port).syncUninterruptibly().channel()));
         bot.getSession().setProtocolID(bot.getOwner().getSession().getProtocolID());
         bot.getSession().setConnectionState(ConnectionState.LOGIN);
-        bot.getSession().getChannel().config().setOption(ChannelOption.TCP_NODELAY, true);
-        bot.getSession().getChannel().config().setOption(ChannelOption.IP_TOS, 0x18);
     }
 
     private void disconnect(Bot bot, Player owner) {

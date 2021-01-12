@@ -19,12 +19,11 @@ import me.ANONIMUS.proxy.utils.ScoreboardUtil;
 import me.ANONIMUS.proxy.utils.WorldUtil;
 import me.kbrewster.mojangapi.MojangAPI;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class ServerLoginHandler extends ServerHandler {
-    public ServerLoginHandler(Player player) {
-        super(player);
-    }
+    public ServerLoginHandler(Player player) { super(player); }
 
     @Override
     public void disconnected() {
@@ -47,7 +46,7 @@ public class ServerLoginHandler extends ServerHandler {
 
                     try {
                         new SkinManager(new GameProfile(MojangAPI.getUUID(playerName), playerName), player);
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
 
                     player.setAccount(account);
@@ -57,7 +56,7 @@ public class ServerLoginHandler extends ServerHandler {
                     ChatUtil.clearChat(100, player);
                     ScoreboardUtil.sendScoreboard(player);
                     if(CalendarUtil.isHoliday()) {
-                        ChatUtil.sendTitle(player, ";D", "&6" + CalendarUtil.getHoliday().getWishes() + "!");
+                        ChatUtil.sendTitle(player, ";D", "&6" + Objects.requireNonNull(CalendarUtil.getHoliday()).getWishes() + "!");
                     }
                     ChatUtil.sendBroadcastMessage("&6>> &8Player &6" + playerName + " &8has connected to the &6BetterProxy &8(&e" + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8)", false);
                     ChatUtil.sendChatMessage("&6>> &8Welcome to &6BetterProxy &8by &4ANONIMUS", player, false);

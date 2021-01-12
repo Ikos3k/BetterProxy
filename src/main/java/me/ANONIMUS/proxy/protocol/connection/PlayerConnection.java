@@ -49,6 +49,8 @@ public class PlayerConnection {
         final Bootstrap bootstrap = new Bootstrap()
                 .group(group)
                 .channel(NioSocketChannel.class)
+                .option(ChannelOption.TCP_NODELAY, true)
+                .option(ChannelOption.IP_TOS, 0x18)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) {
@@ -56,7 +58,7 @@ public class PlayerConnection {
                         if (proxy != Proxy.NO_PROXY) {
                             pipeline.addFirst(new Socks4ProxyHandler(proxy.address()));
                         }
-                        pipeline.addLast("timer", new ReadTimeoutHandler(20));
+                        pipeline.addLast("timer", new ReadTimeoutHandler(30));
                         pipeline.addLast("frameCodec", new VarInt21FrameCodec());
                         pipeline.addLast("packetCodec", new PacketCodec(ConnectionState.LOGIN, PacketDirection.CLIENTBOUND));
                         pipeline.addLast("handler", new SimpleChannelInboundHandler<Packet>() {
@@ -172,8 +174,6 @@ public class PlayerConnection {
         owner.setRemoteSession(new Session(bootstrap.connect(host, port).syncUninterruptibly().channel()));
         owner.getRemoteSession().setProtocolID(owner.getSession().getProtocolID());
         owner.getRemoteSession().setConnectionState(ConnectionState.LOGIN);
-        owner.getRemoteSession().getChannel().config().setOption(ChannelOption.TCP_NODELAY, true);
-        owner.getRemoteSession().getChannel().config().setOption(ChannelOption.IP_TOS, 0x18);
         owner.getRemoteSession().setUsername(username);
     }
 

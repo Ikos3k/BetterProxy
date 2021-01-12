@@ -121,7 +121,7 @@ public class WorldUtil {
                 GameProfile profile = new GameProfile(UUID.randomUUID(), name);
                 profile.getProperties().add(new GameProfile.Property("textures", value, signature));
                 p.getSession().sendPacket(new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, new PlayerListEntry[]{ new PlayerListEntry(profile, Gamemode.ADVENTURE, 0, name) }));
-                p.getSession().sendPacket(new ServerSpawnPlayerPacket(i, profile.getId(), x, y, z, 0, 0, 0, new EntityMetadata[0]));
+                p.getSession().sendPacket(new ServerSpawnPlayerPacket(i, profile.getId(), x, y, z, 0, 0, 0, new EntityMetadata[] { new EntityMetadata(10, MetadataType.BYTE, Byte.MAX_VALUE) }));
                 i++;
             }
         } catch (IOException | ParseException e) {

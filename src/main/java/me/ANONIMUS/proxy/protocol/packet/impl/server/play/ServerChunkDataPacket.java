@@ -16,46 +16,54 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class ServerChunkDataPacket extends Packet {
-    public ServerChunkDataPacket(final int x, final int z) {
-        this(x, z, new Chunk[16], new byte[256]);
-    }
-
-    public ServerChunkDataPacket(final int x, final int z, final Chunk[] chunks) {
-        this(x, z, chunks, null);
-    }
-
-    public ServerChunkDataPacket(final int x, final int z, final Chunk[] chunks, final byte[] biomeData) {
-        if (chunks.length != 16) {
-            throw new IllegalArgumentException("Chunks length must be 16.");
-        }
-        boolean noSkylight = false;
-        boolean skylight = false;
-        for (Chunk chunk : chunks) {
-            if (chunk != null) {
-                if (chunk.getSkyLight() == null) {
-                    noSkylight = true;
-                } else {
-                    skylight = true;
-                }
-            }
-        }
-        if (noSkylight && skylight) {
-            throw new IllegalArgumentException("Either all chunks must have skylight values or none must have them.");
-        }
-        this.x = x;
-        this.z = z;
-        this.chunks = chunks;
-        this.biomeData = biomeData;
-    }
-
     private int x;
     private int z;
     private Chunk[] chunks;
     private byte[] biomeData;
 
+    public ServerChunkDataPacket(int x, int z) {
+        this(x, z, new Chunk[16], new byte[256]);
+    }
+
+    public ServerChunkDataPacket(int x, int z, Chunk[] chunks) {
+        this(x, z, chunks, null);
+    }
+
+    public ServerChunkDataPacket(int x, int z, Chunk[] chunks, byte[] biomeData) {
+        if (chunks.length != 16) {
+            throw new IllegalArgumentException("Chunks length must be 16.");
+        } else {
+            boolean noSkylight = false;
+            boolean skylight = false;
+
+            for (Chunk chunk : chunks) {
+                if (chunk != null) {
+                    if (chunk.getSkyLight() == null) {
+                        noSkylight = true;
+                    } else {
+                        skylight = true;
+                    }
+                }
+            }
+
+            if (noSkylight && skylight) {
+                throw new IllegalArgumentException("Either all chunks must have skylight values or none must have them.");
+            } else {
+                this.x = x;
+                this.z = z;
+                this.chunks = chunks;
+                this.biomeData = biomeData;
+            }
+        }
+    }
+
+    public boolean isFullChunk() {
+        return this.biomeData != null;
+    }
+
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
-        final NetworkChunkData data = NetUtil.chunksToData(new ParsedChunkData(this.chunks, this.biomeData));
+        NetworkChunkData data = NetUtil.chunksToData(new ParsedChunkData(this.chunks, this.biomeData));
         out.writeInt(this.x);
         out.writeInt(this.z);
         out.writeBoolean(data.isFullChunk());
@@ -68,21 +76,18 @@ public class ServerChunkDataPacket extends Packet {
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.x = in.readInt();
         this.z = in.readInt();
-        final boolean fullChunk = in.readBoolean();
-        final int chunkMask = in.readUnsignedShort();
-        final byte[] data = new byte[in.readableBytes()];
-        in.readBytes(data);
-        final ParsedChunkData chunkData = NetUtil.dataToChunks(new NetworkChunkData(chunkMask, fullChunk, false, data), true);
-        this.chunks = chunkData.getChunks();
-        this.biomeData = chunkData.getBiomes();
+        boolean fullChunk = in.readBoolean();
+        int chunkMask = in.readUnsignedShort();
+        byte[] data = in.readByteArray(Integer.MAX_VALUE);
+        if (data.length > 0) {
+            ParsedChunkData chunkData = NetUtil.dataToChunks(new NetworkChunkData(chunkMask, fullChunk, false, data), true);
+            this.chunks = chunkData.getChunks();
+            this.biomeData = chunkData.getBiomes();
+        }
     }
 
     @Override
     public List<Protocol> getProtocolList() {
         return Collections.singletonList(new Protocol(0x21, 47));
-    }
-
-    public boolean isFullChunk() {
-        return this.biomeData != null;
     }
 }

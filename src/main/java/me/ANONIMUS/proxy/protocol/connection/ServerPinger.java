@@ -41,6 +41,8 @@ public class ServerPinger {
         final Bootstrap bootstrap = new Bootstrap()
                 .group(group)
                 .channel(NioSocketChannel.class)
+                .option(ChannelOption.TCP_NODELAY, true)
+                .option(ChannelOption.IP_TOS, 0x18)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) {
@@ -48,7 +50,7 @@ public class ServerPinger {
                         if (proxy != Proxy.NO_PROXY) {
                             pipeline.addFirst(new Socks4ProxyHandler(proxy.address()));
                         }
-                        pipeline.addLast("timer", new ReadTimeoutHandler(20));
+                        pipeline.addLast("timer", new ReadTimeoutHandler(30));
                         pipeline.addLast("frameCodec", new VarInt21FrameCodec());
                         pipeline.addLast("packetCodec", new PacketCodec(ConnectionState.STATUS, PacketDirection.CLIENTBOUND));
                         pipeline.addLast("handler", new SimpleChannelInboundHandler<Packet>() {
@@ -89,7 +91,5 @@ public class ServerPinger {
                 });
         session = new Session(bootstrap.connect(host, port).syncUninterruptibly().channel());
         session.setProtocolID(owner.getSession().getProtocolID());
-        session.getChannel().config().setOption(ChannelOption.TCP_NODELAY, true);
-        session.getChannel().config().setOption(ChannelOption.IP_TOS, 0x18);
     }
 }

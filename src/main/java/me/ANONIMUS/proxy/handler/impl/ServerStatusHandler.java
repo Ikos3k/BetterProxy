@@ -43,6 +43,10 @@ public class ServerStatusHandler extends ServerHandler {
                 if (statusFile.exists()) {
                     try {
                         bufferedImage = ImageIO.read(new File(BetterProxy.getInstance().getDirFolder() + "/" + BetterProxy.getInstance().getConfigManager().getConfig().icon));
+
+                        if(bufferedImage.getWidth() != 64 || bufferedImage.getHeight() != 64) {
+                            throw new IllegalStateException("> Icon must be 64 pixels wide and 64 pixels high");
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
