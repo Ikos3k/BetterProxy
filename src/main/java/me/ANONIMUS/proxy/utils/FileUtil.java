@@ -2,8 +2,8 @@ package me.ANONIMUS.proxy.utils;
 
 import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.enums.GroupType;
-import me.ANONIMUS.proxy.exploits.Exploit;
 import me.ANONIMUS.proxy.objects.Account;
+import me.ANONIMUS.proxy.objects.Exploit;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.impl.CustomPacket;

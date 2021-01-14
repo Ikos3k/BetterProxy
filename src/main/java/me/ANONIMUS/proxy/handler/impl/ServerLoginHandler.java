@@ -27,7 +27,7 @@ public class ServerLoginHandler extends ServerHandler {
 
     @Override
     public void disconnected() {
-        if(player != null) {
+        if(player != null && player.getAccount() != null) {
             System.out.println("[" + player.getAccount().getUsername() + "] Disconnected during login sequence!");
         }
     }

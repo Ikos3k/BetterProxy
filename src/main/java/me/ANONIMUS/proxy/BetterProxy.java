@@ -1,9 +1,9 @@
 package me.ANONIMUS.proxy;
 
 import lombok.Getter;
-import me.ANONIMUS.proxy.command.CommandManager;
-import me.ANONIMUS.proxy.config.ConfigManager;
-import me.ANONIMUS.proxy.exploits.ExploitManager;
+import me.ANONIMUS.proxy.managers.CommandManager;
+import me.ANONIMUS.proxy.managers.ConfigManager;
+import me.ANONIMUS.proxy.managers.ExploitManager;
 import me.ANONIMUS.proxy.objects.Account;
 import me.ANONIMUS.proxy.protocol.ProxyServer;
 import me.ANONIMUS.proxy.protocol.packet.PacketRegistry;

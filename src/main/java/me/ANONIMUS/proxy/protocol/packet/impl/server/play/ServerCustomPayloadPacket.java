@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.protocol.packet.impl.server.play;
 
-import io.netty.handler.codec.DecoderException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,14 +25,11 @@ public class ServerCustomPayloadPacket extends Packet {
 
     @Override
     public void read(PacketBuffer in, int protocol) throws Exception {
-        this.channel = in.readString(20);
+        this.channel = in.readString();
         int i = in.readableBytes();
 
-        try {
-            if (i >= 0 && i <= 1048576) {
-                this.data = new PacketBuffer(in.readBytes(i));
-            }
-        } catch (DecoderException ignored) {
+        if (i >= 0 && i <= 1048576) {
+            this.data = new PacketBuffer(in.readBytes(i));
         }
     }
 

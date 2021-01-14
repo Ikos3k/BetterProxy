@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.utils;
 
-import lombok.SneakyThrows;
 import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.objects.Schematic;
 import me.ANONIMUS.proxy.protocol.data.*;
@@ -38,7 +37,6 @@ public class WorldUtil {
         player.getSession().sendPacket(new ServerPlayerPositionRotationPacket(0, 0, 0, 180, 90));
     }
 
-    @SneakyThrows
     public static void lobby(Player player, boolean clear) {
         if (clear) { emptyWorld(player); }
         PacketUtil.clearInventory(player);
@@ -81,16 +79,15 @@ public class WorldUtil {
         ShortArray3d blocks = new ShortArray3d(4096);
         NibbleArray3d blockLight = new NibbleArray3d(4096);
         NibbleArray3d skylight = new NibbleArray3d(4096);
+
+        skylight.fill(15);
+
         for (int x = 0; x < width; x++) {
             for (int z = 0; z < length; z++) {
                 for (int y = 0; y < height; y++) {
                     final int blockIndex = y * width * length + z * width + x;
                     final int block = blocksBytes[blockIndex];
                     blocks.setBlockAndData(x, y, z, block, dataBytes[blockIndex]);
-                    if (block == 0) {
-                        skylight.set(x, y, z, 15);
-                    }
-                    skylight.set(x + 1, y + 1, z + 1, 15);
                 }
             }
         }
@@ -101,7 +98,7 @@ public class WorldUtil {
     private static void spawnPlayers(Player p) {
         JSONParser parser = new JSONParser();
         try {
-            Object obj = parser.parse(new FileReader(new File(BetterProxy.getInstance().getDirFolder() + "/world/players.json")));
+            Object obj = parser.parse(new FileReader(BetterProxy.getInstance().getDirFolder() + "/world/players.json"));
             JSONArray jsonObj = (JSONArray) obj;
 
             int i = 1;
@@ -132,7 +129,7 @@ public class WorldUtil {
     private static void loadTextsOnSign(Player p) {
         JSONParser parser = new JSONParser();
         try {
-            Object obj = parser.parse(new FileReader(new File(BetterProxy.getInstance().getDirFolder() + "/world/signs.json")));
+            Object obj = parser.parse(new FileReader(BetterProxy.getInstance().getDirFolder() + "/world/signs.json"));
             JSONArray jsonObj = (JSONArray) obj;
 
             jsonObj.forEach(signs -> {
