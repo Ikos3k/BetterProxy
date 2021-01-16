@@ -86,9 +86,34 @@ public class ServerPlayHandler extends ServerHandler {
     }
 
     private void forwardPacket(final Packet packet) {
-        if (player.isConnected()) {
+                if (player.isConnected()) {
             if (player.isMother()) {
-                player.getBots().forEach(bot -> bot.getSession().sendPacket(packet));
+                if(player.getMotherdelay() == 0){
+                    player.getBots().forEach(bot ->
+                            bot.getSession().sendPacket(packet)
+                    );
+                } else {
+                    int delay = player.getMotherdelay();
+                    Thread thread0 = new Thread(() -> {
+                        player.getBots().forEach(bot -> {
+                            Thread thread1 = new Thread(() -> {
+                                try {
+                                    TimeUnit.MILLISECONDS.sleep(delay);
+                                    bot.getSession().sendPacket(packet);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                            thread1.start();
+                            try {
+                                TimeUnit.MILLISECONDS.sleep(delay);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    });
+                    thread0.start();
+                }
             }
             if (!(packet instanceof ClientKeepAlivePacket))
                 player.getRemoteSession().sendPacket(packet);

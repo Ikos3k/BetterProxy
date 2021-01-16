@@ -37,6 +37,7 @@ public class Player {
     private List<String> players = new ArrayList<>();
     private List<PlayerListEntry> tabList = new ArrayList<>();
     private List<Bot> bots = new ArrayList<>();
+    private int motherdelay;
 
     public void packetReceived(final Packet packet) {
         if (packet instanceof HandshakePacket) {
