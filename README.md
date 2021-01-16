@@ -1,3 +1,8 @@
 BetterProxy fork by SnyGun
 
-Added : 
+Added :
+
+-motherdelay 
+-spam 
+-broadcast
+-respawn
