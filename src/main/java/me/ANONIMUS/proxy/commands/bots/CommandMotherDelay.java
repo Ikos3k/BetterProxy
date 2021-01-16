@@ -1,6 +1,6 @@
-package me.ANONIMUS.proxy.command.impl.bots;
+package me.ANONIMUS.proxy.commands.bots;
 
-import me.ANONIMUS.proxy.command.Command;
+import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.protocol.objects.Player;
