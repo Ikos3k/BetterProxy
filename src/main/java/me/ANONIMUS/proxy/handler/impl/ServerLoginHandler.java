@@ -2,6 +2,7 @@ package me.ANONIMUS.proxy.handler.impl;
 
 import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.handler.ServerHandler;
+import me.ANONIMUS.proxy.managers.PlayerManager;
 import me.ANONIMUS.proxy.managers.SkinManager;
 import me.ANONIMUS.proxy.objects.Account;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
@@ -36,6 +37,14 @@ public class ServerLoginHandler extends ServerHandler {
     public void handlePacket(Packet packet) {
         if (packet instanceof ClientLoginStartPacket) {
             final String playerName = ((ClientLoginStartPacket) packet).getUsername();
+            if(PlayerManager.getPlayers().size() > 1) {
+                for (Player p : PlayerManager.getPlayers()) {
+                    if (p.getAccount() != null && p.getAccount().getUsername().equals(playerName)) {
+                        player.getSession().sendPacket(new ServerLoginDisconnectPacket("&4The player with this nickname is already on the proxy!"));
+                        return;
+                    }
+                }
+            }
             for (Account account : BetterProxy.getInstance().getAccounts()) {
                 if (account.getUsername().equals(playerName)) {
                     player.getSession().sendPacket(new ServerLoginSetCompressionPacket(256));

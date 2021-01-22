@@ -49,17 +49,13 @@ public class CommandManager {
             ChatUtil.sendChatMessage("&cYou are not permitted to this command!", sender, true);
             return;
         }
-        if (command.get().getConnected() == ConnectedType.CONNECTED) {
-            if (!sender.isConnected()) {
-                ChatUtil.sendChatMessage("&4You must be connected to the server!", sender, true);
-                return;
-            }
+        if (command.get().getConnected() == ConnectedType.CONNECTED && !sender.isConnected()) {
+            ChatUtil.sendChatMessage("&4You must be connected to the server!", sender, true);
+            return;
         }
-        if (command.get().getConnected() == ConnectedType.DISCONNECTED) {
-            if (sender.isConnected()) {
-                ChatUtil.sendChatMessage("&4You cannot be connected to the server!", sender, true);
-                return;
-            }
+        if (command.get().getConnected() == ConnectedType.DISCONNECTED && sender.isConnected()) {
+            ChatUtil.sendChatMessage("&4You cannot be connected to the server!", sender, true);
+            return;
         }
         try {
             if (cooldown.containsKey(sender.getAccount().getUsername())) {
@@ -76,7 +72,5 @@ public class CommandManager {
         }
     }
 
-    public List<Command> getCommands() {
-        return commands;
-    }
+    public List<Command> getCommands() { return commands; }
 }

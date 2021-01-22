@@ -47,130 +47,130 @@ public class PlayerConnection {
 
     public void connect(String host, int port, Proxy proxy) {
         final Bootstrap bootstrap = new Bootstrap()
-                .group(group)
-                .channel(NioSocketChannel.class)
-                .option(ChannelOption.TCP_NODELAY, true)
-                .option(ChannelOption.IP_TOS, 0x18)
-                .handler(new ChannelInitializer<SocketChannel>() {
-                    @Override
-                    protected void initChannel(SocketChannel socketChannel) {
-                        final ChannelPipeline pipeline = socketChannel.pipeline();
-                        if (proxy != Proxy.NO_PROXY) {
-                            pipeline.addFirst(new Socks4ProxyHandler(proxy.address()));
+            .group(group)
+            .channel(NioSocketChannel.class)
+            .option(ChannelOption.TCP_NODELAY, true)
+            .option(ChannelOption.IP_TOS, 0x18)
+            .handler(new ChannelInitializer<SocketChannel>() {
+                @Override
+                protected void initChannel(SocketChannel socketChannel) {
+                    final ChannelPipeline pipeline = socketChannel.pipeline();
+                    if (proxy != Proxy.NO_PROXY) {
+                        pipeline.addFirst(new Socks4ProxyHandler(proxy.address()));
+                    }
+                    pipeline.addLast("timer", new ReadTimeoutHandler(30));
+                    pipeline.addLast("frameCodec", new VarInt21FrameCodec());
+                    pipeline.addLast("packetCodec", new PacketCodec(ConnectionState.LOGIN, PacketDirection.CLIENTBOUND));
+                    pipeline.addLast("handler", new SimpleChannelInboundHandler<Packet>() {
+                        @Override
+                        public void channelActive(ChannelHandlerContext ctx) throws Exception {
+                            ChatUtil.sendChatMessage("&6>> &8Connecting to server &7[&6" + host + "&7]", owner, false);
+                            if (proxy != Proxy.NO_PROXY) {
+                                ChatUtil.sendChatMessage("&6>> &8Used proxy: &e" + proxy.address().toString(), owner, false);
+                            }
+                            TimeUnit.MILLISECONDS.sleep(150);
+                            owner.getRemoteSession().sendPacket(new HandshakePacket(owner.getSession().getProtocolID(), "", port, 2));
+                            owner.getRemoteSession().sendPacket(new ClientLoginStartPacket(username));
+                            owner.setServerData(new ServerData(host, port));
+                            ScoreboardUtil.updateScoreboard(owner);
                         }
-                        pipeline.addLast("timer", new ReadTimeoutHandler(30));
-                        pipeline.addLast("frameCodec", new VarInt21FrameCodec());
-                        pipeline.addLast("packetCodec", new PacketCodec(ConnectionState.LOGIN, PacketDirection.CLIENTBOUND));
-                        pipeline.addLast("handler", new SimpleChannelInboundHandler<Packet>() {
-                            @Override
-                            public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                                ChatUtil.sendChatMessage("&6>> &8Connecting to server &7[&6" + host + "&7]", owner, false);
-                                if (proxy != Proxy.NO_PROXY) {
-                                    ChatUtil.sendChatMessage("&6>> &8Used proxy: &e" + proxy.address().toString(), owner, false);
-                                }
-                                TimeUnit.MILLISECONDS.sleep(150);
-                                owner.getRemoteSession().sendPacket(new HandshakePacket(owner.getSession().getProtocolID(), "", port, 2));
-                                owner.getRemoteSession().sendPacket(new ClientLoginStartPacket(username));
-                                owner.setServerData(new ServerData(host, port));
-                                ScoreboardUtil.updateScoreboard(owner);
-                            }
 
-                            @Override
-                            public void channelInactive(ChannelHandlerContext ctx) {
-                                if (owner.isConnected()) {
-                                    ChatUtil.sendChatMessage("&6>> &cDisconnected!", owner, false);
-                                    owner.setConnected(false);
-                                    WorldUtil.lobby(owner, true);
-                                }
-                                owner.setRemoteSession(null);
-                                owner.setServerData(null);
-                                ScoreboardUtil.updateScoreboard(owner);
-                                group.shutdownGracefully();
+                        @Override
+                        public void channelInactive(ChannelHandlerContext ctx) {
+                            if (owner.isConnected()) {
+                                ChatUtil.sendChatMessage("&6>> &cDisconnected!", owner, false);
+                                owner.setConnected(false);
+                                WorldUtil.lobby(owner, true);
                             }
+                            owner.setRemoteSession(null);
+                            owner.setServerData(null);
+                            ScoreboardUtil.updateScoreboard(owner);
+                            group.shutdownGracefully();
+                        }
 
-                            @Override
-                            protected void channelRead0(ChannelHandlerContext channelHandlerContext, Packet packet) {
-                                owner.getLastPacket().setReceived(System.currentTimeMillis());
-                                if (packet instanceof ServerLoginSetCompressionPacket) {
-                                    owner.getRemoteSession().setCompressionThreshold(((ServerLoginSetCompressionPacket) packet).getThreshold());
-                                } else if (packet instanceof ServerLoginSuccessPacket) {
-                                    owner.getRemoteSession().setConnectionState(ConnectionState.PLAY);
-                                    ChatUtil.sendChatMessage("&6>> &8Successfully &6logged!", owner, false);
-                                } else if (packet instanceof ServerJoinGamePacket) {
-                                    ChatUtil.sendChatMessage("&6>> &8Downloading terrain!", owner, false);
-                                    WorldUtil.dimSwitch(owner, (ServerJoinGamePacket) packet);
-                                    owner.setConnected(true);
-                                    ChatUtil.sendChatMessage("&6>> &6Connected successfully&8!", owner, false);
+                        @Override
+                        protected void channelRead0(ChannelHandlerContext channelHandlerContext, Packet packet) {
+                            owner.getLastPacket().setReceived(System.currentTimeMillis());
+                            if (packet instanceof ServerLoginSetCompressionPacket) {
+                                owner.getRemoteSession().setCompressionThreshold(((ServerLoginSetCompressionPacket) packet).getThreshold());
+                            } else if (packet instanceof ServerLoginSuccessPacket) {
+                                owner.getRemoteSession().setConnectionState(ConnectionState.PLAY);
+                                ChatUtil.sendChatMessage("&6>> &8Successfully &6logged!", owner, false);
+                            } else if (packet instanceof ServerJoinGamePacket) {
+                                ChatUtil.sendChatMessage("&6>> &8Downloading terrain!", owner, false);
+                                WorldUtil.dimSwitch(owner, (ServerJoinGamePacket) packet);
+                                owner.setConnected(true);
+                                ChatUtil.sendChatMessage("&6>> &6Connected successfully&8!", owner, false);
+                                ScoreboardUtil.updateScoreboard(owner);
+                            } else if (packet instanceof ServerDisconnectPacket) {
+                                ChatUtil.sendChatMessage("&6>> &8Connection to the server was lost: &6" + owner.getServerData().getHost() + " &8cause: &6" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerDisconnectPacket) packet).getReason())), owner, false);
+                                disconnect();
+                            } else if (packet instanceof ServerLoginDisconnectPacket) {
+                                ChatUtil.sendChatMessage("&6>> &8Connection to the server was lost: &6" + owner.getServerData().getHost() + " &8cause: &6" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerLoginDisconnectPacket) packet).getReason())), owner, false);
+                                disconnect();
+                            } else if (packet instanceof ServerKeepAlivePacket) {
+                                owner.getRemoteSession().sendPacket(new ClientKeepAlivePacket(((ServerKeepAlivePacket) packet).getKeepaliveId()));
+                            } else if (packet instanceof ServerCustomPayloadPacket) {
+                                if (((ServerCustomPayloadPacket) packet).getChannel().equals("MC|Brand")) {
+                                    ChatUtil.sendChatMessage("&6>> &8Engine: &6" + ((ServerCustomPayloadPacket) packet).getData().readString().split(" ")[0], owner, false);
                                     ScoreboardUtil.updateScoreboard(owner);
-                                } else if (packet instanceof ServerDisconnectPacket) {
-                                    ChatUtil.sendChatMessage("&6>> &8Connection to the server was lost: &6" + owner.getServerData().getHost() + " &8cause: &6" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerDisconnectPacket) packet).getReason())), owner, false);
-                                    disconnect();
-                                } else if (packet instanceof ServerLoginDisconnectPacket) {
-                                    ChatUtil.sendChatMessage("&6>> &8Connection to the server was lost: &6" + owner.getServerData().getHost() + " &8cause: &6" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerLoginDisconnectPacket) packet).getReason())), owner, false);
-                                    disconnect();
-                                } else if (packet instanceof ServerKeepAlivePacket) {
-                                    owner.getRemoteSession().sendPacket(new ClientKeepAlivePacket(((ServerKeepAlivePacket) packet).getKeepaliveId()));
-                                } else if (packet instanceof ServerCustomPayloadPacket) {
-                                    if (((ServerCustomPayloadPacket) packet).getChannel().equals("MC|Brand")) {
-                                        ChatUtil.sendChatMessage("&6>> &8Engine: &6" + ((ServerCustomPayloadPacket) packet).getData().readString().split(" ")[0], owner, false);
-                                        ScoreboardUtil.updateScoreboard(owner);
+                                }
+                            } else if (owner.isConnected() && owner.getRemoteSession().getConnectionState() == ConnectionState.PLAY) {
+                                if(packet instanceof CustomPacket) {
+                                    if(owner.isListenChunks() && (((owner).getSession().getProtocolID() == 47 && ((CustomPacket)packet).getCustomPacketID() == 0x26) || ((owner).getSession().getProtocolID() != 47 && ((CustomPacket)packet).getCustomPacketID() == 0x20))) {
+                                        owner.getListenedChunks().add(packet);
+                                        ChatUtil.sendTitle(owner, "[CHUNKS]", "listening... (" + owner.getListenedChunks().size() + ")");
                                     }
-                                } else if (owner.isConnected() && owner.getRemoteSession().getConnectionState() == ConnectionState.PLAY) {
-                                    if(packet instanceof CustomPacket) {
-                                        if(owner.isListenChunks() && (((owner).getSession().getProtocolID() == 47 && ((CustomPacket)packet).getCustomPacketID() == 0x26) || ((owner).getSession().getProtocolID() != 47 && ((CustomPacket)packet).getCustomPacketID() == 0x20))) {
-                                            owner.getListenedChunks().add(packet);
-                                            ChatUtil.sendTitle(owner, "[CHUNKS]", "listening... (" + owner.getListenedChunks().size() + ")");
+                                }
+                                if (packet instanceof ServerTabCompletePacket) {
+                                    if (owner.isPlayersState()) {
+                                        for(String m : ((ServerTabCompletePacket) packet).getMatches()) {
+                                            owner.getPlayers().add(m);
                                         }
-                                    }
-                                    if (packet instanceof ServerTabCompletePacket) {
-                                        if (owner.isPlayersState()) {
-                                            for(String m : ((ServerTabCompletePacket) packet).getMatches()) {
-                                                owner.getPlayers().add(m);
-                                            }
-                                            String out = owner.getPlayers().toString();
-                                            if (out.equals("[]")) {
-                                                ChatUtil.sendChatMessage("&6>> &cNo players found!", owner, false);
-                                                owner.setPlayersState(false);
-                                                return;
-                                            }
-                                            out = out.replace("[", "").replace("]", "");
-                                            ChatUtil.sendChatMessage("&f" + out + " &8[&f" + owner.getPlayers().size() + "&8]", owner, true);
+                                        String out = owner.getPlayers().toString();
+                                        if (out.equals("[]")) {
+                                            ChatUtil.sendChatMessage("&6>> &cNo players found!", owner, false);
                                             owner.setPlayersState(false);
-                                        }
-                                        if (owner.isPluginsState()) {
-                                            List<String> matches = new ArrayList<>();
-                                            for(String m : ((ServerTabCompletePacket) packet).getMatches()) {
-                                                if (m.contains(":")) {
-                                                    final String[] split = m.split(":", 2);
-                                                    String plugin = split[0].replace("/", "");
-                                                    if (!matches.contains(plugin)) {
-                                                        matches.add(plugin);
-                                                    }
-                                                }
-                                            }
-                                            String out = matches.toString();
-                                            if (out.equals("[]")) {
-                                                ChatUtil.sendChatMessage("&6>> &cNo plugins found!", owner, false);
-                                                owner.setPluginsState(false);
-                                                return;
-                                            }
-                                            out = out.replace("[", "").replace("]", "");
-                                            ChatUtil.sendChatMessage("&f" + out, owner, true);
-                                            owner.setPluginsState(false);
-                                        }
-                                    }
-                                    if (packet instanceof ServerTimeUpdatePacket) {
-                                        if (owner.getTimeType() != TimeType.DEFAULT) {
-                                            owner.getSession().sendPacket(new ServerTimeUpdatePacket(owner.getTimeType().getAge(), owner.getTimeType().getTime()));
                                             return;
                                         }
+                                        out = out.replace("[", "").replace("]", "");
+                                        ChatUtil.sendChatMessage("&f" + out + " &8[&f" + owner.getPlayers().size() + "&8]", owner, true);
+                                        owner.setPlayersState(false);
                                     }
-                                    owner.getSession().sendPacket(packet);
+                                    if (owner.isPluginsState()) {
+                                        List<String> matches = new ArrayList<>();
+                                        for(String m : ((ServerTabCompletePacket) packet).getMatches()) {
+                                            if (m.contains(":")) {
+                                                final String[] split = m.split(":", 2);
+                                                String plugin = split[0].replace("/", "");
+                                                if (!matches.contains(plugin)) {
+                                                    matches.add(plugin);
+                                                }
+                                            }
+                                        }
+                                        String out = matches.toString();
+                                        if (out.equals("[]")) {
+                                            ChatUtil.sendChatMessage("&6>> &cNo plugins found!", owner, false);
+                                            owner.setPluginsState(false);
+                                            return;
+                                        }
+                                        out = out.replace("[", "").replace("]", "");
+                                        ChatUtil.sendChatMessage("&f" + out, owner, true);
+                                        owner.setPluginsState(false);
+                                    }
                                 }
+                                if (packet instanceof ServerTimeUpdatePacket) {
+                                    if (owner.getTimeType() != TimeType.DEFAULT) {
+                                        owner.getSession().sendPacket(new ServerTimeUpdatePacket(owner.getTimeType().getAge(), owner.getTimeType().getTime()));
+                                        return;
+                                    }
+                                }
+                                owner.getSession().sendPacket(packet);
                             }
-                        });
-                    }
-                });
+                        }
+                    });
+                }
+            });
         owner.setRemoteSession(new Session(bootstrap.connect(host, port).syncUninterruptibly().channel()));
         owner.getRemoteSession().setProtocolID(owner.getSession().getProtocolID());
         owner.getRemoteSession().setConnectionState(ConnectionState.LOGIN);

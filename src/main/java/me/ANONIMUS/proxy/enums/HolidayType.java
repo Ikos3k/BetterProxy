@@ -2,7 +2,7 @@ package me.ANONIMUS.proxy.enums;
 
 public enum  HolidayType {
     NEW_YEAR(1, 1, "Happy New Year"),
-    XMAS(12, 24,"Merry Christmas");
+    XMAS(12, 24, "Merry Christmas");
 
     private final int month;
     private final int day;
@@ -16,11 +16,7 @@ public enum  HolidayType {
 
     public int getMonth() { return month; }
 
-    public int getDay() {
-        return day;
-    }
+    public int getDay() { return day; }
 
-    public String getWishes() {
-        return wishes;
-    }
+    public String getWishes() { return wishes; }
 }

@@ -1,8 +1,8 @@
 package me.ANONIMUS.proxy.commands.bots;
 
-import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
+import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Bot;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.play.ClientChatPacket;
@@ -17,9 +17,8 @@ public class CommandBroadcast extends Command {
     public void onCommand(Player sender, String cmd, String[] args) throws Exception {
         if(sender.getBots().size() == 0){
             ChatUtil.sendChatMessage("&cYou don't have any connected bots", sender, true);
-            return;
-        }else {
-            String[] message = cmd.split("#bc ", 2);
+        } else {
+            String[] message = cmd.split(sender.getPrefixCMD() + "bc ", 2);
             for (Bot bot : sender.getBots()) {
                 bot.getSession().sendPacket(new ClientChatPacket(message[1]));
             }

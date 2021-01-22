@@ -6,7 +6,6 @@ import me.ANONIMUS.proxy.protocol.data.MessagePosition;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
-import me.ANONIMUS.proxy.utils.ChatUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.chat.ComponentSerializer;
@@ -21,12 +20,12 @@ public class ServerChatPacket extends Packet {
     private MessagePosition position;
 
     public ServerChatPacket(String message) {
-        this.message = new ComponentBuilder(ChatUtil.fixColor(message)).create();
+        this.message = new ComponentBuilder(message).create();
         this.position = MessagePosition.CHATBOX;
     }
 
     public ServerChatPacket(String message, MessagePosition position) {
-        this.message = new ComponentBuilder(ChatUtil.fixColor(message)).create();
+        this.message = new ComponentBuilder(message).create();
         this.position = position;
     }
 

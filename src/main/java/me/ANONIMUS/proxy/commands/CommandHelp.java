@@ -41,25 +41,28 @@ public class CommandHelp extends Command {
         }
 
         if(i > (j + 1)) {
-            ChatUtil.sendChatMessage ("&cThe given number (" + (k + 1) + ") is too high, cannot exceed" + (j + 1), sender, false);
+            ChatUtil.sendChatMessage ("&cThe given number (" + i + ") is too high, cannot exceed " + (j + 1), sender, false);
             return;
         }
 
         ChatUtil.clearChat(1, sender);
-        ChatUtil.sendChatMessage (" &8 --- Showing help page: &6" + (k + 1) + " &8of &6" + (j + 1) + " &8---", sender, false);
+        ChatUtil.sendChatMessage (" &8 --- Showing help page: &6" + i + " &8of &6" + (j + 1) + " &8---", sender, false);
         for (int i1 = k * 10; i1 < l; ++i1) {
             final Command command = list.get(i1);
             ChatUtil.sendHoverMessage(sender, "&8>> &f" + sender.getPrefixCMD() + command.getPrefix() + " &7" + command.getUsage(), "&6" + command.getDesc());
         }
 
-        TextComponent msg = new TextComponent(ChatUtil.fixColor((i != 1) ? "&c[PREVIOUS]": ""));
-        msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor("&eClick to go to the previous page!"))));
-        msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, sender.getPrefixCMD() + "help " + (i - 1)));
+        TextComponent msg = new TextComponent(ChatUtil.fixColor((i != 1) ? "&c[PREVIOUS]": "&7[PREVIOUS]"));
+        if (i != 1) {
+            msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor("&eClick to go to the previous page!"))));
+            msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, sender.getPrefixCMD() + "help " + (i - 1)));
+        }
 
-        TextComponent msg1 = new TextComponent(ChatUtil.fixColor((k + 1) != (j + 1) ? "&a[NEXT]" : ""));
-        msg1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor("&eClick to go to the next page!"))));
-        msg1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, sender.getPrefixCMD() + "help " + (i + 1)));
-
-        sender.getSession().sendPacket(new ServerChatPacket(msg, new TextComponent(" "), msg1));
+        TextComponent msg2 = new TextComponent(ChatUtil.fixColor(i != (j + 1) ? "&a[NEXT]" : "&7[NEXT]"));
+        if(i != (j + 1)) {
+            msg2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor("&eClick to go to the next page!"))));
+            msg2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, sender.getPrefixCMD() + "help " + (i + 1)));
+        }
+        sender.getSession().sendPacket(new ServerChatPacket(msg, new TextComponent(" "), msg2));
     }
 }

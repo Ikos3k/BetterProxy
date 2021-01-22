@@ -18,8 +18,6 @@ public class CalendarUtil {
     }
 
     public static boolean isHoliday() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
         return getHoliday() != null;
     }
 }

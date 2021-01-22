@@ -39,56 +39,56 @@ public class ServerPinger {
 
     public void connect(String host, int port, Proxy proxy) {
         final Bootstrap bootstrap = new Bootstrap()
-                .group(group)
-                .channel(NioSocketChannel.class)
-                .option(ChannelOption.TCP_NODELAY, true)
-                .option(ChannelOption.IP_TOS, 0x18)
-                .handler(new ChannelInitializer<SocketChannel>() {
-                    @Override
-                    protected void initChannel(SocketChannel socketChannel) {
-                        final ChannelPipeline pipeline = socketChannel.pipeline();
-                        if (proxy != Proxy.NO_PROXY) {
-                            pipeline.addFirst(new Socks4ProxyHandler(proxy.address()));
-                        }
-                        pipeline.addLast("timer", new ReadTimeoutHandler(30));
-                        pipeline.addLast("frameCodec", new VarInt21FrameCodec());
-                        pipeline.addLast("packetCodec", new PacketCodec(ConnectionState.STATUS, PacketDirection.CLIENTBOUND));
-                        pipeline.addLast("handler", new SimpleChannelInboundHandler<Packet>() {
+            .group(group)
+            .channel(NioSocketChannel.class)
+            .option(ChannelOption.TCP_NODELAY, true)
+            .option(ChannelOption.IP_TOS, 0x18)
+            .handler(new ChannelInitializer<SocketChannel>() {
+                @Override
+                protected void initChannel(SocketChannel socketChannel) {
+                    final ChannelPipeline pipeline = socketChannel.pipeline();
+                    if (proxy != Proxy.NO_PROXY) {
+                        pipeline.addFirst(new Socks4ProxyHandler(proxy.address()));
+                    }
+                    pipeline.addLast("timer", new ReadTimeoutHandler(30));
+                    pipeline.addLast("frameCodec", new VarInt21FrameCodec());
+                    pipeline.addLast("packetCodec", new PacketCodec(ConnectionState.STATUS, PacketDirection.CLIENTBOUND));
+                    pipeline.addLast("handler", new SimpleChannelInboundHandler<Packet>() {
 
-                            @Override
-                            public void channelInactive(ChannelHandlerContext ctx) {
+                        @Override
+                        public void channelInactive(ChannelHandlerContext ctx) {
+                            session.getChannel().close();
+                            group.shutdownGracefully();
+                        }
+
+                        @Override
+                        public void channelActive(ChannelHandlerContext ctx) throws Exception {
+                            if (showResult) {
+                                ChatUtil.sendChatMessage("&aPinging...", owner, true);
+                            }
+                            TimeUnit.MILLISECONDS.sleep(150);
+                            session.sendPacket(new HandshakePacket(session.getProtocolID(), host, port, 1));
+                            session.sendPacket(new ClientStatusRequestPacket());
+                        }
+
+                        @Override
+                        protected void channelRead0(ChannelHandlerContext channelHandlerContext, Packet packet) {
+                            if (packet instanceof ServerStatusResponsePacket) {
+                                final ServerStatusInfo info = ((ServerStatusResponsePacket) packet).getInfo();
+                                ChatUtil.sendChatMessage("&7Max players: &6" + info.getPlayerInfo().getMaxPlayers(), owner, false);
+                                ChatUtil.sendChatMessage("&7Online players: &6" + info.getPlayerInfo().getOnlinePlayers(), owner, false);
+                                ChatUtil.sendChatMessage("&7MOTD: &6" + BaseComponent.toLegacyText(info.getDescription()), owner, false);
+                                ChatUtil.sendChatMessage("&7Version: &6" + info.getVersionInfo().getVersionName() + "(" + info.getVersionInfo().getProtocolVersion() + ")", owner, false);
+                                session.getChannel().close();
+                                group.shutdownGracefully();
+                            } else if (packet instanceof ServerStatusPongPacket) {
                                 session.getChannel().close();
                                 group.shutdownGracefully();
                             }
-
-                            @Override
-                            public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                                if (showResult) {
-                                    ChatUtil.sendChatMessage("&aPinging...", owner, true);
-                                }
-                                TimeUnit.MILLISECONDS.sleep(150);
-                                session.sendPacket(new HandshakePacket(session.getProtocolID(), host, port, 1));
-                                session.sendPacket(new ClientStatusRequestPacket());
-                            }
-
-                            @Override
-                            protected void channelRead0(ChannelHandlerContext channelHandlerContext, Packet packet) {
-                                if (packet instanceof ServerStatusResponsePacket) {
-                                    final ServerStatusInfo info = ((ServerStatusResponsePacket) packet).getInfo();
-                                    ChatUtil.sendChatMessage("&7Max players: &6" + info.getPlayerInfo().getMaxPlayers(), owner, false);
-                                    ChatUtil.sendChatMessage("&7Online players: &6" + info.getPlayerInfo().getOnlinePlayers(), owner, false);
-                                    ChatUtil.sendChatMessage("&7MOTD: &6" + BaseComponent.toLegacyText(info.getDescription()), owner, false);
-                                    ChatUtil.sendChatMessage("&7Version: &6" + info.getVersionInfo().getVersionName() + "(" + info.getVersionInfo().getProtocolVersion() + ")", owner, false);
-                                    session.getChannel().close();
-                                    group.shutdownGracefully();
-                                } else if (packet instanceof ServerStatusPongPacket) {
-                                    session.getChannel().close();
-                                    group.shutdownGracefully();
-                                }
-                            }
-                        });
-                    }
-                });
+                        }
+                    });
+                }
+            });
         session = new Session(bootstrap.connect(host, port).syncUninterruptibly().channel());
         session.setProtocolID(owner.getSession().getProtocolID());
     }

@@ -34,21 +34,21 @@ public class ChatUtil {
     }
 
     public static void sendTitle(final Player player, final String header, final String footer, int s, int d, int f) {
-        if (header != null) player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TITLE, header));
-        if (footer != null) player.getSession().sendPacket(new ServerTitlePacket(TitleAction.SUBTITLE, footer));
+        if (header != null) player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TITLE, ChatUtil.fixColor(header)));
+        if (footer != null) player.getSession().sendPacket(new ServerTitlePacket(TitleAction.SUBTITLE, ChatUtil.fixColor(footer)));
         player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TIMES, s, d, f));
     }
 
     public static void sendChatMessage(final String message, Player player, boolean prefix) {
-        player.getSession().sendPacket(new ServerChatPacket((prefix ? "&6BetterProxy &8>> " : "") + "&7" + message));
+        player.getSession().sendPacket(new ServerChatPacket(ChatUtil.fixColor((prefix ? "&6BetterProxy &8>> " : "") + "&7" + message)));
     }
 
     public static void sendHotBar(final String message, Player player) {
-        player.getSession().sendPacket(new ServerChatPacket(message, MessagePosition.HOTBAR));
+        player.getSession().sendPacket(new ServerChatPacket(ChatUtil.fixColor(message), MessagePosition.HOTBAR));
     }
 
     public static void sendActionBar(final String message, Player player) {
-        player.getSession().sendPacket(new ServerTitlePacket(TitleAction.ACTIONBAR, message));
+        player.getSession().sendPacket(new ServerTitlePacket(TitleAction.ACTIONBAR, ChatUtil.fixColor(message)));
     }
 
     public static void sendBroadcastMessage(final String message, boolean prefix) {

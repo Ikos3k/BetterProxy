@@ -16,8 +16,4 @@ public class Bot {
         this.username = username;
         this.owner = owner;
     }
-
-    public void disconnected() {
-        owner.getBots().remove(this);
-    }
 }

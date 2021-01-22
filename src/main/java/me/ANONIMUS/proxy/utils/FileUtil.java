@@ -71,7 +71,7 @@ public class FileUtil {
                     }
                     Packet p = new CustomPacket(id, data);
 
-                    BetterProxy.getInstance().getExploitManager().addExploit(new Exploit(f.getName().replace(".json", "")) {
+                    BetterProxy.getInstance().getExploitManager().addExploit(new Exploit(f.getName().substring(0, f.getName().length() - 5)) {
 
                         @Override
                         public void execute(Player sender, int amount) {

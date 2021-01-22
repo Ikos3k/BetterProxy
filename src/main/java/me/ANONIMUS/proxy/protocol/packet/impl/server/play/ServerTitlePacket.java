@@ -6,7 +6,6 @@ import me.ANONIMUS.proxy.protocol.data.TitleAction;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
-import me.ANONIMUS.proxy.utils.ChatUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.chat.ComponentSerializer;
@@ -29,11 +28,11 @@ public class ServerTitlePacket extends Packet {
     public ServerTitlePacket(TitleAction action, String message) {
         this.titleAction = action;
         if (action == TitleAction.TITLE) {
-            this.title = new ComponentBuilder(ChatUtil.fixColor(message)).create();
+            this.title = new ComponentBuilder(message).create();
         } else if (action == TitleAction.SUBTITLE) {
-            this.subTitle = new ComponentBuilder(ChatUtil.fixColor(message)).create();
+            this.subTitle = new ComponentBuilder(message).create();
         } else if (action == TitleAction.ACTIONBAR) {
-            this.actionBar = new ComponentBuilder(ChatUtil.fixColor(message)).create();
+            this.actionBar = new ComponentBuilder(message).create();
         } else {
             throw new IllegalArgumentException("Illegal use of ServerTitlePacket!");
         }
