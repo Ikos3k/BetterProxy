@@ -36,7 +36,6 @@ public final class ScoreboardUtil {
         player.getSession().sendPacket(new ServerDisplayScoreboardPacket(1, "emptySidebar"));
         player.getSession().sendPacket(new ServerScoreboardObjectivePacket("emptySidebar", ObjectiveMode.CREATE, ChatUtil.fixColor("&6&lBetterProxy"), ObjectiveType.HEARTS));
         player.getSession().sendPacket(new ServerDisplayScoreboardPacket(2, "emptySidebar"));
-
     }
 
     public static void updateScoreboard(Player player) {

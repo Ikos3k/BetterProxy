@@ -11,19 +11,17 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class CommandHelp extends Command {
     public CommandHelp() {
-        super("help", null, "helpful commands", "[page]", null, ConnectedType.NONE);
+        super("help", null, "helpful commands", "[page]", ConnectedType.NONE);
     }
 
     @Override
     public void onCommand(Player sender, String cmd, String[] args) throws Exception {
-        List<Command> list = new ArrayList<>();
-        BetterProxy.getInstance().getCommandManager().getCommands().stream().filter(command -> command.getCommandType() != null).forEach(list::add);
+        List<Command> list = BetterProxy.getInstance().getCommandManager().getCommands();
         list.sort(Comparator.comparingInt(s -> StringUtil.getStringWidth(s.getPrefix())));
 
         int i = 1;

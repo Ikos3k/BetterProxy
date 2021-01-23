@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.more;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
@@ -12,7 +11,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class CommandMsgall extends Command {
-    public CommandMsgall() { super("msgall", "msgspam", "spamming with private messages", "[delay] [text]", CommandType.MORE, ConnectedType.CONNECTED); }
+    public CommandMsgall() { super("msgall", "msgspam", "spamming with private messages", "[delay] [text]", ConnectedType.CONNECTED); }
 
     @Override
     public void onCommand(Player sender, String cmd, String[] args) throws Exception {

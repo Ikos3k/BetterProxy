@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.more;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.enums.TimeType;
 import me.ANONIMUS.proxy.objects.Command;
@@ -12,7 +11,7 @@ import java.util.Arrays;
 
 public class CommandTime extends Command {
     public CommandTime() {
-        super("time", "alwaystime", null, Arrays.toString(TimeType.values()).toLowerCase(), CommandType.MORE, ConnectedType.NONE);
+        super("time", "alwaystime", null, Arrays.toString(TimeType.values()).toLowerCase(), ConnectedType.NONE);
     }
 
     @Override

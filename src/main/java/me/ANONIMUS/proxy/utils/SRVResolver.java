@@ -16,7 +16,7 @@ public class SRVResolver {
             final String[] var5 = var4.get("srv").get().toString().split(" ", 4);
             return new String[]{var5[3], var5[2]};
         } catch (final Throwable var6) {
-            return new String[]{p_78863_0_, Integer.toString(25565)};
+            return new String[]{p_78863_0_, "25565"};
         }
     }
 }

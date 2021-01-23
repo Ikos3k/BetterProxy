@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.normal;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
@@ -9,7 +8,7 @@ import me.ANONIMUS.proxy.utils.WorldUtil;
 
 public class CommandQuit extends Command {
     public CommandQuit() {
-        super("quit", "q", "Disconnecting from server", "", CommandType.NORMAL, ConnectedType.CONNECTED);
+        super("quit", "q", "Disconnecting from server", null, ConnectedType.CONNECTED);
     }
 
     @Override

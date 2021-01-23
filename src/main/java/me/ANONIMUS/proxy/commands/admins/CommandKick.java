@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.admins;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.managers.PlayerManager;
 import me.ANONIMUS.proxy.objects.Command;
@@ -9,7 +8,7 @@ import me.ANONIMUS.proxy.utils.ChatUtil;
 
 public class CommandKick extends Command {
     public CommandKick() {
-        super("kick", null, null, "[player] [reason]", CommandType.ADMINS, ConnectedType.NONE);
+        super("kick", null, null, "[player] [reason]", ConnectedType.NONE);
     }
 
     @Override

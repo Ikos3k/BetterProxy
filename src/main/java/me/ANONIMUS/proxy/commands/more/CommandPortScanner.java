@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.more;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommandPortScanner extends Command {
-    public CommandPortScanner() { super("portscanner", null, null, "[ip] [start port] [end port]", CommandType.MORE, ConnectedType.NONE); }
+    public CommandPortScanner() { super("portscanner", null, null, "[ip] [start port] [end port]", ConnectedType.NONE); }
 
     @Override
     public void onCommand(Player sender, String cmd, String[] args) throws Exception {

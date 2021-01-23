@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.admins;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.managers.PlayerManager;
 import me.ANONIMUS.proxy.objects.Command;
@@ -9,7 +8,7 @@ import me.ANONIMUS.proxy.utils.ChatUtil;
 
 public class CommandAlert extends Command {
     public CommandAlert() {
-        super("alert", null, null, "[message]", CommandType.ADMINS, ConnectedType.NONE);
+        super("alert", null, null, "[message]", ConnectedType.NONE);
     }
 
     @Override

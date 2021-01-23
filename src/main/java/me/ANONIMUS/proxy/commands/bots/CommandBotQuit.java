@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.bots;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Bot;
@@ -9,7 +8,7 @@ import me.ANONIMUS.proxy.utils.ChatUtil;
 
 public class CommandBotQuit extends Command {
     public CommandBotQuit() {
-        super("botquit", "botq", null, "[name/all]", CommandType.BOTS, ConnectedType.NONE);
+        super("botquit", "botq", null, "[name/all]", ConnectedType.NONE);
     }
 
     @Override

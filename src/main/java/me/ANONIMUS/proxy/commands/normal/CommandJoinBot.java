@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.normal;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.connection.BotConnection;
@@ -19,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CommandJoinBot extends Command {
     public CommandJoinBot() {
-        super("joinbot","connectbot","Connecting bots to server","[host:port] [usernames] [amount] [delay] [resolver] [ping]", CommandType.NORMAL, ConnectedType.NONE);
+        super("joinbot","connectbot","Connecting bots to server","[host:port] [usernames] [amount] [delay] [resolver] [ping]", ConnectedType.NONE);
     }
 
     @Override

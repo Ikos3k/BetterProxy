@@ -1,7 +1,6 @@
 package me.ANONIMUS.proxy.commands.admins;
 
 import me.ANONIMUS.proxy.BetterProxy;
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
@@ -14,7 +13,7 @@ import java.io.File;
 
 public class CommandListenChunks extends Command {
     public CommandListenChunks() {
-        super("listenchunks", "chunks", ":D", "[listen/save]", CommandType.ADMINS, ConnectedType.NONE);
+        super("listenchunks", "chunks", ":D", "[listen/save]", ConnectedType.NONE);
     }
 
     @Override

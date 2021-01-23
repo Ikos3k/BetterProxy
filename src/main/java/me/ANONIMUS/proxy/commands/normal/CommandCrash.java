@@ -1,7 +1,6 @@
 package me.ANONIMUS.proxy.commands.normal;
 
 import me.ANONIMUS.proxy.BetterProxy;
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.objects.Exploit;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public class CommandCrash extends Command {
     public CommandCrash() {
-        super("crash", "exploit", ";D", "[method, list] [amount]", CommandType.NORMAL, ConnectedType.NONE);
+        super("crash", "exploit", ";D", "[method, list] [amount]", ConnectedType.NONE);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.normal;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.connection.PlayerConnection;
@@ -15,7 +14,7 @@ import java.net.Socket;
 
 public class CommandJoin extends Command {
     public CommandJoin() {
-        super("join", "connect", "Connecting to server", "[host:port] [username] [resolver] [ping]", CommandType.NORMAL, ConnectedType.DISCONNECTED);
+        super("join", "connect", "Connecting to server", "[host:port] [username] [resolver] [ping]", ConnectedType.DISCONNECTED);
     }
 
     @Override

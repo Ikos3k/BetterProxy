@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.more;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
@@ -14,7 +13,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class CommandPlayers extends Command {
-    public CommandPlayers() { super("players", null, null, "[tablist/tabcomplete/tabcomplete2/api/clear]", CommandType.MORE, ConnectedType.CONNECTED); }
+    public CommandPlayers() { super("players", null, null, "[tablist/tabcomplete/tabcomplete2/api/clear]", ConnectedType.CONNECTED); }
 
     @Override
     public void onCommand(Player sender, String cmd, String[] args) throws Exception {

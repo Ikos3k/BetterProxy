@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.admins;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
@@ -8,7 +7,7 @@ import me.ANONIMUS.proxy.utils.ChatUtil;
 
 public class CommandFree extends Command {
     public CommandFree() {
-        super("free", "clean", "freeing memory", null, CommandType.ADMINS, ConnectedType.NONE);
+        super("free", "clean", "freeing memory", null, ConnectedType.NONE);
     }
 
     @Override

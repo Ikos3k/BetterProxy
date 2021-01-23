@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.more;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.objects.Option;
@@ -17,7 +16,7 @@ import java.util.List;
 
 public class CommandOptions extends Command {
     public CommandOptions() {
-        super("options", "settings", "options :d", "[list, set] [option] [value]", CommandType.MORE, ConnectedType.NONE);
+        super("options", "settings", "options :d", "[list, set] [option] [value]", ConnectedType.NONE);
     }
 
     @Override

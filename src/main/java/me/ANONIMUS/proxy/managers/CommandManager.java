@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.managers;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
@@ -37,7 +36,7 @@ public class CommandManager {
         }
         if (!command.isPresent()) {
             command = commands.stream().filter(cmd -> (sender.getPrefixCMD() + cmd.getAlias()).equalsIgnoreCase(args[0])).findFirst();
-            if(command.isPresent() && command.get().getAlias() == null) {
+            if (command.isPresent() && command.get().getAlias() == null) {
                 command = Optional.empty();
             }
         }
@@ -45,10 +44,14 @@ public class CommandManager {
             ChatUtil.sendChatMessage("&cCommand not found!", sender, true);
             return;
         }
-        if (command.get().getCommandType() == CommandType.ADMINS && sender.getAccount().getGroup().getPermissionLevel() < 2) {
+
+        final String packageName = command.get().getClass().getPackage().getName();
+        final String commandType = packageName.substring(packageName.lastIndexOf(".")).substring(1);
+        if (commandType.equals("admins") && sender.getAccount().getGroup().getPermissionLevel() < 2) {
             ChatUtil.sendChatMessage("&cYou are not permitted to this command!", sender, true);
             return;
         }
+
         if (command.get().getConnected() == ConnectedType.CONNECTED && !sender.isConnected()) {
             ChatUtil.sendChatMessage("&4You must be connected to the server!", sender, true);
             return;

@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.cheats;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
@@ -9,7 +8,7 @@ import me.ANONIMUS.proxy.utils.PacketUtil;
 
 public class CommandFly extends Command {
     public CommandFly() {
-        super("fly", null, null, "[true/false]", CommandType.CHEATS, ConnectedType.NONE);
+        super("fly", null, null, "[true/false]", ConnectedType.NONE);
     }
 
     @Override

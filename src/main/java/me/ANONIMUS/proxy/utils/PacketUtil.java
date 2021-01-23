@@ -19,6 +19,7 @@ public class PacketUtil {
     public static void speed(final Session session, final int speed) {
         session.sendPacket(new ServerPlayerAbilitiesPacket(false, false, false, false, 1.0f, (float) speed));
     }
+
     public static void clearInventory(final Player player) {
         IntStream.range(0, 45).forEach(i -> player.getSession().sendPacket(new ServerSetSlotPacket(0, i, null)));
     }

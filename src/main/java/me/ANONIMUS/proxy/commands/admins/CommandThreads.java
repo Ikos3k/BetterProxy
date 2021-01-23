@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.admins;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
@@ -10,7 +9,7 @@ import java.util.Set;
 
 public class CommandThreads extends Command {
     public CommandThreads() {
-        super("threads", null, null, "", CommandType.ADMINS, ConnectedType.NONE);
+        super("threads", null, null, null, ConnectedType.NONE);
     }
 
     @Override

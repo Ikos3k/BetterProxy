@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.cheats;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
@@ -9,7 +8,7 @@ import me.ANONIMUS.proxy.utils.PacketUtil;
 
 public class CommandSpeed extends Command {
     public CommandSpeed() {
-        super("speed", null, "speed cmd", "[speed]", CommandType.CHEATS, ConnectedType.NONE);
+        super("speed", null, "speed cmd", "[speed]", ConnectedType.NONE);
     }
 
     @Override

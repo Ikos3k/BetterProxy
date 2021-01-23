@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.bots;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
@@ -13,7 +12,7 @@ import java.util.stream.IntStream;
 
 public class CommandBotRegister extends Command {
     public CommandBotRegister() {
-        super("bregister", "breg", "register bot", "[arguments] [login] [register]", CommandType.BOTS, ConnectedType.CONNECTED);
+        super("bregister", "breg", "register bot", "[arguments] [login] [register]", ConnectedType.CONNECTED);
     }
 
     @Override
@@ -26,7 +25,7 @@ public class CommandBotRegister extends Command {
         final boolean login = Boolean.parseBoolean(args[2]);
         final boolean register = Boolean.parseBoolean(args[3]);
         final String passwd = generateString(5 + new Random().nextInt(3));
-        final StringBuilder regCMD = new StringBuilder("/register " + passwd);
+        final StringBuilder regCMD = new StringBuilder("/register");
         if(arguments > 0) {
             IntStream.range(0, arguments).forEach(i -> regCMD.append(" ").append(passwd));
         }

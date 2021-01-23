@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.commands.admins;
 
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
@@ -14,7 +13,7 @@ import java.lang.management.ManagementFactory;
 
 public class CommandStatus extends Command {
     public CommandStatus() {
-        super("status", null, null, "", CommandType.ADMINS, ConnectedType.NONE);
+        super("status", null, null, "", ConnectedType.NONE);
     }
 
     @Override

@@ -4,7 +4,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
-import me.ANONIMUS.proxy.enums.CommandType;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
@@ -27,7 +26,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 
 public class CommandStay extends Command {
     public CommandStay() {
-        super("stay", "detach", "", "", CommandType.MORE, ConnectedType.CONNECTED);
+        super("stay", "detach", null, null, ConnectedType.CONNECTED);
     }
 
     EventLoopGroup group = new NioEventLoopGroup();
