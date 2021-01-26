@@ -13,7 +13,7 @@ public class CommandThreads extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
         ChatUtil.sendChatMessage("threads: " + (Thread.activeCount() > 7 ? "&4" : "&e") + Thread.activeCount(), sender, true);
         ChatUtil.sendChatMessage("current: &6" + Thread.currentThread(), sender, true);

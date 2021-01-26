@@ -12,7 +12,7 @@ public class CommandKick extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         String text = "";
         for (int i = 2; i < args.length; ++i) { text = (i != 2 ? text + " " : "") + args[i]; }
         Player player;

@@ -14,5 +14,5 @@ public abstract class Command {
     private final String usage;
     private final ConnectedType connected;
 
-    public abstract void onCommand(final Player sender, final String cmd, final String[] args) throws Exception;
+    public abstract void onCommand(final Player sender, final String[] args) throws Exception;
 }

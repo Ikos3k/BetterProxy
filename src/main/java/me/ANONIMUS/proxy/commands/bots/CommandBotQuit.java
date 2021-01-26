@@ -12,7 +12,7 @@ public class CommandBotQuit extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         if (args[1].equals("all")){
             if(sender.getBots().size() == 0){
                 ChatUtil.sendChatMessage("&cYou don't have any connected bots", sender, true);

@@ -14,7 +14,7 @@ public class CommandPortScanner extends Command {
     public CommandPortScanner() { super("portscanner", null, null, "[ip] [start port] [end port]", ConnectedType.NONE); }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         String host = args[1];
         if (host.contains(":")) {
             host = host.split(":", 2)[0];

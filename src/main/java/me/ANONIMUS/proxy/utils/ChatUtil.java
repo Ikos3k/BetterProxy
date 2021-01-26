@@ -28,15 +28,13 @@ public class ChatUtil {
     }
 
     public static void sendTitle(final Player player, final String header, final String footer) {
-        if (header != null) player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TITLE, header));
-        if (footer != null) player.getSession().sendPacket(new ServerTitlePacket(TitleAction.SUBTITLE, footer));
-        player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TIMES, 10, 10, 10));
+        sendTitle(player, header, footer, 10, 10, 10);
     }
 
-    public static void sendTitle(final Player player, final String header, final String footer, int s, int d, int f) {
+    public static void sendTitle(final Player player, final String header, final String footer, int fadeIn, int stay, int fadeOut) {
         if (header != null) player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TITLE, ChatUtil.fixColor(header)));
         if (footer != null) player.getSession().sendPacket(new ServerTitlePacket(TitleAction.SUBTITLE, ChatUtil.fixColor(footer)));
-        player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TIMES, s, d, f));
+        player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TIMES, fadeIn, stay, fadeOut));
     }
 
     public static void sendChatMessage(final String message, Player player, boolean prefix) {

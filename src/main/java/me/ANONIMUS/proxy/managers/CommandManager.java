@@ -69,7 +69,7 @@ public class CommandManager {
                 }
             }
             cooldown.put(sender.getAccount().getUsername(), System.currentTimeMillis());
-            command.get().onCommand(sender, message, args);
+            command.get().onCommand(sender, args);
         } catch (final Exception e) {
             ChatUtil.sendChatMessage("&8Correct usage: &6" + sender.getPrefixCMD() + command.get().getPrefix() + " " + command.get().getUsage(), sender, true);
         }

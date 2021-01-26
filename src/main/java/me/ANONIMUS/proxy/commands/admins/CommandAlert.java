@@ -12,7 +12,7 @@ public class CommandAlert extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         String out = "";
         for (int i = 1; i < args.length; ++i) { out = (!out.equals("") ? out + " " : "") + args[i]; }
         if(out.equals("")) {

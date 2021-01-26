@@ -12,7 +12,7 @@ public class CommandQuit extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         ChatUtil.sendChatMessage("&6>> &cDisconnected!", sender, false);
         sender.setServerData(null);
         sender.setConnected(false);

@@ -10,7 +10,7 @@ public class CommandLobby extends Command {
     public CommandLobby() { super("lobby", null, "teleport to lobby", null, ConnectedType.DISCONNECTED); }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         WorldUtil.lobby(sender, false);
         ChatUtil.sendChatMessage("&6>> &8Teleported to the lobby!", sender, false);
     }

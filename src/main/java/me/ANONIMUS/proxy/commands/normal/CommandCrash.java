@@ -16,7 +16,7 @@ public class CommandCrash extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         if (args[1].equals("list") && args.length == 2) {
             List<String> exploits = new ArrayList<>();
             BetterProxy.getInstance().getExploitManager().getExploits().forEach(exploit -> exploits.add(exploit.getName()));

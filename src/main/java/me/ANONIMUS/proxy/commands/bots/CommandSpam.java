@@ -25,19 +25,18 @@ public class CommandSpam extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         if(sender.getBots().size() == 0) {
             ChatUtil.sendChatMessage("&cYou don't have any connected bots", sender, true);
             return;
         }
-        String[] message = cmd.split(sender.getPrefixCMD() + "spam ", 2);
-        ChatUtil.sendChatMessage("&7message : " + message[1], sender, true);
+        ChatUtil.sendChatMessage("&7message : " + args[1], sender, true);
         sender.getBots().forEach(bot -> {
             String start = getRandomString(1);
             String firstmiddle = getRandomString(5);
             String end = getRandomString(1);
             String endmiddle = getRandomString(5);
-            bot.getSession().sendPacket(new ClientChatPacket(start + "| (" + firstmiddle + ") |" + start + " " + message[1] + " " + end + "| (" + endmiddle + ") |" + end));
+            bot.getSession().sendPacket(new ClientChatPacket(start + "| (" + firstmiddle + ") |" + start + " " + args[1] + " " + end + "| (" + endmiddle + ") |" + end));
         });
     }
 }

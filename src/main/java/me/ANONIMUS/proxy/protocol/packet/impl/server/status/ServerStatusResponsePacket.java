@@ -75,7 +75,7 @@ public class ServerStatusResponsePacket extends Packet {
             }
         }
 
-        PlayerInfo players = new PlayerInfo(plrs.get("max").getAsInt(), plrs.get("online").getAsInt(), profiles);
+        PlayerInfo players = new PlayerInfo(plrs.get("online").getAsInt(), plrs.get("max").getAsInt(), profiles);
         JsonElement desc = obj.get("description");
         BaseComponent[] description = ComponentSerializer.parse(desc.toString());
         String icon = null;

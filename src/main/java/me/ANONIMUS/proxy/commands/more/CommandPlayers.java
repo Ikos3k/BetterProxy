@@ -16,7 +16,7 @@ public class CommandPlayers extends Command {
     public CommandPlayers() { super("players", null, null, "[tablist/tabcomplete/tabcomplete2/api/clear]", ConnectedType.CONNECTED); }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         if (args[1].equalsIgnoreCase("tablist")) {
             sender.getPlayers().clear();
             sender.setPlayersState(false);

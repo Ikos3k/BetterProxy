@@ -17,7 +17,7 @@ public class CommandStatus extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         long freeMemory = Runtime.getRuntime().freeMemory();
         long totalMemory = Runtime.getRuntime().totalMemory();
         long maxMemory = Runtime.getRuntime().maxMemory();

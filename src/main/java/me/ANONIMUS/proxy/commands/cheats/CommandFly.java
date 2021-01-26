@@ -12,7 +12,7 @@ public class CommandFly extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         PacketUtil.fly(sender.getSession(), Boolean.parseBoolean(args[1]));
         ChatUtil.sendChatMessage("&7Flying is successfully set to &6" + args[1] + "&7!", sender, true);
     }

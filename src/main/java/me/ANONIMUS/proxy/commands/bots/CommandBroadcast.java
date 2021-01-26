@@ -12,13 +12,12 @@ public class CommandBroadcast extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         if(sender.getBots().size() == 0) {
             ChatUtil.sendChatMessage("&cYou don't have any connected bots", sender, true);
             return;
         }
-        String[] message = cmd.split(sender.getPrefixCMD() + "bc ", 2);
-        sender.getBots().forEach(bot -> bot.getSession().sendPacket(new ClientChatPacket(message[1])));
+        sender.getBots().forEach(bot -> bot.getSession().sendPacket(new ClientChatPacket(args[1])));
         ChatUtil.sendChatMessage("&7Successfully sent message !", sender, true);
     }
 }

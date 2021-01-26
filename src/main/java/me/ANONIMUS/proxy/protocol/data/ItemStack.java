@@ -76,9 +76,7 @@ public class ItemStack {
 
         NBTTagList lores = new NBTTagList();
 
-        for (String s : lore) {
-            lores.appendTag(new NBTTagString(s));
-        }
+        lore.forEach(l -> lores.appendTag(new NBTTagString(l)));
 
         this.nbt.getCompoundTag("display").setTag("Lore", lores);
         return this;

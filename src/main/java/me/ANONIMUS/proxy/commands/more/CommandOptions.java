@@ -20,7 +20,7 @@ public class CommandOptions extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         if (args[1].equals("list")) {
             List<ItemStack> items = new ArrayList<>();
             sender.getOptionsManager().getOptions().forEach(option -> items.add(ItemUtil.option(option)));

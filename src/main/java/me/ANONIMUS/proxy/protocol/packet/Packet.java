@@ -1,10 +1,7 @@
 package me.ANONIMUS.proxy.protocol.packet;
 
-import lombok.Data;
-
 import java.util.List;
 
-@Data
 public abstract class Packet {
     public abstract List<Protocol> getProtocolList();
 

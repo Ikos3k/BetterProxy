@@ -10,7 +10,7 @@ public class CommandMotherDelay extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         sender.setMotherDelay(Integer.parseInt(args[1]));
     }
 }

@@ -14,7 +14,7 @@ public class CommandMsgall extends Command {
     public CommandMsgall() { super("msgall", "msgspam", "spamming with private messages", "[delay] [text]", ConnectedType.CONNECTED); }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         int delay = Integer.parseInt(args[1]);
         String text = "";
         for (int i = 2; i < args.length; ++i) { text = (i != 2 ? text + " " : "") + args[i]; }

@@ -18,7 +18,7 @@ public class CommandJoin extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         String host = args[1];
         int port = 25565;
         if (host.contains(":")) {

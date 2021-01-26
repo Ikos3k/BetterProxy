@@ -17,7 +17,7 @@ public class CommandListenChunks extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String cmd, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) throws Exception {
         if(args[1].equals("listen")) {
             sender.setListenChunks(!sender.isListenChunks());
             ChatUtil.sendChatMessage("listening chunks: &6" + sender.isListenChunks(), sender, false);
