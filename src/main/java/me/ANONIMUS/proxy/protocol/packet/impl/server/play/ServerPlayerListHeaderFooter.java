@@ -38,6 +38,6 @@ public class ServerPlayerListHeaderFooter extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x47, 47), new Protocol(0x47, 110), new Protocol(0x4A, 340));
+        return Arrays.asList(new Protocol(0x47, 47), new Protocol(0x48, 109), new Protocol(0x47, 110), new Protocol(0x47, 210), new Protocol(0x4A, 340));
     }
 }

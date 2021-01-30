@@ -61,7 +61,7 @@ public class BotConnection {
                         @Override
                         public void channelActive(ChannelHandlerContext ctx) throws Exception {
                             TimeUnit.MILLISECONDS.sleep(150);
-                            bot.getSession().sendPacket(new HandshakePacket(bot.getSession().getProtocolID(), "", port, 2));
+                            bot.getSession().sendPacket(new HandshakePacket(bot.getSession().getProtocolID(), host, port, 2));
                             bot.getSession().sendPacket(new ClientLoginStartPacket(bot.getUsername()));
                             bot.setServerData(new ServerData(host, port));
                         }

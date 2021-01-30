@@ -9,12 +9,13 @@ public class OptionsManager {
     private final List<Option> options = new ArrayList<>();
 
     public OptionsManager() {
-        options.add(new Option("test1", "TEST", "TEST"));
-        options.add(new Option(true, "test2", ":D"));
+        options.add(new Option(true, "lastpacket", "last packet :D"));
+        options.add(new Option(true, "titlelag", "title lag"));
+        options.add(new Option(true, "scoreboard"));
     }
 
     public Option getOptionByName(String name) {
-        return options.stream().filter(s -> s.getName().equals(name.toLowerCase())).findFirst().orElse(null);
+        return options.stream().filter(s -> s.getName().equals(name)).findFirst().orElse(null);
     }
 
     public List<Option> getOptions() {

@@ -31,6 +31,6 @@ public class ClientChatPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x01, 47), new Protocol(0x02, 110), new Protocol(0x02, 340));
+        return Arrays.asList(new Protocol(0x01, 47), new Protocol(0x02, 109), new Protocol(0x02, 110), new Protocol(0x02, 210), new Protocol(0x02, 340));
     }
 }

@@ -22,8 +22,8 @@ public class ChatUtil {
     }
 
     public static void sendHoverMessage(final Player player, final String s1, final String s2) {
-        TextComponent msg = new TextComponent(ChatUtil.fixColor(s1));
-        msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(s2))));
+        TextComponent msg = new TextComponent(fixColor(s1));
+        msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(fixColor(s2))));
         player.getSession().sendPacket(new ServerChatPacket(msg));
     }
 
@@ -32,21 +32,21 @@ public class ChatUtil {
     }
 
     public static void sendTitle(final Player player, final String header, final String footer, int fadeIn, int stay, int fadeOut) {
-        if (header != null) player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TITLE, ChatUtil.fixColor(header)));
-        if (footer != null) player.getSession().sendPacket(new ServerTitlePacket(TitleAction.SUBTITLE, ChatUtil.fixColor(footer)));
+        if (header != null) player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TITLE, fixColor(header)));
+        if (footer != null) player.getSession().sendPacket(new ServerTitlePacket(TitleAction.SUBTITLE, fixColor(footer)));
         player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TIMES, fadeIn, stay, fadeOut));
     }
 
     public static void sendChatMessage(final String message, Player player, boolean prefix) {
-        player.getSession().sendPacket(new ServerChatPacket(ChatUtil.fixColor((prefix ? "&6BetterProxy &8>> " : "") + "&7" + message)));
-    }
-
-    public static void sendHotBar(final String message, Player player) {
-        player.getSession().sendPacket(new ServerChatPacket(ChatUtil.fixColor(message), MessagePosition.HOTBAR));
+        player.getSession().sendPacket(new ServerChatPacket(fixColor((prefix ? "&6BetterProxy &8>> " : "") + "&7" + message)));
     }
 
     public static void sendActionBar(final String message, Player player) {
-        player.getSession().sendPacket(new ServerTitlePacket(TitleAction.ACTIONBAR, ChatUtil.fixColor(message)));
+        if(player.getSession().getProtocolID() == 340) {
+            player.getSession().sendPacket(new ServerTitlePacket(TitleAction.ACTIONBAR, fixColor(message)));
+        } else {
+            player.getSession().sendPacket(new ServerChatPacket(fixColor(message), MessagePosition.HOTBAR));
+        }
     }
 
     public static void sendBroadcastMessage(final String message, boolean prefix) {

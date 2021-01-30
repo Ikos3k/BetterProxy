@@ -13,20 +13,26 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServerPlayerPositionRotationPacket extends Packet {
+public class ServerPlayerPosLookPacket extends Packet {
     private double x;
     private double y;
     private double z;
     private float yaw;
     private float pitch;
+    private int flags;
     private int teleport;
 
-    public ServerPlayerPositionRotationPacket(double x, double y, double z, float yaw, float pitch) {
+    public ServerPlayerPosLookPacket(double x, double y, double z, float yaw, float pitch, int flags) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.yaw = yaw;
         this.pitch = pitch;
+        this.flags = flags;
+    }
+
+    public ServerPlayerPosLookPacket(double x, double y, double z, float yaw, float pitch) {
+        this(x, y, z, yaw, pitch, 0);
     }
 
     public double getX() {
@@ -60,9 +66,8 @@ public class ServerPlayerPositionRotationPacket extends Packet {
         out.writeDouble(this.z);
         out.writeFloat(this.yaw);
         out.writeFloat(this.pitch);
-        int flags = 0;
-        out.writeByte(flags);
-        if (protocol >= 110) {
+        out.writeByte(this.flags);
+        if (protocol >= 109) {
             out.writeVarInt(this.teleport);
         }
     }
@@ -74,14 +79,14 @@ public class ServerPlayerPositionRotationPacket extends Packet {
         this.z = in.readDouble();
         this.yaw = in.readFloat();
         this.pitch = in.readFloat();
-        int flags = in.readUnsignedByte();
-        if (protocol >= 110) {
+        this.flags = in.readUnsignedByte();
+        if (protocol >= 109) {
             this.teleport = in.readVarInt();
         }
     }
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x08, 47), new Protocol(0x2E, 110), new Protocol(0x2F, 340));
+        return Arrays.asList(new Protocol(0x08, 47), new Protocol(0x2E, 109), new Protocol(0x2E, 110), new Protocol(0x2E, 210), new Protocol(0x2F, 340));
     }
 }

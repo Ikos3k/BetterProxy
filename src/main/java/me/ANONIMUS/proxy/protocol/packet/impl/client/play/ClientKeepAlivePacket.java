@@ -36,6 +36,6 @@ public class ClientKeepAlivePacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x00, 47), new Protocol(0x0B, 110), new Protocol(0x0B, 340));
+        return Arrays.asList(new Protocol(0x00, 47), new Protocol(0x0B, 109), new Protocol(0x0B, 110), new Protocol(0x0B, 210), new Protocol(0x0B, 340));
     }
 }

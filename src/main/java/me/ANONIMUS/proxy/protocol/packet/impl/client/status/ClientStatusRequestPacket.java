@@ -9,15 +9,13 @@ import java.util.List;
 
 public class ClientStatusRequestPacket extends Packet {
     @Override
-    public void write(PacketBuffer out, int protocol) throws Exception {
-    }
+    public void write(PacketBuffer out, int protocol) throws Exception { }
 
     @Override
-    public void read(PacketBuffer in, int protocol) throws Exception {
-    }
+    public void read(PacketBuffer in, int protocol) throws Exception { }
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x00, 47), new Protocol(0x00, 110), new Protocol(0x00, 340));
+        return Arrays.asList(new Protocol(0x00, 47),new Protocol(0x00, 109),  new Protocol(0x00, 110), new Protocol(0x00, 210), new Protocol(0x00, 340));
     }
 }

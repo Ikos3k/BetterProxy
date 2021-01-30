@@ -39,6 +39,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) {
         if (!byteBuf.isReadable()) return;
+
         try {
             final PacketBuffer packetBuffer = new PacketBuffer(byteBuf);
 

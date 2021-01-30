@@ -35,7 +35,7 @@ public class ClientTabCompletePacket extends Packet {
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
         out.writeString(this.text);
-        if (protocol >= 110) {
+        if (protocol >= 109) {
             out.writeBoolean(this.assumeCMD);
         }
         out.writeBoolean(this.position != null);
@@ -47,7 +47,7 @@ public class ClientTabCompletePacket extends Packet {
     @Override
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.text = in.readString();
-        if (protocol >= 110) {
+        if (protocol >= 109) {
             this.assumeCMD = in.readBoolean();
         }
         this.position = (in.readBoolean() ? in.readPosition() : null);
@@ -55,6 +55,6 @@ public class ClientTabCompletePacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x14, 47), new Protocol(0x01, 110), new Protocol(0x01, 340));
+        return Arrays.asList(new Protocol(0x14, 47), new Protocol(0x01, 109), new Protocol(0x01, 110), new Protocol(0x01, 340));
     }
 }

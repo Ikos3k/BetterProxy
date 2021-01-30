@@ -28,35 +28,32 @@ public class CommandManager {
 
     public void onCommand(final String message, final Player sender) {
         final String[] args = message.split(" ");
-        Optional<Command> command = commands.stream().filter(cmd -> (sender.getPrefixCMD() + cmd.getPrefix()).equalsIgnoreCase(args[0])).findFirst();
+        Optional<Command> optionalCommand = commands.stream().filter(cmd -> (sender.getPrefixCMD() + cmd.getPrefix()).equalsIgnoreCase(args[0])).findFirst();
         ScoreboardUtil.updateScoreboard(sender);
         if (!sender.isLogged() && !(message.startsWith(sender.getPrefixCMD() + "login ") || message.startsWith(sender.getPrefixCMD() + "l "))) {
             ChatUtil.sendChatMessage("&6You must login! &c" + sender.getPrefixCMD() + "login <password>", sender, true);
             return;
         }
-        if (!command.isPresent()) {
-            command = commands.stream().filter(cmd -> (sender.getPrefixCMD() + cmd.getAlias()).equalsIgnoreCase(args[0])).findFirst();
-            if (command.isPresent() && command.get().getAlias() == null) {
-                command = Optional.empty();
-            }
+        if (!optionalCommand.isPresent()) {
+            optionalCommand = commands.stream().filter(cmd -> cmd.getAlias() != null && (sender.getPrefixCMD() + cmd.getAlias()).equalsIgnoreCase(args[0])).findFirst();
         }
-        if (!command.isPresent()) {
+        if (!optionalCommand.isPresent()) {
             ChatUtil.sendChatMessage("&cCommand not found!", sender, true);
             return;
         }
 
-        final String packageName = command.get().getClass().getPackage().getName();
+        final Command command = optionalCommand.get();
+        final String packageName = command.getClass().getPackage().getName();
         final String commandType = packageName.substring(packageName.lastIndexOf(".")).substring(1);
         if (commandType.equals("admins") && sender.getAccount().getGroup().getPermissionLevel() < 2) {
             ChatUtil.sendChatMessage("&cYou are not permitted to this command!", sender, true);
             return;
         }
-
-        if (command.get().getConnected() == ConnectedType.CONNECTED && !sender.isConnected()) {
+        if (command.getConnected() == ConnectedType.CONNECTED && !sender.isConnected()) {
             ChatUtil.sendChatMessage("&4You must be connected to the server!", sender, true);
             return;
         }
-        if (command.get().getConnected() == ConnectedType.DISCONNECTED && sender.isConnected()) {
+        if (command.getConnected() == ConnectedType.DISCONNECTED && sender.isConnected()) {
             ChatUtil.sendChatMessage("&4You cannot be connected to the server!", sender, true);
             return;
         }
@@ -69,9 +66,9 @@ public class CommandManager {
                 }
             }
             cooldown.put(sender.getAccount().getUsername(), System.currentTimeMillis());
-            command.get().onCommand(sender, args);
+            command.onCommand(sender, args);
         } catch (final Exception e) {
-            ChatUtil.sendChatMessage("&8Correct usage: &6" + sender.getPrefixCMD() + command.get().getPrefix() + " " + command.get().getUsage(), sender, true);
+            ChatUtil.sendChatMessage("&8Correct usage: &6" + sender.getPrefixCMD() + command.getPrefix() + " " + command.getUsage(), sender, true);
         }
     }
 

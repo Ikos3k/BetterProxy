@@ -28,6 +28,6 @@ public class ServerStatusPongPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x01, 47), new Protocol(0x01, 110), new Protocol(0x01, 340));
+        return Arrays.asList(new Protocol(0x01, 47), new Protocol(0x01, 109), new Protocol(0x01, 110), new Protocol(0x01, 210), new Protocol(0x01, 340));
     }
 }

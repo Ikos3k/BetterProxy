@@ -60,8 +60,7 @@ public class FileUtil {
                     Object obj = null;
                     try {
                         obj = parser.parse(new FileReader(f));
-                    } catch (IOException | ParseException ignored) {
-                    }
+                    } catch (IOException | ParseException ignored) { }
                     JSONObject jsonObj = (JSONObject) obj;
                     int id = ((Long) jsonObj.get("id")).intValue();
                     List<Long> s = ((JSONArray) jsonObj.get("data"));

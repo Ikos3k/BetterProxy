@@ -34,27 +34,30 @@ public class WorldUtil {
         dimSwitch(player, new ServerJoinGamePacket(0, Gamemode.SURVIVAL, Dimension.OVERWORLD, Difficulty.PEACEFULL, 1, "default_1_1", false));
         player.getSession().sendPacket(new ServerSpawnPositionPacket(new Position(0, 1, 0)));
         player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, true, false, false, 2f, 2f));
-        player.getSession().sendPacket(new ServerPlayerPositionRotationPacket(0, 0, 0, 180, 90));
+        player.getSession().sendPacket(new ServerPlayerPosLookPacket(0, 0, 0, 180, 90));
     }
 
     public static void lobby(Player player, boolean clear) {
         if (clear) { emptyWorld(player); }
         PacketUtil.clearInventory(player);
         PacketUtil.clearTabList(player);
-        try {
-            int i = 0;
-            while (new File(BetterProxy.getInstance().getDirFolder() + "/world/" + (player.getSession().getProtocolID() != 47 ? "other" : "47") + "/world_" + i).exists()) {
-                final byte[] data = Files.readAllBytes(new File(BetterProxy.getInstance().getDirFolder() + "/world/" + (player.getSession().getProtocolID() != 47 ? "other" : "47") + "/world_" + i).toPath());
-                Packet p = new CustomPacket(player.getSession().getProtocolID() == 47 ? 0x26 : 0x20, data);
-                player.getSession().sendPacket(p);
-                i++;
-            }
-        } catch (IOException ignored) { }
+
+        if(player.getSession().getProtocolID() != 109) {
+            try {
+                int i = 0;
+                while (new File(BetterProxy.getInstance().getDirFolder() + "/world/" + (player.getSession().getProtocolID() != 47 ? "other" : "47") + "/world_" + i).exists()) {
+                    final byte[] data = Files.readAllBytes(new File(BetterProxy.getInstance().getDirFolder() + "/world/" + (player.getSession().getProtocolID() != 47 ? "other" : "47") + "/world_" + i).toPath());
+                    Packet p = new CustomPacket(player.getSession().getProtocolID() == 47 ? 0x26 : 0x20, data);
+                    player.getSession().sendPacket(p);
+                    i++;
+                }
+            } catch (IOException ignored) { }
+        }
 
 //        testLoadSchematic(player, new Schematic(BetterProxy.getInstance().getDirFolder() + "/schematics/example.schematic"), 0, 0);
 
         player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, false, false, false, 0f, 0f));
-        player.getSession().sendPacket(new ServerPlayerPositionRotationPacket(0.5, 70, 0.5, 0.0f, 0.0f));
+        player.getSession().sendPacket(new ServerPlayerPosLookPacket(0.5, 70, 0.5, 0.0f, 0.0f));
 
         if(player.getSession().getProtocolID() == 47) {
             spawnPlayers(player);
@@ -141,7 +144,7 @@ public class WorldUtil {
 
                 JSONObject position = (JSONObject) sign.get("position");
                 long x = ((Number)position.get("x")).longValue();
-                long y =((Number)position.get("y")).longValue();
+                long y = ((Number)position.get("y")).longValue();
                 long z = ((Number)position.get("z")).longValue();
                 p.getSession().sendPacket(new ServerUpdateSignPacket(new Position(x, y, z), ChatUtil.fixColor(text_1), ChatUtil.fixColor(text_2), ChatUtil.fixColor(text_3), ChatUtil.fixColor(text_4)));
             });

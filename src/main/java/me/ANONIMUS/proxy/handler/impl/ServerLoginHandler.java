@@ -69,7 +69,7 @@ public class ServerLoginHandler extends ServerHandler {
                     }
                     ChatUtil.sendBroadcastMessage("&6>> &8Player &6" + playerName + " &8has connected to the &6BetterProxy &8(&e" + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8)", false);
                     ChatUtil.sendChatMessage("&6>> &8Welcome to &6BetterProxy &8by &4ANONIMUS", player, false);
-                    ChatUtil.sendChatMessage("&6>> &8Supported versions: &e1.8.X&8, &e1.9.3&8, &e1.9.4&8, &e1.12.2", player, false);
+                    ChatUtil.sendChatMessage("&6>> &8Supported versions: &e1.8.X&8, &e1.9.2&8, &e1.9.3&8, &e1.9.4&8, &e1.10.X&8, &e1.12.2", player, false);
                     ChatUtil.sendChatMessage("&6>> &8Log in using the command: &6" + player.getPrefixCMD() + "login [haslo]", player, false);
                     return;
                 }

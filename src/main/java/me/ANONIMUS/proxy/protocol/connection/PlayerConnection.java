@@ -69,7 +69,7 @@ public class PlayerConnection {
                                 ChatUtil.sendChatMessage("&6>> &8Used proxy: &e" + proxy.address().toString(), owner, false);
                             }
                             TimeUnit.MILLISECONDS.sleep(150);
-                            owner.getRemoteSession().sendPacket(new HandshakePacket(owner.getSession().getProtocolID(), "", port, 2));
+                            owner.getRemoteSession().sendPacket(new HandshakePacket(owner.getSession().getProtocolID(), host, port, 2));
                             owner.getRemoteSession().sendPacket(new ClientLoginStartPacket(username));
                             owner.setServerData(new ServerData(host, port));
                             ScoreboardUtil.updateScoreboard(owner);
@@ -96,6 +96,7 @@ public class PlayerConnection {
                             } else if (packet instanceof ServerLoginSuccessPacket) {
                                 owner.getRemoteSession().setConnectionState(ConnectionState.PLAY);
                                 ChatUtil.sendChatMessage("&6>> &8Successfully &6logged!", owner, false);
+                                ScoreboardUtil.updateScoreboard(owner);
                             } else if (packet instanceof ServerJoinGamePacket) {
                                 ChatUtil.sendChatMessage("&6>> &8Downloading terrain!", owner, false);
                                 WorldUtil.dimSwitch(owner, (ServerJoinGamePacket) packet);
@@ -116,8 +117,8 @@ public class PlayerConnection {
                                     ScoreboardUtil.updateScoreboard(owner);
                                 }
                             } else if (owner.isConnected() && owner.getRemoteSession().getConnectionState() == ConnectionState.PLAY) {
-                                if(packet instanceof CustomPacket) {
-                                    if(owner.isListenChunks() && (((owner).getSession().getProtocolID() == 47 && ((CustomPacket)packet).getCustomPacketID() == 0x26) || ((owner).getSession().getProtocolID() != 47 && ((CustomPacket)packet).getCustomPacketID() == 0x20))) {
+                                if(owner.isListenChunks() && packet instanceof CustomPacket) {
+                                    if((((owner).getSession().getProtocolID() == 47 && ((CustomPacket)packet).getCustomPacketID() == 0x26) || ((owner).getSession().getProtocolID() != 47 && ((CustomPacket)packet).getCustomPacketID() == 0x20))) {
                                         owner.getListenedChunks().add(packet);
                                         ChatUtil.sendTitle(owner, "[CHUNKS]", "listening... (" + owner.getListenedChunks().size() + ")");
                                     }

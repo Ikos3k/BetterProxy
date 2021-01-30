@@ -10,9 +10,7 @@ public class Option {
     private boolean enabled;
 
     public Option(String name, String... description) {
-        this.name = name;
-        this.description = description;
-        this.enabled = false;
+        this(false, name, description);
     }
 
     public Option(boolean defaultValue, String name, String... description) {
@@ -33,12 +31,10 @@ public class Option {
 
     public void setEnabled(Player player, boolean enabled) {
         this.player = player;
-        if(this.enabled != enabled) {
-            if (enabled) {
-                onEnable();
-            } else {
-                onDisable();
-            }
+        if (this.enabled != enabled) {
+            toggle(player);
+        } else {
+            ChatUtil.sendChatMessage("&6>> &8The &6" + name + " &8option is already " + (enabled ? "&a" : "&c") + enabled, player, false);
         }
         this.enabled = enabled;
     }

@@ -28,6 +28,6 @@ public class ClientLoginStartPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x00, 47), new Protocol(0x00, 110), new Protocol(0x00, 340));
+        return Arrays.asList(new Protocol(0x00, 47), new Protocol(0x00, 109), new Protocol(0x00, 110), new Protocol(0x00, 210), new Protocol(0x00, 340));
     }
 }

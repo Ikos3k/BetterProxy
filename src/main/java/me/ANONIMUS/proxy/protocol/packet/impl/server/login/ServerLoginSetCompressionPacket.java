@@ -28,6 +28,6 @@ public class ServerLoginSetCompressionPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x03, 47), new Protocol(0x03, 110), new Protocol(0x03, 340));
+        return Arrays.asList(new Protocol(0x03, 47), new Protocol(0x03, 109), new Protocol(0x03, 110), new Protocol(0x03, 210), new Protocol(0x03, 340));
     }
 }
