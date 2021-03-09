@@ -27,7 +27,6 @@ import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSetCompres
 import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSuccessPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.*;
 import me.ANONIMUS.proxy.utils.ChatUtil;
-import me.ANONIMUS.proxy.utils.ScoreboardUtil;
 import me.ANONIMUS.proxy.utils.WorldUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -72,7 +71,6 @@ public class PlayerConnection {
                             owner.getRemoteSession().sendPacket(new HandshakePacket(owner.getSession().getProtocolID(), host, port, 2));
                             owner.getRemoteSession().sendPacket(new ClientLoginStartPacket(username));
                             owner.setServerData(new ServerData(host, port));
-                            ScoreboardUtil.updateScoreboard(owner);
                         }
 
                         @Override
@@ -84,7 +82,6 @@ public class PlayerConnection {
                             }
                             owner.setRemoteSession(null);
                             owner.setServerData(null);
-                            ScoreboardUtil.updateScoreboard(owner);
                             group.shutdownGracefully();
                         }
 
@@ -96,13 +93,11 @@ public class PlayerConnection {
                             } else if (packet instanceof ServerLoginSuccessPacket) {
                                 owner.getRemoteSession().setConnectionState(ConnectionState.PLAY);
                                 ChatUtil.sendChatMessage("&6>> &8Successfully &6logged!", owner, false);
-                                ScoreboardUtil.updateScoreboard(owner);
                             } else if (packet instanceof ServerJoinGamePacket) {
                                 ChatUtil.sendChatMessage("&6>> &8Downloading terrain!", owner, false);
                                 WorldUtil.dimSwitch(owner, (ServerJoinGamePacket) packet);
                                 owner.setConnected(true);
                                 ChatUtil.sendChatMessage("&6>> &6Connected successfully&8!", owner, false);
-                                ScoreboardUtil.updateScoreboard(owner);
                             } else if (packet instanceof ServerDisconnectPacket) {
                                 ChatUtil.sendChatMessage("&6>> &8Connection to the server was lost: &6" + owner.getServerData().getHost() + " &8cause: &6" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerDisconnectPacket) packet).getReason())), owner, false);
                                 disconnect();
@@ -114,7 +109,6 @@ public class PlayerConnection {
                             } else if (packet instanceof ServerCustomPayloadPacket) {
                                 if (((ServerCustomPayloadPacket) packet).getChannel().equals("MC|Brand")) {
                                     ChatUtil.sendChatMessage("&6>> &8Engine: &6" + ((ServerCustomPayloadPacket) packet).getData().readString().split(" ")[0], owner, false);
-                                    ScoreboardUtil.updateScoreboard(owner);
                                 }
                             } else if (owner.isConnected() && owner.getRemoteSession().getConnectionState() == ConnectionState.PLAY) {
                                 if(owner.isListenChunks() && packet instanceof CustomPacket) {
@@ -183,7 +177,6 @@ public class PlayerConnection {
         owner.setRemoteSession(null);
         owner.setServerData(null);
         WorldUtil.lobby(owner, true);
-        ScoreboardUtil.updateScoreboard(owner);
         group.shutdownGracefully();
     }
 }

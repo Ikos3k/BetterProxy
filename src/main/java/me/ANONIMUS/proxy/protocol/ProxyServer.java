@@ -7,6 +7,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.Data;
+import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.managers.PlayerManager;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
 import me.ANONIMUS.proxy.protocol.handlers.PacketCodec;
@@ -21,8 +22,6 @@ import java.util.concurrent.TimeUnit;
 
 @Data
 public class ProxyServer {
-    private final int port;
-
     EventLoopGroup worker = new NioEventLoopGroup();
 
     public void bind() {
@@ -55,7 +54,7 @@ public class ProxyServer {
                         }
                     });
                 }
-            }).bind(port);
+            }).bind(BetterProxy.getInstance().getConfigManager().getConfig().port);
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> PlayerManager.getPlayers().stream().filter(p -> p.getSession().getConnectionState() == ConnectionState.PLAY).forEach(p -> p.getSession().sendPacket(new ServerKeepAlivePacket(System.currentTimeMillis()))),3,3, TimeUnit.SECONDS);
     }
 }

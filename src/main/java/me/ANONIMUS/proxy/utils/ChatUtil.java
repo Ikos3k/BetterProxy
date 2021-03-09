@@ -7,6 +7,7 @@ import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerChatPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerTitlePacket;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -14,11 +15,10 @@ import java.util.stream.IntStream;
 
 public class ChatUtil {
     public static String fixColor(final String text) {
-        return text.replace('&', '§')
-                .replace(">>", "»")
+        return ChatColor.translateAlternateColorCodes('&', text.replace(">>", "»")
                 .replace("<<", "«")
                 .replace("(o)", "●")
-                .replace("(*)", "•");
+                .replace("(*)", "•"));
     }
 
     public static void sendHoverMessage(final Player player, final String s1, final String s2) {

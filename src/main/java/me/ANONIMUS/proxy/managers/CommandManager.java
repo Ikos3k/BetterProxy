@@ -4,7 +4,6 @@ import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.utils.ChatUtil;
-import me.ANONIMUS.proxy.utils.ScoreboardUtil;
 import org.reflections.Reflections;
 
 import java.util.ArrayList;
@@ -29,7 +28,6 @@ public class CommandManager {
     public void onCommand(final String message, final Player sender) {
         final String[] args = message.split(" ");
         Optional<Command> optionalCommand = commands.stream().filter(cmd -> (sender.getPrefixCMD() + cmd.getPrefix()).equalsIgnoreCase(args[0])).findFirst();
-        ScoreboardUtil.updateScoreboard(sender);
         if (!sender.isLogged() && !(message.startsWith(sender.getPrefixCMD() + "login ") || message.startsWith(sender.getPrefixCMD() + "l "))) {
             ChatUtil.sendChatMessage("&6You must login! &c" + sender.getPrefixCMD() + "login <password>", sender, true);
             return;

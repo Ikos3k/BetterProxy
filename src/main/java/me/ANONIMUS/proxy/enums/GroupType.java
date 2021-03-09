@@ -18,9 +18,9 @@ public enum GroupType {
         this.delayCMD = delayCMD;
     }
 
-    public String getPrefix() { return this.prefix; }
+    public String getPrefix() { return prefix; }
 
-    public int getPermissionLevel() { return this.permission; }
+    public int getPermissionLevel() { return permission; }
 
     public int getDelayCMD() { return delayCMD; }
 

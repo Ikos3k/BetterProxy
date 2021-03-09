@@ -9,6 +9,7 @@ import me.ANONIMUS.proxy.protocol.ProxyServer;
 import me.ANONIMUS.proxy.protocol.packet.PacketRegistry;
 import me.ANONIMUS.proxy.threads.MemoryFreeThread;
 import me.ANONIMUS.proxy.threads.MessageThread;
+import me.ANONIMUS.proxy.threads.ScoreboardThread;
 import me.ANONIMUS.proxy.threads.TitleLagThread;
 import me.ANONIMUS.proxy.utils.FileUtil;
 
@@ -37,7 +38,7 @@ public class BetterProxy {
         configManager = new ConfigManager(new File(dirFolder + "/config.json"));
         configManager.read();
         accounts = new ArrayList<>();
-        server = new ProxyServer(configManager.getConfig().port);
+        server = new ProxyServer();
     }
 
     public void run() {
@@ -63,6 +64,7 @@ public class BetterProxy {
 
         final Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TitleLagThread(), 1000L, 1000L);
+        timer.scheduleAtFixedRate(new ScoreboardThread(), 1000L, 1000L);
         timer.scheduleAtFixedRate(new MessageThread(), 80000L, 80000L);
         timer.scheduleAtFixedRate(new MemoryFreeThread(), 60000L, 60000L);
     }

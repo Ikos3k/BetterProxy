@@ -30,7 +30,7 @@ public class FileUtil {
             if (!f1.exists()) { f1.createNewFile(); }
             if (!f2.exists()) { f2.mkdir(); }
             if (!f3.exists()) { f3.mkdir(); }
-            if (!f3.exists()) { f4.mkdir(); }
+            if (!f4.exists()) { f4.mkdir(); }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -42,8 +42,7 @@ public class FileUtil {
             final Scanner s = new Scanner(f1);
             while (s.hasNext()) {
                 final String[] split = s.next().split(":", 3);
-                final Account ac = new Account(split[0], split[1], GroupType.valueOf(split[2]));
-                BetterProxy.getInstance().getAccounts().add(ac);
+                BetterProxy.getInstance().getAccounts().add(new Account(split[0], split[1], GroupType.valueOf(split[2])));
             }
             s.close();
         } catch (Exception e) {

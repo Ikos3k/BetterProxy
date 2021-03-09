@@ -19,19 +19,17 @@ public class ServerChatPacket extends Packet {
     private BaseComponent[] message;
     private MessagePosition position;
 
-    public ServerChatPacket(String message) {
-        this.message = new ComponentBuilder(message).create();
-        this.position = MessagePosition.CHATBOX;
-    }
-
-    public ServerChatPacket(String message, MessagePosition position) {
-        this.message = new ComponentBuilder(message).create();
-        this.position = position;
-    }
-
     public ServerChatPacket(BaseComponent[] message, MessagePosition position) {
         this.message = message;
         this.position = position;
+    }
+
+    public ServerChatPacket(String message) {
+        this(new ComponentBuilder(message).create(), MessagePosition.CHATBOX);
+    }
+
+    public ServerChatPacket(String message, MessagePosition position) {
+        this(new ComponentBuilder(message).create(), position);
     }
 
     public ServerChatPacket(BaseComponent... text) {

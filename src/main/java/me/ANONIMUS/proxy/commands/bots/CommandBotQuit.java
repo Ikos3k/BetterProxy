@@ -18,10 +18,7 @@ public class CommandBotQuit extends Command {
                 ChatUtil.sendChatMessage("&cYou don't have any connected bots", sender, true);
                 return;
             }
-            sender.getBots().forEach(b -> {
-                b.getSession().getChannel().close();
-                sender.getBots().remove(b);
-            });
+            sender.getBots().forEach(b -> b.getSession().getChannel().close());
             ChatUtil.sendChatMessage("&7Successfully kicked out &4" + sender.getBots().size() + " &7bots", sender, true);
             sender.getBots().clear();
         } else {

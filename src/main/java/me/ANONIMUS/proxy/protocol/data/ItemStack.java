@@ -23,6 +23,11 @@ public class ItemStack {
         this.data = 0;
     }
 
+    public ItemStack(final int id, final String name) {
+        this(id);
+        setStackDisplayName(name);
+    }
+
     public ItemStack(final int id, final int amount, final int data) {
         this.id = id;
         this.amount = amount;

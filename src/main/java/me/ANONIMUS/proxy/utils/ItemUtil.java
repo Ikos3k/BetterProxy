@@ -26,9 +26,7 @@ public class ItemUtil {
     }
 
     public static ItemStack optionsMenu() {
-        ItemStack is = new ItemStack(404);
-        is.setStackDisplayName(ChatUtil.fixColor("&8Options"));
-        return is;
+        return new ItemStack(404, ChatUtil.fixColor("&8Options"));
     }
 
     public static ItemStack changeSkinMenu() {
@@ -38,9 +36,7 @@ public class ItemUtil {
     }
 
     public static ItemStack serverMenu() {
-        ItemStack is = new ItemStack(2);
-        is.setStackDisplayName(ChatUtil.fixColor("&aServers"));
-        return is;
+        return new ItemStack(2, ChatUtil.fixColor("&aServers"));
     }
 
     public static void loadStartItems(Player player) {

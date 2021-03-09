@@ -36,7 +36,6 @@ public class Option {
         } else {
             ChatUtil.sendChatMessage("&6>> &8The &6" + name + " &8option is already " + (enabled ? "&a" : "&c") + enabled, player, false);
         }
-        this.enabled = enabled;
     }
 
     public boolean isEnabled() {

@@ -10,15 +10,14 @@ import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.impl.CustomPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.*;
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.UUID;
@@ -54,7 +53,11 @@ public class WorldUtil {
             } catch (IOException ignored) { }
         }
 
-//        testLoadSchematic(player, new Schematic(BetterProxy.getInstance().getDirFolder() + "/schematics/example.schematic"), 0, 0);
+//        try {
+//            testLoadSchematic(player, new Schematic(CompressedStreamTools.readCompressed(new FileInputStream(BetterProxy.getInstance().getDirFolder() + "/schematics/example.schematic"))), 0, 0);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, false, false, false, 0f, 0f));
         player.getSession().sendPacket(new ServerPlayerPosLookPacket(0.5, 70, 0.5, 0.0f, 0.0f));
