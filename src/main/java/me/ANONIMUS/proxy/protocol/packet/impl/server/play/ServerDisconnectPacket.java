@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
-import me.ANONIMUS.proxy.utils.ChatUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.chat.ComponentSerializer;
@@ -21,7 +20,7 @@ public class ServerDisconnectPacket extends Packet {
     private BaseComponent[] reason;
 
     public ServerDisconnectPacket(String message) {
-        this(new ComponentBuilder(ChatUtil.fixColor(message)).create());
+        this(new ComponentBuilder(message).create());
     }
 
     @Override

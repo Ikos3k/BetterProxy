@@ -17,7 +17,6 @@ import me.ANONIMUS.proxy.protocol.packet.Protocol;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
-import java.util.Arrays;
 import java.util.List;
 
 @NoArgsConstructor
@@ -88,6 +87,6 @@ public class ServerStatusResponsePacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x00, 47), new Protocol(0x00, 109), new Protocol(0x00, 110), new Protocol(0x00, 210), new Protocol(0x00, 340));
+        return Protocol.protocols(0x00, 47, 109, 110, 210, 340);
     }
 }

@@ -49,9 +49,9 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
 
             if(BetterProxy.getInstance().getConfigManager().getConfig().debug) {
                 final ByteBuf bufDUPLICATE = byteBuf.duplicate();
-                final byte[] data = new byte[bufDUPLICATE.readableBytes()];
-                bufDUPLICATE.readBytes(data);
-                if(data.length > 1) {
+                if(bufDUPLICATE.readableBytes() > 1) {
+                    final byte[] data = new byte[bufDUPLICATE.readableBytes()];
+                    bufDUPLICATE.readBytes(data);
                     System.err.println("[" + channelHandlerContext.channel().remoteAddress() + "] Packet data " + packet.getClass().getSimpleName() + "(" + packetID + "): " + Arrays.toString(data));
                 }
                 bufDUPLICATE.clear();

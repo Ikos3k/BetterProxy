@@ -9,7 +9,6 @@ import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerUpdateScorePacke
 
 import java.text.DecimalFormat;
 
-
 public final class ScoreboardUtil {
     private static final DecimalFormat format = new DecimalFormat("##.##");
 

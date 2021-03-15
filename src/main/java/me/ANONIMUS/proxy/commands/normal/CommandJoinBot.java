@@ -12,7 +12,6 @@ import me.ANONIMUS.proxy.utils.SRVResolver;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -54,8 +53,7 @@ public class CommandJoinBot extends Command {
     }
 
     private void connect(final Player sender, final int delay, final String host, final int port, final String usernames, final int amount, final boolean ping) {
-        final ExecutorService service = Executors.newSingleThreadExecutor();
-        service.submit(() -> {
+        Executors.newSingleThreadExecutor().submit(() -> {
             ChatUtil.sendChatMessage("&aSending!", sender, true);
             for (int i = 0; i < amount; i++) {
                 final String username = (usernames + i);

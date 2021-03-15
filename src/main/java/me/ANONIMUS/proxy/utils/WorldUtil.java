@@ -10,14 +10,15 @@ import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.impl.CustomPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.*;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.UUID;
@@ -114,7 +115,7 @@ public class WorldUtil {
 
                 JSONObject position = (JSONObject) player.get("position");
                 double x = ((Number)position.get("x")).doubleValue();
-                double y =((Number)position.get("y")).doubleValue();
+                double y = ((Number)position.get("y")).doubleValue();
                 double z = ((Number)position.get("z")).doubleValue();
 
                 JSONObject textures = (JSONObject) player.get("textures");
@@ -146,9 +147,9 @@ public class WorldUtil {
                 String text_4 = (String) sign.get("text_4");
 
                 JSONObject position = (JSONObject) sign.get("position");
-                long x = ((Number)position.get("x")).longValue();
-                long y = ((Number)position.get("y")).longValue();
-                long z = ((Number)position.get("z")).longValue();
+                int x = ((Number)position.get("x")).intValue();
+                int y = ((Number)position.get("y")).intValue();
+                int z = ((Number)position.get("z")).intValue();
                 p.getSession().sendPacket(new ServerUpdateSignPacket(new Position(x, y, z), ChatUtil.fixColor(text_1), ChatUtil.fixColor(text_2), ChatUtil.fixColor(text_3), ChatUtil.fixColor(text_4)));
             });
         } catch (IOException | ParseException e) {

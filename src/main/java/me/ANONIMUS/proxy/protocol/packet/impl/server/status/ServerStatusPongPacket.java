@@ -7,7 +7,6 @@ import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -28,6 +27,6 @@ public class ServerStatusPongPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x01, 47), new Protocol(0x01, 109), new Protocol(0x01, 110), new Protocol(0x01, 210), new Protocol(0x01, 340));
+        return Protocol.protocols(0x01, 47, 109, 110, 210, 340);
     }
 }

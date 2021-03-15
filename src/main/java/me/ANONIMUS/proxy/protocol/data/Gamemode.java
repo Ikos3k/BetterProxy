@@ -6,7 +6,6 @@ import java.util.Arrays;
 
 @Getter
 public enum Gamemode {
-
     SURVIVAL(0), CREATIVE(1), ADVENTURE(2), SPECTATOR(3), HARDCORE(0x8);
 
     private final int id;

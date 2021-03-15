@@ -35,8 +35,8 @@ public class BetterProxy {
         commandManager = new CommandManager();
         packetRegistry = new PacketRegistry();
         exploitManager = new ExploitManager();
-        configManager = new ConfigManager(new File(dirFolder + "/config.json"));
-        configManager.read();
+        configManager = new ConfigManager();
+        configManager.read(new File(dirFolder + "/config.json"));
         accounts = new ArrayList<>();
         server = new ProxyServer();
     }

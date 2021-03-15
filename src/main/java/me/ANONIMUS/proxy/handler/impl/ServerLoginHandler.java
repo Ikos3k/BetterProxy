@@ -40,7 +40,7 @@ public class ServerLoginHandler extends ServerHandler {
             if(PlayerManager.getPlayers().size() > 1) {
                 for (Player p : PlayerManager.getPlayers()) {
                     if (p.getAccount() != null && p.getAccount().getUsername().equals(playerName)) {
-                        player.getSession().sendPacket(new ServerLoginDisconnectPacket("&4The player with this nickname is already on the proxy!"));
+                        player.getSession().sendPacket(new ServerLoginDisconnectPacket(ChatUtil.fixColor("&4The player with this nickname is already on the proxy!")));
                         return;
                     }
                 }

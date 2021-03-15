@@ -38,8 +38,7 @@ public class FileUtil {
 
     public static void loadAccounts() {
         try {
-            final File f1 = new File(BetterProxy.getInstance().getDirFolder() + "/accounts.txt");
-            final Scanner s = new Scanner(f1);
+            final Scanner s = new Scanner(new File(BetterProxy.getInstance().getDirFolder() + "/accounts.txt"));
             while (s.hasNext()) {
                 final String[] split = s.next().split(":", 3);
                 BetterProxy.getInstance().getAccounts().add(new Account(split[0], split[1], GroupType.valueOf(split[2])));

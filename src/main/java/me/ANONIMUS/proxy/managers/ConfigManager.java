@@ -12,15 +12,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ConfigManager {
-    private final File file;
     private final Config config;
 
-    public ConfigManager(File f){
-        this.file = f;
+    public ConfigManager() {
         this.config = new Config();
     }
 
-    public void read(){
+    public void read(File file) {
         JSONParser parser = new JSONParser();
         try {
             Object obj = parser.parse(new FileReader(file));
