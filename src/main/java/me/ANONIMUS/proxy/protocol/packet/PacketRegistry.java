@@ -7,14 +7,24 @@ import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class PacketRegistry {
     public void init() {
         Arrays.asList(PacketDirection.values()).forEach(direction -> Arrays.stream(ConnectionState.values()).filter(connectionState -> connectionState != ConnectionState.HANDSHAKE).forEach(state -> new Reflections("me.ANONIMUS.proxy.protocol.packet.impl." + direction.packetsPackageName.toLowerCase() + "." + state.name().toLowerCase()).getSubTypesOf(Packet.class).forEach(p -> {
             try {
                 final Packet packet = p.newInstance();
-                packet.getProtocolList().forEach(protocol -> state.getPacketsByDirection(direction).put(protocol, packet));
+                packet.getProtocolList().forEach(protocol -> {
+                    if(state.getPacketsByDirection(direction).get(packet) == null) {
+                        List<Protocol> protocols = new ArrayList<>();
+                        protocols.add(protocol);
+                        state.getPacketsByDirection(direction).put(packet, protocols);
+                    } else {
+                        state.getPacketsByDirection(direction).get(packet).add(protocol);
+                    }
+                });
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -45,6 +55,15 @@ public class PacketRegistry {
         if(connectionState == ConnectionState.HANDSHAKE) {
             return new HandshakePacket();
         }
-        return connectionState.getPacketsByDirection(direction).get(protocol);
+
+        for(Packet packet : connectionState.getPacketsByDirection(direction).keySet()) {
+            for(Protocol protocol1 : connectionState.getPacketsByDirection(direction).get(packet)) {
+                if(protocol1.equals(protocol)) {
+                    return packet;
+                }
+            }
+        }
+
+        return null;
     }
 }
