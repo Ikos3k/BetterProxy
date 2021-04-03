@@ -21,7 +21,7 @@ public class CommandMsgall extends Command {
 
         final String out = sender.getPlayers().toString();
         if (out.equals("[]")) {
-            ChatUtil.sendChatMessage("&cYou need to download players first &6" + sender.getPrefixCMD() + "players", sender, true);
+            ChatUtil.sendChatMessage("&cYou need to download players first " + sender.getThemeType().getColor(1) + sender.getPrefixCMD() + "players", sender, true);
             return;
         }
         sendMSG(sender, delay, text);
@@ -30,7 +30,7 @@ public class CommandMsgall extends Command {
     private void sendMSG(final Player player, final int delay, final String text) {
         final ExecutorService service = Executors.newSingleThreadExecutor();
         service.submit(() -> {
-            ChatUtil.sendChatMessage("&6Message sending has started &4" + text + " &6to &c" + player.getPlayers().size() + " &6players", player, true);
+            ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + "Message sending has started &4" + text + player.getThemeType().getColor(1) + " to &c" + player.getPlayers().size() + player.getThemeType().getColor(1) + " players", player, true);
             player.getPlayers().forEach(s -> {
                 try {
                     TimeUnit.SECONDS.sleep(delay);
@@ -40,7 +40,7 @@ public class CommandMsgall extends Command {
                 player.getRemoteSession().sendPacket(new ClientChatPacket("/msg " + s + " " + text));
             });
 
-            ChatUtil.sendChatMessage("&6Message sent successfully &4" + text + " &6to &c" + player.getPlayers().size() + " &6players", player, true);
+            ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + "Message sent successfully &4" + text + player.getThemeType().getColor(1) + " to &c" + player.getPlayers().size() + player.getThemeType().getColor(1) + " players", player, true);
             player.getPlayers().clear();
         });
     }

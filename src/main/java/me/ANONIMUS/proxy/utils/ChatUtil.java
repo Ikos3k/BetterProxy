@@ -38,7 +38,7 @@ public class ChatUtil {
     }
 
     public static void sendChatMessage(final String message, Player player, boolean prefix) {
-        player.getSession().sendPacket(new ServerChatPacket(fixColor((prefix ? "&6BetterProxy &8>> " : "") + "&7" + message)));
+        player.getSession().sendPacket(new ServerChatPacket(fixColor((prefix ? player.getThemeType().getColor(1) + "BetterProxy &8>> " : "") + "&7" + message)));
     }
 
     public static void sendActionBar(final String message, Player player) {

@@ -29,7 +29,7 @@ public class CommandManager {
         final String[] args = message.split(" ");
         Optional<Command> optionalCommand = commands.stream().filter(cmd -> (sender.getPrefixCMD() + cmd.getPrefix()).equalsIgnoreCase(args[0])).findFirst();
         if (!sender.isLogged() && !(message.startsWith(sender.getPrefixCMD() + "login ") || message.startsWith(sender.getPrefixCMD() + "l "))) {
-            ChatUtil.sendChatMessage("&6You must login! &c" + sender.getPrefixCMD() + "login <password>", sender, true);
+            ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + "You must login! &c" + sender.getPrefixCMD() + "login <password>", sender, true);
             return;
         }
         if (!optionalCommand.isPresent()) {
@@ -59,14 +59,14 @@ public class CommandManager {
             if (cooldown.containsKey(sender.getAccount().getUsername())) {
                 final long secondsLeft = cooldown.get(sender.getAccount().getUsername()) / 1000L + sender.getAccount().getGroup().getDelayCMD() - System.currentTimeMillis() / 1000L;
                 if (secondsLeft > 0L) {
-                    ChatUtil.sendChatMessage("&7The next command can be used in &6" + secondsLeft + "s&7!", sender, true);
+                    ChatUtil.sendChatMessage("&7The next command can be used in " + sender.getThemeType().getColor(1) + secondsLeft + "s&7!", sender, true);
                     return;
                 }
             }
             cooldown.put(sender.getAccount().getUsername(), System.currentTimeMillis());
             command.onCommand(sender, args);
         } catch (final Exception e) {
-            ChatUtil.sendChatMessage("&8Correct usage: &6" + sender.getPrefixCMD() + command.getPrefix() + " " + command.getUsage(), sender, true);
+            ChatUtil.sendChatMessage("&8Correct usage: " + sender.getThemeType().getColor(1) + sender.getPrefixCMD() + command.getPrefix() + " " + command.getUsage(), sender, true);
         }
     }
 

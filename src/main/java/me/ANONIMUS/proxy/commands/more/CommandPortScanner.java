@@ -19,7 +19,7 @@ public class CommandPortScanner extends Command {
         if (host.contains(":")) {
             host = host.split(":", 2)[0];
         }
-        ChatUtil.sendChatMessage("&7Port scan started &2" + host, sender, true);
+        ChatUtil.sendChatMessage("&7Port scan started " + sender.getThemeType().getColor(1) + host, sender, true);
         ChatUtil.sendChatMessage("&7Started port &c" + args[2], sender, true);
         List<Integer> ports = new ArrayList<>();
         String finalHost = host;
@@ -32,8 +32,8 @@ public class CommandPortScanner extends Command {
                     ChatUtil.sendChatMessage("&7A working port has been found &a" + i, sender, true);
                 } catch (Exception ignored){ }
             }
-            ChatUtil.sendChatMessage("&7Scanning is complete &8(&e" + ports.size() + "&8)", sender, true);
-            ChatUtil.sendChatMessage("&7Open ports: &6" + ports, sender, true);
+            ChatUtil.sendChatMessage("&7Scanning is complete &8(" + sender.getThemeType().getColor(2) + ports.size() + "&8)", sender, true);
+            ChatUtil.sendChatMessage("&7Open ports: " + sender.getThemeType().getColor(1) + ports, sender, true);
             ports.clear();
         }).start();
     }

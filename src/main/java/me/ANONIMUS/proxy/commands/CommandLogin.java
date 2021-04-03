@@ -19,8 +19,8 @@ public class CommandLogin extends Command {
         }
         if (sender.getAccount().getPassword().equals(args[1])) {
             ChatUtil.clearChat(1, sender);
-            ChatUtil.sendChatMessage("&6>> &8Your account is valid until: &602-01-2069, 00:00:00&8!", sender, false);
-            ChatUtil.sendChatMessage("&6>> &8You will find the available functions under the command: &6" + sender.getPrefixCMD() + "help&8!", sender, false);
+            ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Your account is valid until: " + sender.getThemeType().getColor(1) + "02-01-2069, 00:00:00&8!", sender, false);
+            ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8You will find the available functions under the command: " + sender.getThemeType().getColor(1) + sender.getPrefixCMD() + "help&8!", sender, false);
             sender.setLogged(true);
             WorldUtil.lobby(sender, false);
             return;

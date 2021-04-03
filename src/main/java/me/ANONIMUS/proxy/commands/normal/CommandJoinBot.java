@@ -54,7 +54,7 @@ public class CommandJoinBot extends Command {
 
     private void connect(final Player sender, final int delay, final String host, final int port, final String usernames, final int amount, final boolean ping) {
         Executors.newSingleThreadExecutor().submit(() -> {
-            ChatUtil.sendChatMessage("&aSending!", sender, true);
+            ChatUtil.sendChatMessage(sender.getThemeType().getColor(2) + "Sending!", sender, true);
             for (int i = 0; i < amount; i++) {
                 final String username = (usernames + i);
 
@@ -68,7 +68,7 @@ public class CommandJoinBot extends Command {
                     e.printStackTrace();
                 }
             }
-            ChatUtil.sendChatMessage("&aSent all bots!", sender, true);
+            ChatUtil.sendChatMessage(sender.getThemeType().getColor(2) + "Sent all bots!", sender, true);
         });
     }
 }

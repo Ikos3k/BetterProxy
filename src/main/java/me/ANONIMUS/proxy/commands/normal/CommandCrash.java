@@ -20,7 +20,7 @@ public class CommandCrash extends Command {
         if (args[1].equals("list") && args.length == 2) {
             List<String> exploits = new ArrayList<>();
             BetterProxy.getInstance().getExploitManager().getExploits().forEach(exploit -> exploits.add(exploit.getName()));
-            ChatUtil.sendChatMessage("&8>> &6" + exploits.toString().replace("[", "").replace("]", ""), sender, false);
+            ChatUtil.sendChatMessage("&8>> " + sender.getThemeType().getColor(1) + exploits.toString().replace("[", "").replace("]", ""), sender, false);
             return;
         }
         Exploit exploit = BetterProxy.getInstance().getExploitManager().findExploit(args[1]);

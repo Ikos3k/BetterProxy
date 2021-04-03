@@ -63,9 +63,9 @@ public class PlayerConnection {
                     pipeline.addLast("handler", new SimpleChannelInboundHandler<Packet>() {
                         @Override
                         public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                            ChatUtil.sendChatMessage("&6>> &8Connecting to server &7[&6" + host + "&7]", owner, false);
+                            ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Connecting to server &7[" + owner.getThemeType().getColor(1) + host + "&7]", owner, false);
                             if (proxy != Proxy.NO_PROXY) {
-                                ChatUtil.sendChatMessage("&6>> &8Used proxy: &e" + proxy.address().toString(), owner, false);
+                                ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Used proxy: " + owner.getThemeType().getColor(2) + proxy.address().toString(), owner, false);
                             }
                             TimeUnit.MILLISECONDS.sleep(150);
                             owner.getRemoteSession().sendPacket(new HandshakePacket(owner.getSession().getProtocolID(), host, port, 2));
@@ -92,23 +92,23 @@ public class PlayerConnection {
                                 owner.getRemoteSession().setCompressionThreshold(((ServerLoginSetCompressionPacket) packet).getThreshold());
                             } else if (packet instanceof ServerLoginSuccessPacket) {
                                 owner.getRemoteSession().setConnectionState(ConnectionState.PLAY);
-                                ChatUtil.sendChatMessage("&6>> &8Successfully &6logged!", owner, false);
+                                ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Successfully " + owner.getThemeType().getColor(1) + "logged!", owner, false);
                             } else if (packet instanceof ServerJoinGamePacket) {
-                                ChatUtil.sendChatMessage("&6>> &8Downloading terrain!", owner, false);
+                                ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Downloading terrain!", owner, false);
                                 WorldUtil.dimSwitch(owner, (ServerJoinGamePacket) packet);
                                 owner.setConnected(true);
-                                ChatUtil.sendChatMessage("&6>> &6Connected successfully&8!", owner, false);
+                                ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> Connected successfully&8!", owner, false);
                             } else if (packet instanceof ServerDisconnectPacket) {
-                                ChatUtil.sendChatMessage("&6>> &8Connection to the server was lost: &6" + owner.getServerData().getHost() + " &8cause: &6" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerDisconnectPacket) packet).getReason())), owner, false);
+                                ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Connection to the server was lost: " + owner.getThemeType().getColor(1) + owner.getServerData().getHost() + " &8cause: " + owner.getThemeType().getColor(1) + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerDisconnectPacket) packet).getReason())), owner, false);
                                 disconnect();
                             } else if (packet instanceof ServerLoginDisconnectPacket) {
-                                ChatUtil.sendChatMessage("&6>> &8Connection to the server was lost: &6" + owner.getServerData().getHost() + " &8cause: &6" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerLoginDisconnectPacket) packet).getReason())), owner, false);
+                                ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Connection to the server was lost: " + owner.getThemeType().getColor(1) + owner.getServerData().getHost() + " &8cause: " + owner.getThemeType().getColor(1) + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerLoginDisconnectPacket) packet).getReason())), owner, false);
                                 disconnect();
                             } else if (packet instanceof ServerKeepAlivePacket) {
                                 owner.getRemoteSession().sendPacket(new ClientKeepAlivePacket(((ServerKeepAlivePacket) packet).getKeepaliveId()));
                             } else if (packet instanceof ServerCustomPayloadPacket) {
                                 if (((ServerCustomPayloadPacket) packet).getChannel().equals("MC|Brand")) {
-                                    ChatUtil.sendChatMessage("&6>> &8Engine: &6" + ((ServerCustomPayloadPacket) packet).getData().readString().split(" ")[0], owner, false);
+                                    ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Engine: " + owner.getThemeType().getColor(1) + ((ServerCustomPayloadPacket) packet).getData().readString().split(" ")[0], owner, false);
                                 }
                             } else if (owner.isConnected() && owner.getRemoteSession().getConnectionState() == ConnectionState.PLAY) {
                                 if(owner.isListenChunks() && packet instanceof CustomPacket) {
@@ -124,7 +124,7 @@ public class PlayerConnection {
                                         }
                                         String out = owner.getPlayers().toString();
                                         if (out.equals("[]")) {
-                                            ChatUtil.sendChatMessage("&6>> &cNo players found!", owner, false);
+                                            ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &cNo players found!", owner, false);
                                             owner.setPlayersState(false);
                                             return;
                                         }
@@ -145,7 +145,7 @@ public class PlayerConnection {
                                         }
                                         String out = matches.toString();
                                         if (out.equals("[]")) {
-                                            ChatUtil.sendChatMessage("&6>> &cNo plugins found!", owner, false);
+                                            ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &cNo plugins found!", owner, false);
                                             owner.setPluginsState(false);
                                             return;
                                         }

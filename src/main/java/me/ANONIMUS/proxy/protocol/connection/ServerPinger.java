@@ -64,7 +64,7 @@ public class ServerPinger {
                         @Override
                         public void channelActive(ChannelHandlerContext ctx) throws Exception {
                             if (showResult) {
-                                ChatUtil.sendChatMessage("&aPinging...", owner, true);
+                                ChatUtil.sendChatMessage(owner.getThemeType().getColor(2) + "Pinging...", owner, true);
                             }
                             TimeUnit.MILLISECONDS.sleep(150);
                             session.sendPacket(new HandshakePacket(session.getProtocolID(), host, port, 1));
@@ -75,10 +75,10 @@ public class ServerPinger {
                         protected void channelRead0(ChannelHandlerContext channelHandlerContext, Packet packet) {
                             if (packet instanceof ServerStatusResponsePacket) {
                                 final ServerStatusInfo info = ((ServerStatusResponsePacket) packet).getInfo();
-                                ChatUtil.sendChatMessage("&7Max players: &6" + info.getPlayerInfo().getMaxPlayers(), owner, false);
-                                ChatUtil.sendChatMessage("&7Online players: &6" + info.getPlayerInfo().getOnlinePlayers(), owner, false);
-                                ChatUtil.sendChatMessage("&7MOTD: &6" + BaseComponent.toLegacyText(info.getDescription()), owner, false);
-                                ChatUtil.sendChatMessage("&7Version: &6" + info.getVersionInfo().getVersionName() + "(" + info.getVersionInfo().getProtocolVersion() + ")", owner, false);
+                                ChatUtil.sendChatMessage("&7Max players: " + owner.getThemeType().getColor(1) + info.getPlayerInfo().getMaxPlayers(), owner, false);
+                                ChatUtil.sendChatMessage("&7Online players: " + owner.getThemeType().getColor(1) + info.getPlayerInfo().getOnlinePlayers(), owner, false);
+                                ChatUtil.sendChatMessage("&7MOTD: " + owner.getThemeType().getColor(1) + BaseComponent.toLegacyText(info.getDescription()), owner, false);
+                                ChatUtil.sendChatMessage("&7Version: " + owner.getThemeType().getColor(1) + info.getVersionInfo().getVersionName() + "(" + info.getVersionInfo().getProtocolVersion() + ")", owner, false);
                                 session.getChannel().close();
                                 group.shutdownGracefully();
                             } else if (packet instanceof ServerStatusPongPacket) {

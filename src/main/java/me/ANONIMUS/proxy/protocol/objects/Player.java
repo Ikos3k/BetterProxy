@@ -1,6 +1,7 @@
 package me.ANONIMUS.proxy.protocol.objects;
 
 import lombok.Data;
+import me.ANONIMUS.proxy.enums.ThemeType;
 import me.ANONIMUS.proxy.enums.TimeType;
 import me.ANONIMUS.proxy.handler.impl.ServerLoginHandler;
 import me.ANONIMUS.proxy.handler.impl.ServerStatusHandler;
@@ -38,6 +39,7 @@ public class Player {
     private List<PlayerListEntry> tabList = new ArrayList<>();
     private List<Bot> bots = new ArrayList<>();
     private int motherDelay = 25;
+    private ThemeType themeType = ThemeType.DEFAULT;
 
     public void packetReceived(final Packet packet) {
         if (packet instanceof HandshakePacket) {

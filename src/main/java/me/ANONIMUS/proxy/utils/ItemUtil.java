@@ -11,8 +11,7 @@ import java.util.List;
 
 public class ItemUtil {
     public static ItemStack option(Option option) {
-        ItemStack is = new ItemStack(160, 1, option.isEnabled() ? 5 : 14);
-        is.setStackDisplayName(ChatUtil.fixColor("&l" + option.getName().toUpperCase()));
+        ItemStack is = new ItemStack(160, 1, option.isEnabled() ? 5 : 14).setStackDisplayName(ChatUtil.fixColor("&l" + option.getName().toUpperCase()));
         final List<String> lores = new ArrayList<>();
         lores.add("");
         if (option.hasDescription()) {
@@ -30,9 +29,7 @@ public class ItemUtil {
     }
 
     public static ItemStack changeSkinMenu() {
-        ItemStack is = new ItemStack(397, 1, 3);
-        is.setStackDisplayName(ChatUtil.fixColor("&6Skins"));
-        return is;
+        return new ItemStack(397, 1, 3).setStackDisplayName(ChatUtil.fixColor("&6Skins"));
     }
 
     public static ItemStack serverMenu() {

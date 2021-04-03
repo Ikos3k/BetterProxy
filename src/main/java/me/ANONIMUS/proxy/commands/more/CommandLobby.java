@@ -12,6 +12,6 @@ public class CommandLobby extends Command {
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {
         WorldUtil.lobby(sender, false);
-        ChatUtil.sendChatMessage("&6>> &8Teleported to the lobby!", sender, false);
+        ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Teleported to the lobby!", sender, false);
     }
 }
