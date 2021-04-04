@@ -7,12 +7,13 @@ import io.netty.handler.codec.DecoderException;
 import lombok.Getter;
 import lombok.Setter;
 import me.ANONIMUS.proxy.BetterProxy;
+import me.ANONIMUS.proxy.protocol.Protocol;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.protocol.packet.PacketDirection;
-import me.ANONIMUS.proxy.protocol.packet.Protocol;
 import me.ANONIMUS.proxy.protocol.packet.impl.CustomPacket;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerPlayerListEntryPacket;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,12 +48,12 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
 
             Packet packet = BetterProxy.getInstance().getPacketRegistry().createPacket(connectionState,packetDirection,packetID,protocol);
 
-            if(BetterProxy.getInstance().getConfigManager().getConfig().debug) {
+            if(BetterProxy.getInstance().getConfigManager().getConfig().debug && !(packet instanceof ServerPlayerListEntryPacket)) {
                 final ByteBuf bufDUPLICATE = byteBuf.duplicate();
                 if(bufDUPLICATE.readableBytes() > 1) {
                     final byte[] data = new byte[bufDUPLICATE.readableBytes()];
                     bufDUPLICATE.readBytes(data);
-                    System.err.println("[" + channelHandlerContext.channel().remoteAddress() + "] Packet data " + packet.getClass().getSimpleName() + "(" + packetID + "): " + Arrays.toString(data));
+                    System.err.println("[" + channelHandlerContext.channel().remoteAddress() + "] [size: " + data.length + "] Packet data " + packet.getClass().getSimpleName() + "(" + packetID + "): " + Arrays.toString(data));
                 }
                 bufDUPLICATE.clear();
             }

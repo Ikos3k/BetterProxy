@@ -3,10 +3,11 @@ package me.ANONIMUS.proxy.protocol.packet.impl.client.play;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.ANONIMUS.proxy.protocol.Protocol;
 import me.ANONIMUS.proxy.protocol.data.ItemStack;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
-import me.ANONIMUS.proxy.protocol.packet.Protocol;
+import me.ANONIMUS.proxy.utils.PacketUtil;
 
 import java.util.List;
 
@@ -31,6 +32,6 @@ public class ClientCreativeInventoryAction extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Protocol.protocols(0x10,47, 110, 340);
+        return PacketUtil.protocols(0x10,47, 110, 340);
     }
 }

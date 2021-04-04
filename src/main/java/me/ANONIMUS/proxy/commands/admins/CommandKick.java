@@ -29,6 +29,6 @@ public class CommandKick extends Command {
             ChatUtil.sendChatMessage("&cYou cannot kick this player!", sender, true);
             return;
         }
-        ChatUtil.sendChatMessage("&7You have successfully kicked a player with a nickname: &5" + args[1], sender, true);
+        ChatUtil.sendChatMessage("&7You have successfully kicked a player with a nickname: " + sender.getThemeType().getColor(1) + args[1], sender, true);
     }
 }

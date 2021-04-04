@@ -3,9 +3,10 @@ package me.ANONIMUS.proxy.protocol.packet.impl.server.login;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.ANONIMUS.proxy.protocol.Protocol;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
-import me.ANONIMUS.proxy.protocol.packet.Protocol;
+import me.ANONIMUS.proxy.utils.PacketUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.chat.ComponentSerializer;
@@ -34,6 +35,6 @@ public class ServerLoginDisconnectPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Protocol.protocols(0x00, 47, 109, 110, 210, 340);
+        return PacketUtil.protocols(0x00, 47, 109, 110, 210, 340);
     }
 }

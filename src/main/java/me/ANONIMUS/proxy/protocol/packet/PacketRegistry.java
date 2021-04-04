@@ -1,5 +1,6 @@
 package me.ANONIMUS.proxy.protocol.packet;
 
+import me.ANONIMUS.proxy.protocol.Protocol;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
 import me.ANONIMUS.proxy.protocol.packet.impl.CustomPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.HandshakePacket;

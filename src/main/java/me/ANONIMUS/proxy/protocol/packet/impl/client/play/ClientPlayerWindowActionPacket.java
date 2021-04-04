@@ -3,11 +3,11 @@ package me.ANONIMUS.proxy.protocol.packet.impl.client.play;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.ANONIMUS.proxy.protocol.Protocol;
 import me.ANONIMUS.proxy.protocol.data.ItemStack;
 import me.ANONIMUS.proxy.protocol.data.WindowAction;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
-import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
 import java.util.Arrays;
 import java.util.List;

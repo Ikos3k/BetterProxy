@@ -3,9 +3,10 @@ package me.ANONIMUS.proxy.protocol.packet.impl.client.login;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.ANONIMUS.proxy.protocol.Protocol;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
-import me.ANONIMUS.proxy.protocol.packet.Protocol;
+import me.ANONIMUS.proxy.utils.PacketUtil;
 
 import java.util.List;
 
@@ -27,6 +28,6 @@ public class ClientLoginStartPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Protocol.protocols(0x00, 47, 109, 110, 210, 340);
+        return PacketUtil.protocols(0x00, 47, 109, 110, 210, 340);
     }
 }

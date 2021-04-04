@@ -1,5 +1,6 @@
 package me.ANONIMUS.proxy.managers;
 
+import me.ANONIMUS.proxy.commands.CommandHelp;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
@@ -34,10 +35,10 @@ public class CommandManager {
         }
         if (!optionalCommand.isPresent()) {
             optionalCommand = commands.stream().filter(cmd -> cmd.getAlias() != null && (sender.getPrefixCMD() + cmd.getAlias()).equalsIgnoreCase(args[0])).findFirst();
-        }
-        if (!optionalCommand.isPresent()) {
-            ChatUtil.sendChatMessage("&cCommand not found!", sender, true);
-            return;
+            if (!optionalCommand.isPresent()) {
+                ChatUtil.sendChatMessage("&cCommand not found!", sender, true);
+                return;
+            }
         }
 
         final Command command = optionalCommand.get();
@@ -56,14 +57,14 @@ public class CommandManager {
             return;
         }
         try {
-            if (cooldown.containsKey(sender.getAccount().getUsername())) {
+            if (!(command instanceof CommandHelp) && cooldown.containsKey(sender.getAccount().getUsername())) {
                 final long secondsLeft = cooldown.get(sender.getAccount().getUsername()) / 1000L + sender.getAccount().getGroup().getDelayCMD() - System.currentTimeMillis() / 1000L;
                 if (secondsLeft > 0L) {
                     ChatUtil.sendChatMessage("&7The next command can be used in " + sender.getThemeType().getColor(1) + secondsLeft + "s&7!", sender, true);
                     return;
                 }
+                cooldown.put(sender.getAccount().getUsername(), System.currentTimeMillis());
             }
-            cooldown.put(sender.getAccount().getUsername(), System.currentTimeMillis());
             command.onCommand(sender, args);
         } catch (final Exception e) {
             ChatUtil.sendChatMessage("&8Correct usage: " + sender.getThemeType().getColor(1) + sender.getPrefixCMD() + command.getPrefix() + " " + command.getUsage(), sender, true);

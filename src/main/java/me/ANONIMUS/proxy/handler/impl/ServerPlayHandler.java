@@ -2,12 +2,12 @@ package me.ANONIMUS.proxy.handler.impl;
 
 import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.handler.ServerHandler;
+import me.ANONIMUS.proxy.protocol.ProtocolType;
 import me.ANONIMUS.proxy.protocol.data.ItemStack;
 import me.ANONIMUS.proxy.protocol.data.WindowAction;
 import me.ANONIMUS.proxy.protocol.data.WindowType;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
-import me.ANONIMUS.proxy.protocol.packet.ProtocolType;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.play.ClientChatPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.play.ClientKeepAlivePacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.play.ClientPlayerPlaceBlockPacket;
@@ -31,13 +31,13 @@ public class ServerPlayHandler extends ServerHandler {
     @Override
     public void disconnected() {
         System.out.println("[" + player.getAccount().getUsername() + "] Disconnected.");
-        ChatUtil.sendBroadcastMessage("&6>> &8The player &6" + player.getAccount().getUsername() + " &8has disconnected from the &6BetterProxy&8!", false);
+        ChatUtil.sendBroadcastMessage(player.getThemeType().getColor(1) + ">> &8The player " + player.getThemeType().getColor(1) + player.getAccount().getUsername() + " &8has disconnected from the " + player.getThemeType().getColor(1) + "BetterProxy&8!", false);
     }
 
     @Override
     public void handlePacket(Packet packet) {
         player.getLastPacket().setSent(System.currentTimeMillis());
-        if(player.getSession().getProtocolID() == 47) {
+        if(player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol()) {
             if (packet instanceof ClientPlayerPlaceBlockPacket) {
                 final ClientPlayerPlaceBlockPacket block = (ClientPlayerPlaceBlockPacket) packet;
                 if (!player.isConnected()) {
@@ -77,7 +77,7 @@ public class ServerPlayHandler extends ServerHandler {
             if (message.startsWith(player.getPrefixCMD())) {
                 BetterProxy.getInstance().getCommandManager().onCommand(message, player);
             } else if (player.isLogged() && message.startsWith("@")) {
-                ChatUtil.sendBroadcastMessage("&8(&f" + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8) &8[" + player.getAccount().getGroup().getPrefix() + "&8] &6" + player.getAccount().getUsername() + " &8>> &7" + message.substring(1),false);
+                ChatUtil.sendBroadcastMessage("&8(&f" + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8) &8[" + player.getAccount().getGroup().getPrefix() + "&8] " + player.getThemeType().getColor(1) + player.getAccount().getUsername() + " &8>> &7" + message.substring(1),false);
             } else {
                 forwardPacket(packet);
             }

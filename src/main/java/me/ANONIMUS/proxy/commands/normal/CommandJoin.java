@@ -32,19 +32,19 @@ public class CommandJoin extends Command {
             host = resolved[0];
             port = Integer.parseInt(resolved[1]);
         }
+
         try {
             final Socket socket = new Socket();
             socket.connect(new InetSocketAddress(host, port), 500);
             socket.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             ChatUtil.sendChatMessage("&cThe server has a connection problem or is down!", sender, true);
             return;
         }
 
-        final Proxy proxy = Proxy.NO_PROXY;
         if (Boolean.parseBoolean(args[4])) {
-            new ServerPinger(sender, true).connect(host, port, proxy);
+            new ServerPinger(sender, true).connect(host, port, Proxy.NO_PROXY);
         }
-        new PlayerConnection(sender, args[2]).connect(host, port, proxy);
+        new PlayerConnection(sender, args[2]).connect(host, port, Proxy.NO_PROXY);
     }
 }

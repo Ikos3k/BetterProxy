@@ -1,5 +1,6 @@
 package me.ANONIMUS.proxy.utils;
 
+import me.ANONIMUS.proxy.protocol.Protocol;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntry;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntryAction;
 import me.ANONIMUS.proxy.protocol.objects.Player;
@@ -9,6 +10,8 @@ import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerPlayerListEntryP
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerPlayerListHeaderFooter;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerSetSlotPacket;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class PacketUtil {
@@ -32,5 +35,13 @@ public class PacketUtil {
         player.getSession().sendPacket(new ServerPlayerListEntryPacket(PlayerListEntryAction.REMOVE_PLAYER, playerListEntries));
         player.getSession().sendPacket(new ServerPlayerListHeaderFooter(" ", " "));
         player.getTabList().clear();
+    }
+
+    public static List<Protocol> protocols(int id, int... protocols) {
+        List<Protocol> protocolList = new ArrayList<>();
+        for(int protocol : protocols) {
+            protocolList.add(new Protocol(id, protocol));
+        }
+        return protocolList;
     }
 }

@@ -72,7 +72,7 @@ public class FileUtil {
 
                         @Override
                         public void execute(Player sender, int amount) {
-                            ChatUtil.sendChatMessage("&2>> &8Crashing started, method: &6" + getName().toUpperCase(), sender, false);
+                            ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Crashing started, method: " + sender.getThemeType().getColor(1) + getName().toUpperCase(), sender, false);
                             final int time = (int) System.currentTimeMillis();
                             if(sender.getBots().size() > 0) {
                                 sender.getBots().forEach(b -> IntStream.range(0, amount).forEach(i -> b.getSession().sendPacket(p)));
@@ -80,7 +80,7 @@ public class FileUtil {
                                 IntStream.range(0, amount).forEach(i -> sender.getRemoteSession().sendPacket(p));
                             }
                             final int time2 = (int) System.currentTimeMillis() - time;
-                            ChatUtil.sendChatMessage("&2>> &8Crashing complete &7(&e" + time2 + "ms&7)", sender, false);
+                            ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Crashing complete &7(" + sender.getThemeType().getColor(2) + time2 + "ms&7)", sender, false);
                         }
                     });
                 }

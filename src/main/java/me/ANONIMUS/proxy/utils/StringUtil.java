@@ -1,5 +1,9 @@
 package me.ANONIMUS.proxy.utils;
 
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 public class StringUtil {
     public static int getStringWidth(final String s) {
         int width = 0;
@@ -102,5 +106,10 @@ public class StringUtil {
             }
         }
         return 1;
+    }
+
+    public static String generateString(int length) {
+        final char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890".toCharArray();
+        return IntStream.range(0, length).mapToObj(i -> Character.toString(chars[new Random().nextInt(chars.length)])).collect(Collectors.joining());
     }
 }

@@ -1,8 +1,8 @@
 package me.ANONIMUS.proxy.protocol.data;
 
+import me.ANONIMUS.proxy.protocol.Protocol;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketDirection;
-import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
 import java.util.HashMap;
 import java.util.List;

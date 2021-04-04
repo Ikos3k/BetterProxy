@@ -2,13 +2,13 @@ package me.ANONIMUS.proxy.protocol.packet.impl.server.play;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.ANONIMUS.proxy.protocol.Protocol;
 import me.ANONIMUS.proxy.protocol.data.Chunk;
 import me.ANONIMUS.proxy.protocol.data.util.NetUtil;
 import me.ANONIMUS.proxy.protocol.data.util.NetworkChunkData;
 import me.ANONIMUS.proxy.protocol.data.util.ParsedChunkData;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
-import me.ANONIMUS.proxy.protocol.packet.Protocol;
 
 import java.util.Collections;
 import java.util.List;

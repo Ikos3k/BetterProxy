@@ -1,4 +1,4 @@
-package me.ANONIMUS.proxy.protocol.packet;
+package me.ANONIMUS.proxy.protocol;
 
 import java.util.Arrays;
 

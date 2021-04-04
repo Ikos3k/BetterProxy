@@ -20,7 +20,7 @@ public class CommandListenChunks extends Command {
     public void onCommand(Player sender, String[] args) throws Exception {
         if(args[1].equals("listen")) {
             sender.setListenChunks(!sender.isListenChunks());
-            ChatUtil.sendChatMessage("listening chunks: &6" + sender.isListenChunks(), sender, false);
+            ChatUtil.sendChatMessage("listening chunks: " + sender.getThemeType().getColor(1) + sender.isListenChunks(), sender, false);
         } else if (args[1].equals("save")) {
             sender.setListenChunks(false);
 
@@ -34,7 +34,7 @@ public class CommandListenChunks extends Command {
                 FileUtils.writeByteArrayToFile(new File(BetterProxy.getInstance().getDirFolder() + "/world/" + (sender.getSession().getProtocolID() == 47 ? "47" : "other") + "/world_" + i), ((CustomPacket)p).getCustomData());
                 i++;
             }
-            ChatUtil.sendChatMessage("Successfully saved &6" + sender.getListenedChunks().size() + " &7chunks", sender, false);
+            ChatUtil.sendChatMessage("Successfully saved " + sender.getThemeType().getColor(1) + sender.getListenedChunks().size() + " &7chunks", sender, false);
             sender.getListenedChunks().clear();
         }
     }

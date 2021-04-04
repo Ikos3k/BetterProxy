@@ -31,10 +31,10 @@ public class CommandStatus extends Command {
         }
         ChatUtil.sendChatMessage("", sender, false);
         ChatUtil.sendChatMessage("----------------------------------", sender, false);
-        ChatUtil.sendChatMessage("Available memory: &e" + humanReadableByteCount(totalMemory), sender, true);
+        ChatUtil.sendChatMessage("Available memory: " + sender.getThemeType().getColor(2) + humanReadableByteCount(totalMemory), sender, true);
         ChatUtil.sendChatMessage("Assigned memory: &a" + humanReadableByteCount(maxMemory), sender, true);
         ChatUtil.sendChatMessage("Used Memory: &4" + humanReadableByteCount(inUseMemory) + " &8(" + "&f" + inUse + "%&8)", sender, true);
-        ChatUtil.sendChatMessage("Used CPU: &6" + cpu + "%", sender, true);
+        ChatUtil.sendChatMessage("Used CPU: " + sender.getThemeType().getColor(1) + cpu + "%", sender, true);
         ChatUtil.sendChatMessage("----------------------------------", sender, false);
     }
 

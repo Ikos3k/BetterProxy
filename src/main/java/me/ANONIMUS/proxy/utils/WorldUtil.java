@@ -2,6 +2,7 @@ package me.ANONIMUS.proxy.utils;
 
 import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.objects.Schematic;
+import me.ANONIMUS.proxy.protocol.ProtocolType;
 import me.ANONIMUS.proxy.protocol.data.*;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntry;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntryAction;
@@ -33,7 +34,7 @@ public class WorldUtil {
     public static void emptyWorld(Player player) {
         dimSwitch(player, new ServerJoinGamePacket(0, Gamemode.SURVIVAL, Dimension.OVERWORLD, Difficulty.PEACEFULL, 1, "default_1_1", false));
         player.getSession().sendPacket(new ServerSpawnPositionPacket(new Position(0, 1, 0)));
-        player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, true, false, false, 2f, 2f));
+        player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, true, false, false, 0f, 0f));
         player.getSession().sendPacket(new ServerPlayerPosLookPacket(0, 0, 0, 180, 90));
     }
 
@@ -42,7 +43,7 @@ public class WorldUtil {
         PacketUtil.clearInventory(player);
         PacketUtil.clearTabList(player);
 
-        if(player.getSession().getProtocolID() != 109) {
+        if(player.getSession().getProtocolID() != ProtocolType.PROTOCOL_1_9_2.getProtocol()) {
             try {
                 int i = 0;
                 while (new File(BetterProxy.getInstance().getDirFolder() + "/world/" + (player.getSession().getProtocolID() != 47 ? "other" : "47") + "/world_" + i).exists()) {
@@ -63,7 +64,7 @@ public class WorldUtil {
         player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, false, false, false, 0f, 0f));
         player.getSession().sendPacket(new ServerPlayerPosLookPacket(0.5, 70, 0.5, 0.0f, 0.0f));
 
-        if(player.getSession().getProtocolID() == 47) {
+        if(player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol()) {
             spawnPlayers(player);
             loadTextsOnSign(player);
         }

@@ -1,5 +1,7 @@
 package me.ANONIMUS.proxy.protocol.packet;
 
+import me.ANONIMUS.proxy.protocol.Protocol;
+
 import java.util.List;
 
 public abstract class Packet {

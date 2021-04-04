@@ -20,8 +20,7 @@ public class ItemUtil {
             lores.add("");
         }
         lores.add(ChatUtil.fixColor("&fClick to " + (option.isEnabled() ? "&cdisable" : "&aenable")));
-        is.setLoreName(lores);
-        return is;
+        return is.setLoreName(lores);
     }
 
     public static ItemStack optionsMenu() {

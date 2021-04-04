@@ -58,7 +58,7 @@ public class CommandHelp extends Command {
 
         TextComponent msg2 = new TextComponent(ChatUtil.fixColor((i != (j + 1) ? "&a" : "&7") + "[NEXT]"));
         if(i != (j + 1)) {
-            msg2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(sender.getThemeType().getColor(1) + "Click to go to the next page!"))));
+            msg2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(sender.getThemeType().getColor(2) + "Click to go to the next page!"))));
             msg2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, sender.getPrefixCMD() + "help " + (i + 1)));
         }
         sender.getSession().sendPacket(new ServerChatPacket(msg, new TextComponent(" "), msg2));

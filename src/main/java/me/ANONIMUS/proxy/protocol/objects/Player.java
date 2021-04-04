@@ -21,25 +21,25 @@ import java.util.List;
 @Data
 public class Player {
     private final Session session;
+    private OptionsManager optionsManager = new OptionsManager();
+    private List<PlayerListEntry> tabList = new ArrayList<>();
+    private List<Packet> listenedChunks = new ArrayList<>();
+    private List<String> players = new ArrayList<>();
+    private LastPacket lastPacket = new LastPacket();
+    private ThemeType themeType = ThemeType.DEFAULT;
     private TimeType timeType = TimeType.DEFAULT;
+    private List<Bot> bots = new ArrayList<>();
+    private boolean listenChunks = false;
     private Session remoteSession;
-    private Account account;
-    private boolean mother;
+    private String prefixCMD = "#";
+    private ServerData serverData;
     private boolean pluginsState;
     private boolean playersState;
-    private boolean connected;
-    private boolean logged;
-    private boolean listenChunks = false;
-    private List<Packet> listenedChunks = new ArrayList<>();
-    private LastPacket lastPacket = new LastPacket();
-    private OptionsManager optionsManager = new OptionsManager();
-    private ServerData serverData;
-    private String prefixCMD = "#";
-    private List<String> players = new ArrayList<>();
-    private List<PlayerListEntry> tabList = new ArrayList<>();
-    private List<Bot> bots = new ArrayList<>();
     private int motherDelay = 25;
-    private ThemeType themeType = ThemeType.DEFAULT;
+    private boolean connected;
+    private Account account;
+    private boolean mother;
+    private boolean logged;
 
     public void packetReceived(final Packet packet) {
         if (packet instanceof HandshakePacket) {
@@ -69,7 +69,6 @@ public class Player {
             remoteSession.getChannel().close();
         }
         if(session != null) {
-            session.getChannel().close();
             if (session.getPacketHandler() != null) {
                 session.getPacketHandler().disconnected();
             }

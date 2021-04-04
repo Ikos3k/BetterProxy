@@ -24,7 +24,7 @@ public class CommandBotQuit extends Command {
         } else {
             Bot b = null;
             for(Bot bot : sender.getBots()) {
-                if(bot.getUsername().equals(args[1])) {
+                if(bot.getSession().getUsername().equals(args[1])) {
                     b = bot;
                 }
             }

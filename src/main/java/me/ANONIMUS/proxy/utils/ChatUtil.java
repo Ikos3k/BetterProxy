@@ -1,24 +1,49 @@
 package me.ANONIMUS.proxy.utils;
 
 import me.ANONIMUS.proxy.managers.PlayerManager;
-import me.ANONIMUS.proxy.protocol.data.MessagePosition;
-import me.ANONIMUS.proxy.protocol.data.TitleAction;
+import me.ANONIMUS.proxy.protocol.ProtocolType;
+import me.ANONIMUS.proxy.protocol.data.*;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerChatPacket;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerTitlePacket;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.play.*;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 public class ChatUtil {
     public static String fixColor(final String text) {
-        return ChatColor.translateAlternateColorCodes('&', text.replace(">>", "»")
-                .replace("<<", "«")
-                .replace("(o)", "●")
-                .replace("(*)", "•"));
+        return ChatColor.translateAlternateColorCodes('&', text
+            .replace(">>", "»")
+            .replace("<<", "«")
+            .replace("(o)", "●")
+            .replace("(*)", "•"));
+    }
+
+    public static void sendActionBar(final String message, Player player) {
+        if (player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_12_2.getProtocol()) {
+            player.getSession().sendPacket(new ServerTitlePacket(TitleAction.ACTIONBAR, fixColor(message)));
+        } else {
+            player.getSession().sendPacket(new ServerChatPacket(fixColor(message), MessagePosition.HOTBAR));
+        }
+    }
+
+    public static void sendBoosBar(final Player player, final String message) {
+        if (player.getSession().getProtocolID() <= ProtocolType.PROTOCOL_1_8_X.getProtocol()) {
+            player.getSession().sendPacket(new ServerSpawnMobPacket(1, (byte) 63, new Position(0, 0, 0), 0, 0, 0, 0, 0, 0, new EntityMetadata[]{ new EntityMetadata(2, MetadataType.STRING, ChatUtil.fixColor(message)), new EntityMetadata(4, MetadataType.BOOLEAN, true) }));
+        } else {
+            player.getSession().sendPacket(new ServerBossBarPacket(UUID.fromString("a02b04d4-3a81-431b-a4cb-aa0df733af00"), 0, ChatUtil.fixColor(message), 1, 0, 0, (byte)0));
+        }
+    }
+
+    public static void clearBossBar(final Player player) {
+        if (player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol()) {
+            player.getSession().sendPacket(new ServerDestroyEntitiesPacket(1));
+        } else {
+            player.getSession().sendPacket(new ServerBossBarPacket(UUID.fromString("a02b04d4-3a81-431b-a4cb-aa0df733af00"), 1));
+        }
     }
 
     public static void sendHoverMessage(final Player player, final String s1, final String s2) {
@@ -39,14 +64,6 @@ public class ChatUtil {
 
     public static void sendChatMessage(final String message, Player player, boolean prefix) {
         player.getSession().sendPacket(new ServerChatPacket(fixColor((prefix ? player.getThemeType().getColor(1) + "BetterProxy &8>> " : "") + "&7" + message)));
-    }
-
-    public static void sendActionBar(final String message, Player player) {
-        if(player.getSession().getProtocolID() == 340) {
-            player.getSession().sendPacket(new ServerTitlePacket(TitleAction.ACTIONBAR, fixColor(message)));
-        } else {
-            player.getSession().sendPacket(new ServerChatPacket(fixColor(message), MessagePosition.HOTBAR));
-        }
     }
 
     public static void sendBroadcastMessage(final String message, boolean prefix) {

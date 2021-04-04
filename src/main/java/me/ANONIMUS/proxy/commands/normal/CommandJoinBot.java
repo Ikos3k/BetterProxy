@@ -61,7 +61,7 @@ public class CommandJoinBot extends Command {
                 if(ping){
                    new ServerPinger(sender,false).connect(host, port, Proxy.NO_PROXY);
                 }
-                new BotConnection().connect(host, port, Proxy.NO_PROXY, new Bot(username, sender));
+                new BotConnection().connect(host, port, Proxy.NO_PROXY, new Bot(sender), username);
                 try {
                     TimeUnit.MILLISECONDS.sleep(delay);
                 } catch (InterruptedException e) {

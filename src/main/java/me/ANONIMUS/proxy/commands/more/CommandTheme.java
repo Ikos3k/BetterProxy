@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class CommandTheme extends Command {
     public CommandTheme() {
-        super("theme", "motyw", null, Arrays.toString(ThemeType.values()), ConnectedType.NONE);
+        super("theme", "themes", null, Arrays.toString(ThemeType.values()), ConnectedType.NONE);
     }
 
     @Override

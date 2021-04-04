@@ -3,10 +3,9 @@ package me.ANONIMUS.proxy.protocol.packet.impl.server.play;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.ANONIMUS.proxy.protocol.Protocol;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
-import me.ANONIMUS.proxy.protocol.packet.Protocol;
-import me.ANONIMUS.proxy.utils.ChatUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.chat.ComponentSerializer;
@@ -21,7 +20,7 @@ public class ServerPlayerListHeaderFooter extends Packet {
     private BaseComponent[] header, footer;
 
     public ServerPlayerListHeaderFooter(String header, String footer) {
-        this(new ComponentBuilder(ChatUtil.fixColor(header)).create(), new ComponentBuilder(ChatUtil.fixColor(footer)).create());
+        this(new ComponentBuilder(header).create(), new ComponentBuilder(footer).create());
     }
 
     @Override

@@ -8,7 +8,6 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.proxy.Socks4ProxyHandler;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import me.ANONIMUS.proxy.enums.TimeType;
 import me.ANONIMUS.proxy.objects.ServerData;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
@@ -36,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@RequiredArgsConstructor
 @Data
 public class PlayerConnection {
     private final Player owner;
@@ -76,7 +74,7 @@ public class PlayerConnection {
                         @Override
                         public void channelInactive(ChannelHandlerContext ctx) {
                             if (owner.isConnected()) {
-                                ChatUtil.sendChatMessage("&6>> &cDisconnected!", owner, false);
+                                ChatUtil.sendChatMessage(owner.getThemeType().getColor(1)  + ">> &cDisconnected!", owner, false);
                                 owner.setConnected(false);
                                 WorldUtil.lobby(owner, true);
                             }
@@ -173,10 +171,11 @@ public class PlayerConnection {
     }
 
     private void disconnect() {
+        owner.getRemoteSession().getChannel().close();
         owner.setConnected(false);
         owner.setRemoteSession(null);
         owner.setServerData(null);
-        WorldUtil.lobby(owner, true);
         group.shutdownGracefully();
+        WorldUtil.lobby(owner, true);
     }
 }

@@ -14,6 +14,6 @@ public class CommandSpeed extends Command {
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {
         PacketUtil.speed(sender.getSession(), Integer.parseInt(args[1]));
-        ChatUtil.sendChatMessage("&7Speed is successfully set to &6" + args[1] + "&7!", sender, true);
+        ChatUtil.sendChatMessage("&7Speed is successfully set to " + sender.getThemeType().getColor(1) + args[1] + "&7!", sender, true);
     }
 }
