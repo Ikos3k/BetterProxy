@@ -1,6 +1,5 @@
 package me.ANONIMUS.proxy.protocol.packet.impl.server.play;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.ANONIMUS.proxy.protocol.Protocol;
@@ -13,7 +12,6 @@ import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import java.util.Collections;
 import java.util.List;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class ServerSpawnMobPacket extends Packet {
@@ -28,6 +26,19 @@ public class ServerSpawnMobPacket extends Packet {
     private double motZ;
     private EntityMetadata[] metadata;
 
+    public ServerSpawnMobPacket(int entityId, byte type, Position position, float pitch, float yaw, float headYaw, double motX, double motY, double motZ, EntityMetadata... metadata) {
+        this.entityId = entityId;
+        this.type = type;
+        this.position = position;
+        this.pitch = pitch;
+        this.yaw = yaw;
+        this.headYaw = headYaw;
+        this.motX = motX;
+        this.motY = motY;
+        this.motZ = motZ;
+        this.metadata = metadata;
+    }
+    
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
         out.writeVarInt(this.entityId);

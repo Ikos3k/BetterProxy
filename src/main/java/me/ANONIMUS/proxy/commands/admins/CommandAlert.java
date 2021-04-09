@@ -5,6 +5,7 @@ import me.ANONIMUS.proxy.managers.PlayerManager;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.utils.ChatUtil;
+import me.ANONIMUS.proxy.utils.PacketUtil;
 
 public class CommandAlert extends Command {
     public CommandAlert() {
@@ -20,6 +21,6 @@ public class CommandAlert extends Command {
             return;
         }
         String finalOut = out;
-        PlayerManager.getPlayers().forEach(player -> ChatUtil.sendTitle(player, "&8[&4ALERT&8]", "&n" + finalOut, 13, 18, 13));
+        PlayerManager.getPlayers().forEach(player -> PacketUtil.sendTitle(player, "&8[&4ALERT&8]", "&n" + finalOut, 13, 18, 13));
     }
 }

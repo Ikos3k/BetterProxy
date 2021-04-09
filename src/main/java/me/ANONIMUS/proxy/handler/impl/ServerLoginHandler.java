@@ -14,10 +14,7 @@ import me.ANONIMUS.proxy.protocol.packet.impl.client.login.ClientLoginStartPacke
 import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginDisconnectPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSetCompressionPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSuccessPacket;
-import me.ANONIMUS.proxy.utils.CalendarUtil;
-import me.ANONIMUS.proxy.utils.ChatUtil;
-import me.ANONIMUS.proxy.utils.ScoreboardUtil;
-import me.ANONIMUS.proxy.utils.WorldUtil;
+import me.ANONIMUS.proxy.utils.*;
 import me.kbrewster.mojangapi.MojangAPI;
 
 import java.util.Objects;
@@ -64,13 +61,13 @@ public class ServerLoginHandler extends ServerHandler {
                     ChatUtil.clearChat(100, player);
                     ScoreboardUtil.sendScoreboard(player);
                     if(CalendarUtil.isHoliday()) {
-                        ChatUtil.sendTitle(player, ";D", player.getThemeType().getColor(1) + Objects.requireNonNull(CalendarUtil.getHoliday()).getWishes() + "!");
+                        PacketUtil.sendTitle(player, ";D", player.getThemeType().getColor(1) + Objects.requireNonNull(CalendarUtil.getHoliday()).getWishes() + "!");
                     }
                     ChatUtil.sendBroadcastMessage(player.getThemeType().getColor(1) + ">> &8Player " + player.getThemeType().getColor(1) + playerName + " &8has connected to the " + player.getThemeType().getColor(1) + "BetterProxy &8(" + player.getThemeType().getColor(2) + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8)", false);
                     ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Welcome to " + player.getThemeType().getColor(1) + "BetterProxy &8by &4ANONIMUS", player, false);
                     ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Supported versions: *1.8.X&8, *1.9.2&8, *1.9.3&8, *1.9.4&8, *1.10.X&8, *1.12.2".replace("*", player.getThemeType().getColor(2)), player, false);
                     ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Log in using the command: " + player.getThemeType().getColor(1) + player.getPrefixCMD() + "login [haslo]", player, false);
-                    ChatUtil.sendBoosBar(player, ChatUtil.fixColor("&fWelcome to " + player.getThemeType().getColor(1) + "BetterProxy &fby &4ANONIMUS"));
+                    PacketUtil.sendBoosBar(player, ChatUtil.fixColor("&fWelcome to " + player.getThemeType().getColor(1) + "BetterProxy &fby &4ANONIMUS"));
                     return;
                 }
             }

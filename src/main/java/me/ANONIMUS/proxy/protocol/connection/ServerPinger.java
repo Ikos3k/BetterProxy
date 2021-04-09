@@ -1,7 +1,5 @@
 package me.ANONIMUS.proxy.protocol.connection;
 
-import lombok.Data;
-
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -9,7 +7,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.proxy.Socks4ProxyHandler;
 import io.netty.handler.timeout.ReadTimeoutHandler;
-
+import lombok.Data;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
 import me.ANONIMUS.proxy.protocol.data.status.ServerStatusInfo;
 import me.ANONIMUS.proxy.protocol.handlers.PacketCodec;
@@ -23,7 +21,6 @@ import me.ANONIMUS.proxy.protocol.packet.impl.client.status.ClientStatusRequestP
 import me.ANONIMUS.proxy.protocol.packet.impl.server.status.ServerStatusPongPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.status.ServerStatusResponsePacket;
 import me.ANONIMUS.proxy.utils.ChatUtil;
-
 import net.md_5.bungee.api.chat.BaseComponent;
 
 import java.net.Proxy;

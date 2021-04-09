@@ -24,32 +24,28 @@ public class CommandJoinBot extends Command {
     public void onCommand(Player sender, String[] args) throws Exception {
         String host = args[1];
         int port = 25565;
-        if(host.contains(":")){
+        if(host.contains(":")) {
             final String[] sp = host.split(":",2);
             host = sp[0];
             port = Integer.parseInt(sp[1]);
         }
 
-        final boolean resolver = Boolean.parseBoolean(args[5]);
-        if(resolver) {
+        if(Boolean.parseBoolean(args[5])) {
             final String[] resolved = SRVResolver.getServerAddress(host);
             host = resolved[0];
             port = Integer.parseInt(resolved[1]);
         }
+
         try {
             final Socket socket = new Socket();
             socket.connect(new InetSocketAddress(host, port), 500);
             socket.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             ChatUtil.sendChatMessage("&cThe server has a connection problem or is down!", sender, true);
             return;
         }
 
-        final String usernames = args[2];
-        final int amount = Integer.parseInt(args[3]);
-        final int delay = Integer.parseInt(args[4]);
-        final boolean ping = Boolean.parseBoolean(args[6]);
-        connect(sender, delay, host, port, usernames, amount, ping);
+        connect(sender, Integer.parseInt(args[4]), host, port, args[2], Integer.parseInt(args[3]), Boolean.parseBoolean(args[6]));
     }
 
     private void connect(final Player sender, final int delay, final String host, final int port, final String usernames, final int amount, final boolean ping) {

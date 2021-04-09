@@ -26,6 +26,7 @@ import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSetCompres
 import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSuccessPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.*;
 import me.ANONIMUS.proxy.utils.ChatUtil;
+import me.ANONIMUS.proxy.utils.PacketUtil;
 import me.ANONIMUS.proxy.utils.WorldUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -112,7 +113,7 @@ public class PlayerConnection {
                                 if(owner.isListenChunks() && packet instanceof CustomPacket) {
                                     if((((owner).getSession().getProtocolID() == 47 && ((CustomPacket)packet).getCustomPacketID() == 0x26) || ((owner).getSession().getProtocolID() != 47 && ((CustomPacket)packet).getCustomPacketID() == 0x20))) {
                                         owner.getListenedChunks().add(packet);
-                                        ChatUtil.sendTitle(owner, "[CHUNKS]", "listening... (" + owner.getListenedChunks().size() + ")");
+                                        PacketUtil.sendTitle(owner, "[CHUNKS]", "listening... (" + owner.getListenedChunks().size() + ")");
                                     }
                                 }
                                 if (packet instanceof ServerTabCompletePacket) {
