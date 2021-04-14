@@ -16,24 +16,15 @@ public class PacketRegistry {
     public void init() {
         Arrays.asList(PacketDirection.values()).forEach(direction -> Arrays.stream(ConnectionState.values()).filter(connectionState -> connectionState != ConnectionState.HANDSHAKE).forEach(state -> new Reflections("me.ANONIMUS.proxy.protocol.packet.impl." + direction.packetsPackageName.toLowerCase() + "." + state.name().toLowerCase()).getSubTypesOf(Packet.class).forEach(p -> {
             try {
-                final Packet packet = p.newInstance();
-                packet.getProtocolList().forEach(protocol -> {
-                    if(state.getPacketsByDirection(direction).get(packet) == null) {
-                        List<Protocol> protocols = new ArrayList<>();
-                        protocols.add(protocol);
-                        state.getPacketsByDirection(direction).put(packet, protocols);
-                    } else {
-                        state.getPacketsByDirection(direction).get(packet).add(protocol);
-                    }
-                });
+                state.getPacketsByDirection(direction).add(p.newInstance());
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         })));
     }
 
-    public Packet createPacket(ConnectionState connectionState, PacketDirection direction, int id, int protocol){
-        Packet packetIn = getPacket(connectionState,direction,new Protocol(id,protocol));
+    public Packet createPacket(ConnectionState connectionState, PacketDirection direction, int id, int protocol) {
+        Packet packetIn = getPacket(connectionState,direction,id, protocol);
         if(packetIn == null) return new CustomPacket(id);
         Class<? extends Packet> packet = packetIn.getClass();
         try {
@@ -52,15 +43,19 @@ public class PacketRegistry {
         }
     }
 
-    private Packet getPacket(ConnectionState connectionState, PacketDirection direction, Protocol protocol) {
+    private Packet getPacket(ConnectionState connectionState, PacketDirection direction, int id, int protocol) {
         if(connectionState == ConnectionState.HANDSHAKE) {
             return new HandshakePacket();
         }
 
-        for(Packet packet : connectionState.getPacketsByDirection(direction).keySet()) {
-            for(Protocol protocol1 : connectionState.getPacketsByDirection(direction).get(packet)) {
-                if(protocol1.equals(protocol)) {
-                    return packet;
+        for(Packet packet : connectionState.getPacketsByDirection(direction)) {
+            for(Protocol protocol2 : packet.getProtocolList()) {
+                if(protocol2.getId() == id) {
+                    for(int p : protocol2.getProtocols()) {
+                        if(p == protocol) {
+                            return packet;
+                        }
+                    }
                 }
             }
         }

@@ -87,6 +87,6 @@ public class ServerPlayerPosLookPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x08, 47), new Protocol(0x2E, 109), new Protocol(0x2E, 110), new Protocol(0x2E, 210), new Protocol(0x2F, 340));
+        return Arrays.asList(new Protocol(0x08, 47), new Protocol(0x2E, 109, 110, 210), new Protocol(0x2F, 340));
     }
 }

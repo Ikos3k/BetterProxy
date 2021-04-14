@@ -1,7 +1,6 @@
 package me.ANONIMUS.proxy.utils;
 
 import me.ANONIMUS.proxy.managers.PlayerManager;
-import me.ANONIMUS.proxy.protocol.Protocol;
 import me.ANONIMUS.proxy.protocol.ProtocolType;
 import me.ANONIMUS.proxy.protocol.data.*;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntry;
@@ -11,8 +10,6 @@ import me.ANONIMUS.proxy.protocol.objects.Session;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
@@ -77,13 +74,5 @@ public class PacketUtil {
         } else {
             player.getSession().sendPacket(new ServerBossBarPacket(bossBarUUID, 1));
         }
-    }
-
-    public static List<Protocol> protocols(final int id, final int... protocols) {
-        List<Protocol> protocolList = new ArrayList<>();
-        for(int protocol : protocols) {
-            protocolList.add(new Protocol(id, protocol));
-        }
-        return protocolList;
     }
 }

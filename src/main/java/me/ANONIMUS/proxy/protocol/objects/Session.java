@@ -15,15 +15,29 @@ public class Session {
     private String username;
 
     public void sendPacket(Packet p) {
-        if(channel.isOpen()) { channel.writeAndFlush(p); }
+        if(channel.isOpen()) {
+            channel.writeAndFlush(p);
+        }
     }
 
     public void setConnectionState(ConnectionState state) {
-        ((PacketCodec) channel.pipeline().get("packetCodec")).setConnectionState(state);
+        getPacketCodec().setConnectionState(state);
+    }
+
+    public void setProtocolID(int protocol) {
+        getPacketCodec().setProtocol(protocol);
+    }
+
+    public int getProtocolID() {
+        return getPacketCodec().getProtocol();
     }
 
     public ConnectionState getConnectionState() {
-        return ((PacketCodec) channel.pipeline().get("packetCodec")).getConnectionState();
+        return getPacketCodec().getConnectionState();
+    }
+
+    public PacketCodec getPacketCodec() {
+        return ((PacketCodec) channel.pipeline().get("packetCodec"));
     }
 
     public void setCompressionThreshold(final int threshold) {
@@ -36,13 +50,5 @@ public class Session {
         } else {
             throw new UnsupportedOperationException();
         }
-    }
-
-    public void setProtocolID(int protocol) {
-        ((PacketCodec) channel.pipeline().get("packetCodec")).setProtocol(protocol);
-    }
-
-    public int getProtocolID() {
-        return ((PacketCodec) channel.pipeline().get("packetCodec")).getProtocol();
     }
 }

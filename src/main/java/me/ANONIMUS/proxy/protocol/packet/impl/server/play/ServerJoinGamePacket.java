@@ -62,6 +62,6 @@ public class ServerJoinGamePacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x01, 47), new Protocol(0x23, 109), new Protocol(0x23, 110), new Protocol(0x23, 210), new Protocol(0x23, 340));
+        return Arrays.asList(new Protocol(0x01, 47), new Protocol(0x23, 109, 110, 210, 340));
     }
 }

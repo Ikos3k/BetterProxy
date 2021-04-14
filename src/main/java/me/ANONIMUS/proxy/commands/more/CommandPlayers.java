@@ -61,7 +61,7 @@ public class CommandPlayers extends Command {
             out = out.replace("]", "");
             ChatUtil.sendChatMessage("&f" + out + " &7[&f" + sender.getPlayers().size() + "&7]", sender, true);
         } else if (args[1].equalsIgnoreCase("clear")){
-            if (sender.getPlayers().size() == 0) {
+            if (sender.getPlayers().isEmpty()) {
                 ChatUtil.sendChatMessage("&cThere is no one on the list &c:[", sender, true);
                 return;
             }

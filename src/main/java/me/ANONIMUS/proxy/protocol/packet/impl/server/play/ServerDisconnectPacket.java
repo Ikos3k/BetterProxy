@@ -35,6 +35,6 @@ public class ServerDisconnectPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x40, 47), new Protocol(0x1A, 110), new Protocol(0x1A, 340));
+        return Arrays.asList(new Protocol(0x40, 47), new Protocol(0x1A, 110, 340));
     }
 }

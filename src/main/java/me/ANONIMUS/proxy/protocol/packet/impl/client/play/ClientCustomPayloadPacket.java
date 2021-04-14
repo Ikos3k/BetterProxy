@@ -32,6 +32,6 @@ public class ClientCustomPayloadPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x17, 47), new Protocol(0x09, 110), new Protocol(0x09, 340));
+        return Arrays.asList(new Protocol(0x17, 47), new Protocol(0x09, 110, 340));
     }
 }

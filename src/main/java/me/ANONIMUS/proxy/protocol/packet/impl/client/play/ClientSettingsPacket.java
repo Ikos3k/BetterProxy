@@ -55,6 +55,6 @@ public class ClientSettingsPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x15, 47), new Protocol(0x15, 110), new Protocol(0x04, 340));
+        return Arrays.asList(new Protocol(0x15, 47, 110), new Protocol(0x04, 340));
     }
 }

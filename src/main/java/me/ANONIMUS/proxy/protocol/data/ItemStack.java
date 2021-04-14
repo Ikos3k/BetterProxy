@@ -9,18 +9,17 @@ import java.util.List;
 public class ItemStack {
     private final int id;
     private final int amount;
-    private int data;
+    private final int data;
     private NBTTagCompound nbt;
 
     public ItemStack(final int id) {
         this.id = id;
         this.amount = 1;
+        this.data = 0;
     }
 
     public ItemStack(final int id, final int amount) {
-        this.id = id;
-        this.amount = amount;
-        this.data = 0;
+        this(id, amount, 0, null);
     }
 
     public ItemStack(final int id, final String name) {
@@ -29,9 +28,7 @@ public class ItemStack {
     }
 
     public ItemStack(final int id, final int amount, final int data) {
-        this.id = id;
-        this.amount = amount;
-        this.data = data;
+        this(id, amount, data, null);
     }
 
     public ItemStack(final int id, final int amount, final int data, final NBTTagCompound nbt) {

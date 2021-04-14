@@ -53,6 +53,6 @@ public class ClientPlayerWindowActionPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x0E, 47), new Protocol(0x07, 110), new Protocol(0x07, 340));
+        return Arrays.asList(new Protocol(0x0E, 47), new Protocol(0x07, 110, 340));
     }
 }

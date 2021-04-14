@@ -55,6 +55,6 @@ public class ClientTabCompletePacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x14, 47), new Protocol(0x01, 109), new Protocol(0x01, 110), new Protocol(0x01, 340));
+        return Arrays.asList(new Protocol(0x14, 47), new Protocol(0x01, 109, 110, 340));
     }
 }

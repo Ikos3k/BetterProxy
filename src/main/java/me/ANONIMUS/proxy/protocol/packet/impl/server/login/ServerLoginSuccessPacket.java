@@ -8,6 +8,7 @@ import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import me.ANONIMUS.proxy.utils.PacketUtil;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +33,6 @@ public class ServerLoginSuccessPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return PacketUtil.protocols(0x02, 47, 109, 110, 210, 340);
+        return Collections.singletonList(new Protocol(0x02, 47, 109, 110, 210, 340));
     }
 }

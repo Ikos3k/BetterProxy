@@ -48,8 +48,7 @@ public class WorldUtil {
                 int i = 0;
                 while (new File(BetterProxy.getInstance().getDirFolder() + "/world/" + (player.getSession().getProtocolID() != 47 ? "other" : "47") + "/world_" + i).exists()) {
                     final byte[] data = Files.readAllBytes(new File(BetterProxy.getInstance().getDirFolder() + "/world/" + (player.getSession().getProtocolID() != 47 ? "other" : "47") + "/world_" + i).toPath());
-                    Packet p = new CustomPacket(player.getSession().getProtocolID() == 47 ? 0x26 : 0x20, data);
-                    player.getSession().sendPacket(p);
+                    player.getSession().sendPacket(new CustomPacket(player.getSession().getProtocolID() == 47 ? 0x26 : 0x20, data));
                     i++;
                 }
             } catch (IOException ignored) { }

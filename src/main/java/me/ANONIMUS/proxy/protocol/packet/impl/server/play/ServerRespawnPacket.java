@@ -40,6 +40,6 @@ public class ServerRespawnPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x07, 47), new Protocol(0x33, 109), new Protocol(0x33, 110), new Protocol(0x33, 210), new Protocol(0x35, 340));
+        return Arrays.asList(new Protocol(0x07, 47), new Protocol(0x33, 109, 110, 210), new Protocol(0x35, 340));
     }
 }

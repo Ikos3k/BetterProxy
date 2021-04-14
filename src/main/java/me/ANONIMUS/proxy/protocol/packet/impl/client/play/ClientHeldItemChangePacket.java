@@ -28,6 +28,6 @@ public class ClientHeldItemChangePacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x09, 47), new Protocol(0x17, 109), new Protocol(0x17, 110), new Protocol(0x1A, 340));
+        return Arrays.asList(new Protocol(0x09, 47), new Protocol(0x17, 109, 110), new Protocol(0x1A, 340));
     }
 }

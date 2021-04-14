@@ -1,25 +1,23 @@
 package me.ANONIMUS.proxy.protocol.data;
 
-import me.ANONIMUS.proxy.protocol.Protocol;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketDirection;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public enum ConnectionState {
     HANDSHAKE, LOGIN, PLAY, STATUS;
 
-    private final Map<Packet, List<Protocol>> clientPackets;
-    private final Map<Packet, List<Protocol>> serverPackets;
+    private final List<Packet> clientPackets;
+    private final List<Packet> serverPackets;
 
     ConnectionState() {
-        this.clientPackets = new HashMap<>();
-        this.serverPackets = new HashMap<>();
+        this.clientPackets = new ArrayList<>();
+        this.serverPackets = new ArrayList<>();
     }
 
-    public Map<Packet, List<Protocol>> getPacketsByDirection(PacketDirection direction) {
+    public List<Packet> getPacketsByDirection(PacketDirection direction) {
         switch (direction) {
             case SERVERBOUND:
                 return clientPackets;

@@ -36,6 +36,6 @@ public class ServerKeepAlivePacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x00, 47), new Protocol(0x1F, 109), new Protocol(0x1F, 110), new Protocol(0x1F, 210), new Protocol(0x1F, 340));
+        return Arrays.asList(new Protocol(0x00, 47), new Protocol(0x1F, 109, 110, 210, 340));
     }
 }

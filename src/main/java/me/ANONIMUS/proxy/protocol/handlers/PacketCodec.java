@@ -48,13 +48,13 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
 
             Packet packet = BetterProxy.getInstance().getPacketRegistry().createPacket(connectionState,packetDirection,packetID,protocol);
 
-            if(BetterProxy.getInstance().getConfigManager().getConfig().debug && !(packet instanceof ServerPlayerListEntryPacket)) {
+            if (BetterProxy.getInstance().getConfigManager().getConfig().debug && packetBuffer.readableBytes() > 1 && !(packet instanceof ServerPlayerListEntryPacket)) {
                 final ByteBuf bufDUPLICATE = byteBuf.duplicate();
-                if(bufDUPLICATE.readableBytes() > 1) {
-                    final byte[] data = new byte[bufDUPLICATE.readableBytes()];
-                    bufDUPLICATE.readBytes(data);
-                    System.err.println("[" + channelHandlerContext.channel().remoteAddress() + "] [size: " + data.length + "] Packet data " + packet.getClass().getSimpleName() + "(" + packetID + "): " + Arrays.toString(data));
-                }
+
+                final byte[] data = new byte[bufDUPLICATE.readableBytes()];
+                bufDUPLICATE.readBytes(data);
+
+                System.err.println("[" + channelHandlerContext.channel().remoteAddress() + "] [size: " + data.length + "] Packet data " + packet.getClass().getSimpleName() + "(" + packetID + "): " + Arrays.toString(data));
                 bufDUPLICATE.clear();
             }
 
@@ -73,8 +73,10 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
     private int getPacketIDByProtocol(Packet packet, int protocol) {
         if(packet instanceof CustomPacket) { return ((CustomPacket)packet).getCustomPacketID(); }
         for(Protocol p : packet.getProtocolList()) {
-            if(p.getProtocol() == protocol) {
-                return p.getId();
+            for(int protocol2 : p.getProtocols()) {
+                if(protocol2 == protocol) {
+                    return p.getId();
+                }
             }
         }
         return packet.getProtocolList().get(0).getId();

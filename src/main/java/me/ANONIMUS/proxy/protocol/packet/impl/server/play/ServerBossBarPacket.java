@@ -10,6 +10,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.chat.ComponentSerializer;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -99,6 +100,6 @@ public class ServerBossBarPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return PacketUtil.protocols(0x0C, 109, 110, 210, 340);
+        return Collections.singletonList(new Protocol(0x0C, 109, 110, 210, 340));
     }
 }
