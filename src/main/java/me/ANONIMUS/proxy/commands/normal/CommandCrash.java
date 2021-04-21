@@ -7,8 +7,7 @@ import me.ANONIMUS.proxy.objects.Exploit;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.utils.ChatUtil;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommandCrash extends Command {
     public CommandCrash() {
@@ -18,9 +17,7 @@ public class CommandCrash extends Command {
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {
         if (args[1].equals("list") && args.length == 2) {
-            List<String> exploits = new ArrayList<>();
-            BetterProxy.getInstance().getExploitManager().getExploits().forEach(exploit -> exploits.add(exploit.getName()));
-            ChatUtil.sendChatMessage("&8>> " + sender.getThemeType().getColor(1) + exploits.toString().replace("[", "").replace("]", ""), sender, false);
+            ChatUtil.sendChatMessage("&8>> " + sender.getThemeType().getColor(1) + BetterProxy.getInstance().getExploitManager().getExploits().stream().map(Exploit::getName).collect(Collectors.joining(", ")), sender, false);
             return;
         }
         Exploit exploit = BetterProxy.getInstance().getExploitManager().findExploit(args[1]);
@@ -32,6 +29,13 @@ public class CommandCrash extends Command {
             ChatUtil.sendChatMessage("&4You must be connected to the server!", sender, true);
             return;
         }
-        exploit.execute(sender, Integer.parseInt(args[2]));
+        try {
+            int arguments = exploit.getArguments().split(" ").length;
+            Object[] objects = new Object[arguments];
+            System.arraycopy(args, 2, objects, 0, arguments);
+            exploit.execute(sender, objects);
+        } catch (Exception e) {
+            ChatUtil.sendChatMessage("&8Correct usage: " + sender.getThemeType().getColor(1) + sender.getPrefixCMD() + getPrefix() + " " + args[1] + " " + exploit.getArguments(), sender, true);
+        }
     }
 }

