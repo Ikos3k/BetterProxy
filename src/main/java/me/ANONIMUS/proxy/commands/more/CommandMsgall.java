@@ -11,13 +11,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class CommandMsgall extends Command {
-    public CommandMsgall() { super("msgall", "msgspam", "spamming with private messages", "[delay] [text]", ConnectedType.CONNECTED); }
+    public CommandMsgall() {
+        super("msgall", "msgspam", "spamming with private messages", "[delay] [text]", ConnectedType.CONNECTED);
+    }
 
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {
         int delay = Integer.parseInt(args[1]);
         String text = "";
-        for (int i = 2; i < args.length; ++i) { text = (i != 2 ? text + " " : "") + args[i]; }
+        for (int i = 2; i < args.length; ++i) {
+            text = (i != 2 ? text + " " : "") + args[i];
+        }
 
         final String out = sender.getPlayers().toString();
         if (out.equals("[]")) {

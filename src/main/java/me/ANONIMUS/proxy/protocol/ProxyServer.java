@@ -8,7 +8,6 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.Data;
 import me.ANONIMUS.proxy.BetterProxy;
-import me.ANONIMUS.proxy.managers.PlayerManager;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
 import me.ANONIMUS.proxy.protocol.handlers.PacketCodec;
 import me.ANONIMUS.proxy.protocol.handlers.VarInt21FrameCodec;
@@ -26,35 +25,35 @@ public class ProxyServer {
 
     public void bind() {
         new ServerBootstrap()
-            .group(worker)
-            .channel(NioServerSocketChannel.class)
-            .childOption(ChannelOption.TCP_NODELAY, true)
-            .childOption(ChannelOption.SO_KEEPALIVE, true)
-            .childHandler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                protected void initChannel(SocketChannel socketChannel) {
-                    final ChannelPipeline pipeline = socketChannel.pipeline();
-                    pipeline.addLast("timer", new ReadTimeoutHandler(10));
-                    pipeline.addLast("frameCodec", new VarInt21FrameCodec());
-                    pipeline.addLast("packetCodec", new PacketCodec(ConnectionState.HANDSHAKE, PacketDirection.SERVERBOUND));
-                    pipeline.addLast(new SimpleChannelInboundHandler<Packet>() {
-                        @Override
-                        public void channelActive(ChannelHandlerContext ctx) {
-                            PlayerManager.createPlayer(new Session(ctx.channel()));
-                        }
+                .group(worker)
+                .channel(NioServerSocketChannel.class)
+                .childOption(ChannelOption.TCP_NODELAY, true)
+                .childOption(ChannelOption.SO_KEEPALIVE, true)
+                .childHandler(new ChannelInitializer<SocketChannel>() {
+                    @Override
+                    protected void initChannel(SocketChannel socketChannel) {
+                        final ChannelPipeline pipeline = socketChannel.pipeline();
+                        pipeline.addLast("timer", new ReadTimeoutHandler(10));
+                        pipeline.addLast("frameCodec", new VarInt21FrameCodec());
+                        pipeline.addLast("packetCodec", new PacketCodec(ConnectionState.HANDSHAKE, PacketDirection.SERVERBOUND));
+                        pipeline.addLast(new SimpleChannelInboundHandler<Packet>() {
+                            @Override
+                            public void channelActive(ChannelHandlerContext ctx) {
+                                BetterProxy.getInstance().getPlayerManager().createPlayer(new Session(ctx.channel()));
+                            }
 
-                        @Override
-                        public void channelInactive(ChannelHandlerContext ctx) {
-                           PlayerManager.getPlayer(ctx.channel()).disconnected();
-                        }
+                            @Override
+                            public void channelInactive(ChannelHandlerContext ctx) {
+                                BetterProxy.getInstance().getPlayerManager().getPlayer(ctx.channel()).disconnected();
+                            }
 
-                        @Override
-                        protected void channelRead0(ChannelHandlerContext ctx, Packet packet) {
-                            PlayerManager.getPlayer(ctx.channel()).packetReceived(packet);
-                        }
-                    });
-                }
-            }).bind(BetterProxy.getInstance().getConfigManager().getConfig().port);
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> PlayerManager.getPlayers().stream().filter(p -> p.getSession().getConnectionState() == ConnectionState.PLAY).forEach(p -> p.getSession().sendPacket(new ServerKeepAlivePacket(System.currentTimeMillis()))),3,3, TimeUnit.SECONDS);
+                            @Override
+                            protected void channelRead0(ChannelHandlerContext ctx, Packet packet) {
+                                BetterProxy.getInstance().getPlayerManager().getPlayer(ctx.channel()).packetReceived(packet);
+                            }
+                        });
+                    }
+                }).bind(BetterProxy.getInstance().getConfigManager().getConfig().port);
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> BetterProxy.getInstance().getPlayerManager().getPlayers().stream().filter(p -> p.getSession().getConnectionState() == ConnectionState.PLAY).forEach(p -> p.getSession().sendPacket(new ServerKeepAlivePacket(System.currentTimeMillis()))), 3, 3, TimeUnit.SECONDS);
     }
 }

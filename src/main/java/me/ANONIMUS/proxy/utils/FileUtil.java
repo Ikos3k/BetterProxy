@@ -23,14 +23,10 @@ import java.util.stream.IntStream;
 public class FileUtil {
     public static void createMissing() {
         try {
-            final File f1 = new File(BetterProxy.getInstance().getDirFolder() + "/accounts.txt");
-            final File f2 = new File(BetterProxy.getInstance().getDirFolder() + "/world");
-            final File f3 = new File(BetterProxy.getInstance().getDirFolder() + "/exploits");
-            final File f4 = new File(BetterProxy.getInstance().getDirFolder() + "/schematics");
-            if (!f1.exists()) { f1.createNewFile(); }
-            if (!f2.exists()) { f2.mkdir(); }
-            if (!f3.exists()) { f3.mkdir(); }
-            if (!f4.exists()) { f4.mkdir(); }
+            new File(BetterProxy.getInstance().getDirFolder() + "/accounts.txt").mkdir();
+            new File(BetterProxy.getInstance().getDirFolder() + "/world").mkdir();
+            new File(BetterProxy.getInstance().getDirFolder() + "/exploits").mkdir();
+            new File(BetterProxy.getInstance().getDirFolder() + "/schematics").mkdir();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,7 +54,8 @@ public class FileUtil {
                     Object obj = null;
                     try {
                         obj = parser.parse(new FileReader(f));
-                    } catch (IOException | ParseException ignored) { }
+                    } catch (IOException | ParseException ignored) {
+                    }
                     JSONObject jsonObj = (JSONObject) obj;
                     int id = ((Long) jsonObj.get("id")).intValue();
                     List<Long> s = ((JSONArray) jsonObj.get("data"));

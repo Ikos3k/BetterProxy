@@ -26,14 +26,14 @@ public class CommandBotRegister extends Command {
         final boolean register = Boolean.parseBoolean(args[3]);
         final String passwd = StringUtil.generateString(5 + new Random().nextInt(3));
         final StringBuilder regCMD = new StringBuilder("/register");
-        if(arguments > 0) {
+        if (arguments > 0) {
             IntStream.range(0, arguments).forEach(i -> regCMD.append(" ").append(passwd));
         }
         sender.getBots().forEach(bot -> {
-            if(login) {
+            if (login) {
                 bot.getSession().sendPacket(new ClientChatPacket("/login " + passwd));
             }
-            if(register) {
+            if (register) {
                 bot.getSession().sendPacket(new ClientChatPacket(regCMD.toString()));
             }
         });

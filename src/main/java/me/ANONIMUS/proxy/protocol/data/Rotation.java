@@ -9,6 +9,7 @@ public class Rotation {
     protected final float y;
 
     protected final float z;
+
     public Rotation(float x, float y, float z) {
         this.x = x;
         this.y = y;
@@ -23,18 +24,15 @@ public class Rotation {
         return nbttaglist;
     }
 
-    public float getX()
-    {
+    public float getX() {
         return this.x;
     }
 
-    public float getY()
-    {
+    public float getY() {
         return this.y;
     }
 
-    public float getZ()
-    {
+    public float getZ() {
         return this.z;
     }
 }

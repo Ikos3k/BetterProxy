@@ -112,28 +112,25 @@ public class PacketBuffer extends ByteBuf {
     }
 
     public PacketBuffer writeArray(byte[] b) {
-        if ( b.length > Short.MAX_VALUE )
-        {
-            throw new EncoderException( String.format( "Cannot send byte array longer than Short.MAX_VALUE (got %s bytes)", b.length ) );
+        if (b.length > Short.MAX_VALUE) {
+            throw new EncoderException(String.format("Cannot send byte array longer than Short.MAX_VALUE (got %s bytes)", b.length));
         }
-        this.writeVarInt(b.length );
+        this.writeVarInt(b.length);
         this.writeBytes(b);
         return this;
     }
 
-    public byte[] readArray()
-    {
+    public byte[] readArray() {
         return readArray(this.readableBytes());
     }
 
     public byte[] readArray(int limit) {
         int len = this.readVarInt();
-        if ( len > limit )
-        {
-            throw new EncoderException( String.format( "Cannot receive byte array longer than %s (got %s bytes)", limit, len ) );
+        if (len > limit) {
+            throw new EncoderException(String.format("Cannot receive byte array longer than %s (got %s bytes)", limit, len));
         }
-        byte[] ret = new byte[ len ];
-        this.readBytes( ret );
+        byte[] ret = new byte[len];
+        this.readBytes(ret);
         return ret;
     }
 
@@ -482,7 +479,9 @@ public class PacketBuffer extends ByteBuf {
         return byteBuf.ensureWritable(p_ensureWritable_1_);
     }
 
-    public int ensureWritable(int p_ensureWritable_1_, boolean p_ensureWritable_2_) { return byteBuf.ensureWritable(p_ensureWritable_1_, p_ensureWritable_2_); }
+    public int ensureWritable(int p_ensureWritable_1_, boolean p_ensureWritable_2_) {
+        return byteBuf.ensureWritable(p_ensureWritable_1_, p_ensureWritable_2_);
+    }
 
     public boolean getBoolean(int p_getBoolean_1_) {
         return byteBuf.getBoolean(p_getBoolean_1_);
@@ -508,7 +507,9 @@ public class PacketBuffer extends ByteBuf {
         return byteBuf.getUnsignedShort(p_getUnsignedShort_1_);
     }
 
-    public int getUnsignedShortLE(int p_getUnsignedShortLE_1_) { return byteBuf.getUnsignedShortLE(p_getUnsignedShortLE_1_); }
+    public int getUnsignedShortLE(int p_getUnsignedShortLE_1_) {
+        return byteBuf.getUnsignedShortLE(p_getUnsignedShortLE_1_);
+    }
 
     public int getMedium(int p_getMedium_1_) {
         return byteBuf.getMedium(p_getMedium_1_);
@@ -518,9 +519,13 @@ public class PacketBuffer extends ByteBuf {
         return byteBuf.getMediumLE(p_getMediumLE_1_);
     }
 
-    public int getUnsignedMedium(int p_getUnsignedMedium_1_) { return byteBuf.getUnsignedMedium(p_getUnsignedMedium_1_); }
+    public int getUnsignedMedium(int p_getUnsignedMedium_1_) {
+        return byteBuf.getUnsignedMedium(p_getUnsignedMedium_1_);
+    }
 
-    public int getUnsignedMediumLE(int p_getUnsignedMediumLE_1_) { return byteBuf.getUnsignedMediumLE(p_getUnsignedMediumLE_1_); }
+    public int getUnsignedMediumLE(int p_getUnsignedMediumLE_1_) {
+        return byteBuf.getUnsignedMediumLE(p_getUnsignedMediumLE_1_);
+    }
 
     public int getInt(int p_getInt_1_) {
         return byteBuf.getInt(p_getInt_1_);
@@ -558,83 +563,141 @@ public class PacketBuffer extends ByteBuf {
         return byteBuf.getDouble(p_getDouble_1_);
     }
 
-    public ByteBuf getBytes(int p_getBytes_1_, ByteBuf p_getBytes_2_) { return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_); }
+    public ByteBuf getBytes(int p_getBytes_1_, ByteBuf p_getBytes_2_) {
+        return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_);
+    }
 
-    public ByteBuf getBytes(int p_getBytes_1_, ByteBuf p_getBytes_2_, int p_getBytes_3_) { return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_, p_getBytes_3_); }
+    public ByteBuf getBytes(int p_getBytes_1_, ByteBuf p_getBytes_2_, int p_getBytes_3_) {
+        return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_, p_getBytes_3_);
+    }
 
-    public ByteBuf getBytes(int p_getBytes_1_, ByteBuf p_getBytes_2_, int p_getBytes_3_, int p_getBytes_4_) { return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_, p_getBytes_3_, p_getBytes_4_); }
+    public ByteBuf getBytes(int p_getBytes_1_, ByteBuf p_getBytes_2_, int p_getBytes_3_, int p_getBytes_4_) {
+        return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_, p_getBytes_3_, p_getBytes_4_);
+    }
 
-    public ByteBuf getBytes(int p_getBytes_1_, byte[] p_getBytes_2_) { return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_); }
+    public ByteBuf getBytes(int p_getBytes_1_, byte[] p_getBytes_2_) {
+        return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_);
+    }
 
-    public ByteBuf getBytes(int p_getBytes_1_, byte[] p_getBytes_2_, int p_getBytes_3_, int p_getBytes_4_) { return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_, p_getBytes_3_, p_getBytes_4_); }
+    public ByteBuf getBytes(int p_getBytes_1_, byte[] p_getBytes_2_, int p_getBytes_3_, int p_getBytes_4_) {
+        return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_, p_getBytes_3_, p_getBytes_4_);
+    }
 
-    public ByteBuf getBytes(int p_getBytes_1_, ByteBuffer p_getBytes_2_) { return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_); }
+    public ByteBuf getBytes(int p_getBytes_1_, ByteBuffer p_getBytes_2_) {
+        return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_);
+    }
 
-    public ByteBuf getBytes(int p_getBytes_1_, OutputStream p_getBytes_2_, int p_getBytes_3_) throws IOException { return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_, p_getBytes_3_); }
+    public ByteBuf getBytes(int p_getBytes_1_, OutputStream p_getBytes_2_, int p_getBytes_3_) throws IOException {
+        return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_, p_getBytes_3_);
+    }
 
-    public int getBytes(int p_getBytes_1_, GatheringByteChannel p_getBytes_2_, int p_getBytes_3_) throws IOException { return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_, p_getBytes_3_); }
+    public int getBytes(int p_getBytes_1_, GatheringByteChannel p_getBytes_2_, int p_getBytes_3_) throws IOException {
+        return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_, p_getBytes_3_);
+    }
 
-    public int getBytes(int p_getBytes_1_, FileChannel p_getBytes_2_, long p_getBytes_3_, int p_getBytes_5_) throws IOException { return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_, p_getBytes_3_, p_getBytes_5_); }
+    public int getBytes(int p_getBytes_1_, FileChannel p_getBytes_2_, long p_getBytes_3_, int p_getBytes_5_) throws IOException {
+        return byteBuf.getBytes(p_getBytes_1_, p_getBytes_2_, p_getBytes_3_, p_getBytes_5_);
+    }
 
-    public CharSequence getCharSequence(int p_getCharSequence_1_, int p_getCharSequence_2_, Charset p_getCharSequence_3_) { return byteBuf.getCharSequence(p_getCharSequence_1_, p_getCharSequence_2_, p_getCharSequence_3_); }
+    public CharSequence getCharSequence(int p_getCharSequence_1_, int p_getCharSequence_2_, Charset p_getCharSequence_3_) {
+        return byteBuf.getCharSequence(p_getCharSequence_1_, p_getCharSequence_2_, p_getCharSequence_3_);
+    }
 
-    public ByteBuf setBoolean(int p_setBoolean_1_, boolean p_setBoolean_2_) { return byteBuf.setBoolean(p_setBoolean_1_, p_setBoolean_2_); }
+    public ByteBuf setBoolean(int p_setBoolean_1_, boolean p_setBoolean_2_) {
+        return byteBuf.setBoolean(p_setBoolean_1_, p_setBoolean_2_);
+    }
 
     public ByteBuf setByte(int p_setByte_1_, int p_setByte_2_) {
         return byteBuf.setByte(p_setByte_1_, p_setByte_2_);
     }
 
-    public ByteBuf setShort(int p_setShort_1_, int p_setShort_2_) { return byteBuf.setShort(p_setShort_1_, p_setShort_2_); }
+    public ByteBuf setShort(int p_setShort_1_, int p_setShort_2_) {
+        return byteBuf.setShort(p_setShort_1_, p_setShort_2_);
+    }
 
-    public ByteBuf setShortLE(int p_setShortLE_1_, int p_setShortLE_2_) { return byteBuf.setShortLE(p_setShortLE_1_, p_setShortLE_2_); }
+    public ByteBuf setShortLE(int p_setShortLE_1_, int p_setShortLE_2_) {
+        return byteBuf.setShortLE(p_setShortLE_1_, p_setShortLE_2_);
+    }
 
-    public ByteBuf setMedium(int p_setMedium_1_, int p_setMedium_2_) { return byteBuf.setMedium(p_setMedium_1_, p_setMedium_2_); }
+    public ByteBuf setMedium(int p_setMedium_1_, int p_setMedium_2_) {
+        return byteBuf.setMedium(p_setMedium_1_, p_setMedium_2_);
+    }
 
-    public ByteBuf setMediumLE(int p_setMediumLE_1_, int p_setMediumLE_2_) { return byteBuf.setMediumLE(p_setMediumLE_1_, p_setMediumLE_2_); }
+    public ByteBuf setMediumLE(int p_setMediumLE_1_, int p_setMediumLE_2_) {
+        return byteBuf.setMediumLE(p_setMediumLE_1_, p_setMediumLE_2_);
+    }
 
     public ByteBuf setInt(int p_setInt_1_, int p_setInt_2_) {
         return byteBuf.setInt(p_setInt_1_, p_setInt_2_);
     }
 
-    public ByteBuf setIntLE(int p_setIntLE_1_, int p_setIntLE_2_) { return byteBuf.setIntLE(p_setIntLE_1_, p_setIntLE_2_); }
+    public ByteBuf setIntLE(int p_setIntLE_1_, int p_setIntLE_2_) {
+        return byteBuf.setIntLE(p_setIntLE_1_, p_setIntLE_2_);
+    }
 
     public ByteBuf setLong(int p_setLong_1_, long p_setLong_2_) {
         return byteBuf.setLong(p_setLong_1_, p_setLong_2_);
     }
 
-    public ByteBuf setLongLE(int p_setLongLE_1_, long p_setLongLE_2_) { return byteBuf.setLongLE(p_setLongLE_1_, p_setLongLE_2_); }
+    public ByteBuf setLongLE(int p_setLongLE_1_, long p_setLongLE_2_) {
+        return byteBuf.setLongLE(p_setLongLE_1_, p_setLongLE_2_);
+    }
 
     public ByteBuf setChar(int p_setChar_1_, int p_setChar_2_) {
         return byteBuf.setChar(p_setChar_1_, p_setChar_2_);
     }
 
-    public ByteBuf setFloat(int p_setFloat_1_, float p_setFloat_2_) { return byteBuf.setFloat(p_setFloat_1_, p_setFloat_2_); }
+    public ByteBuf setFloat(int p_setFloat_1_, float p_setFloat_2_) {
+        return byteBuf.setFloat(p_setFloat_1_, p_setFloat_2_);
+    }
 
-    public ByteBuf setDouble(int p_setDouble_1_, double p_setDouble_2_) { return byteBuf.setDouble(p_setDouble_1_, p_setDouble_2_); }
+    public ByteBuf setDouble(int p_setDouble_1_, double p_setDouble_2_) {
+        return byteBuf.setDouble(p_setDouble_1_, p_setDouble_2_);
+    }
 
-    public ByteBuf setBytes(int p_setBytes_1_, ByteBuf p_setBytes_2_) { return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_); }
+    public ByteBuf setBytes(int p_setBytes_1_, ByteBuf p_setBytes_2_) {
+        return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_);
+    }
 
-    public ByteBuf setBytes(int p_setBytes_1_, ByteBuf p_setBytes_2_, int p_setBytes_3_) { return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_, p_setBytes_3_); }
+    public ByteBuf setBytes(int p_setBytes_1_, ByteBuf p_setBytes_2_, int p_setBytes_3_) {
+        return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_, p_setBytes_3_);
+    }
 
-    public ByteBuf setBytes(int p_setBytes_1_, ByteBuf p_setBytes_2_, int p_setBytes_3_, int p_setBytes_4_) { return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_, p_setBytes_3_, p_setBytes_4_); }
+    public ByteBuf setBytes(int p_setBytes_1_, ByteBuf p_setBytes_2_, int p_setBytes_3_, int p_setBytes_4_) {
+        return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_, p_setBytes_3_, p_setBytes_4_);
+    }
 
-    public ByteBuf setBytes(int p_setBytes_1_, byte[] p_setBytes_2_) { return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_); }
+    public ByteBuf setBytes(int p_setBytes_1_, byte[] p_setBytes_2_) {
+        return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_);
+    }
 
-    public ByteBuf setBytes(int p_setBytes_1_, byte[] p_setBytes_2_, int p_setBytes_3_, int p_setBytes_4_) { return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_, p_setBytes_3_, p_setBytes_4_); }
+    public ByteBuf setBytes(int p_setBytes_1_, byte[] p_setBytes_2_, int p_setBytes_3_, int p_setBytes_4_) {
+        return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_, p_setBytes_3_, p_setBytes_4_);
+    }
 
-    public ByteBuf setBytes(int p_setBytes_1_, ByteBuffer p_setBytes_2_) { return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_); }
+    public ByteBuf setBytes(int p_setBytes_1_, ByteBuffer p_setBytes_2_) {
+        return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_);
+    }
 
-    public int setBytes(int p_setBytes_1_, InputStream p_setBytes_2_, int p_setBytes_3_) throws IOException { return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_, p_setBytes_3_); }
+    public int setBytes(int p_setBytes_1_, InputStream p_setBytes_2_, int p_setBytes_3_) throws IOException {
+        return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_, p_setBytes_3_);
+    }
 
-    public int setBytes(int p_setBytes_1_, ScatteringByteChannel p_setBytes_2_, int p_setBytes_3_) throws IOException { return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_, p_setBytes_3_); }
+    public int setBytes(int p_setBytes_1_, ScatteringByteChannel p_setBytes_2_, int p_setBytes_3_) throws IOException {
+        return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_, p_setBytes_3_);
+    }
 
-    public int setBytes(int p_setBytes_1_, FileChannel p_setBytes_2_, long p_setBytes_3_, int p_setBytes_5_) throws IOException { return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_, p_setBytes_3_, p_setBytes_5_); }
+    public int setBytes(int p_setBytes_1_, FileChannel p_setBytes_2_, long p_setBytes_3_, int p_setBytes_5_) throws IOException {
+        return byteBuf.setBytes(p_setBytes_1_, p_setBytes_2_, p_setBytes_3_, p_setBytes_5_);
+    }
 
     public ByteBuf setZero(int p_setZero_1_, int p_setZero_2_) {
         return byteBuf.setZero(p_setZero_1_, p_setZero_2_);
     }
 
-    public int setCharSequence(int p_setCharSequence_1_, CharSequence p_setCharSequence_2_, Charset p_setCharSequence_3_) { return byteBuf.setCharSequence(p_setCharSequence_1_, p_setCharSequence_2_, p_setCharSequence_3_); }
+    public int setCharSequence(int p_setCharSequence_1_, CharSequence p_setCharSequence_2_, Charset p_setCharSequence_3_) {
+        return byteBuf.setCharSequence(p_setCharSequence_1_, p_setCharSequence_2_, p_setCharSequence_3_);
+    }
 
     public boolean readBoolean() {
         return byteBuf.readBoolean();
@@ -724,33 +787,49 @@ public class PacketBuffer extends ByteBuf {
         return byteBuf.readSlice(p_readSlice_1_);
     }
 
-    public ByteBuf readRetainedSlice(int p_readRetainedSlice_1_) { return byteBuf.readRetainedSlice(p_readRetainedSlice_1_); }
+    public ByteBuf readRetainedSlice(int p_readRetainedSlice_1_) {
+        return byteBuf.readRetainedSlice(p_readRetainedSlice_1_);
+    }
 
     public ByteBuf readBytes(ByteBuf p_readBytes_1_) {
         return byteBuf.readBytes(p_readBytes_1_);
     }
 
-    public ByteBuf readBytes(ByteBuf p_readBytes_1_, int p_readBytes_2_) { return byteBuf.readBytes(p_readBytes_1_, p_readBytes_2_); }
+    public ByteBuf readBytes(ByteBuf p_readBytes_1_, int p_readBytes_2_) {
+        return byteBuf.readBytes(p_readBytes_1_, p_readBytes_2_);
+    }
 
-    public ByteBuf readBytes(ByteBuf p_readBytes_1_, int p_readBytes_2_, int p_readBytes_3_) { return byteBuf.readBytes(p_readBytes_1_, p_readBytes_2_, p_readBytes_3_); }
+    public ByteBuf readBytes(ByteBuf p_readBytes_1_, int p_readBytes_2_, int p_readBytes_3_) {
+        return byteBuf.readBytes(p_readBytes_1_, p_readBytes_2_, p_readBytes_3_);
+    }
 
     public ByteBuf readBytes(byte[] p_readBytes_1_) {
         return byteBuf.readBytes(p_readBytes_1_);
     }
 
-    public ByteBuf readBytes(byte[] p_readBytes_1_, int p_readBytes_2_, int p_readBytes_3_) { return byteBuf.readBytes(p_readBytes_1_, p_readBytes_2_, p_readBytes_3_); }
+    public ByteBuf readBytes(byte[] p_readBytes_1_, int p_readBytes_2_, int p_readBytes_3_) {
+        return byteBuf.readBytes(p_readBytes_1_, p_readBytes_2_, p_readBytes_3_);
+    }
 
     public ByteBuf readBytes(ByteBuffer p_readBytes_1_) {
         return byteBuf.readBytes(p_readBytes_1_);
     }
 
-    public ByteBuf readBytes(OutputStream p_readBytes_1_, int p_readBytes_2_) throws IOException { return byteBuf.readBytes(p_readBytes_1_, p_readBytes_2_); }
+    public ByteBuf readBytes(OutputStream p_readBytes_1_, int p_readBytes_2_) throws IOException {
+        return byteBuf.readBytes(p_readBytes_1_, p_readBytes_2_);
+    }
 
-    public int readBytes(GatheringByteChannel p_readBytes_1_, int p_readBytes_2_) throws IOException { return byteBuf.readBytes(p_readBytes_1_, p_readBytes_2_); }
+    public int readBytes(GatheringByteChannel p_readBytes_1_, int p_readBytes_2_) throws IOException {
+        return byteBuf.readBytes(p_readBytes_1_, p_readBytes_2_);
+    }
 
-    public CharSequence readCharSequence(int p_readCharSequence_1_, Charset p_readCharSequence_2_) { return byteBuf.readCharSequence(p_readCharSequence_1_, p_readCharSequence_2_); }
+    public CharSequence readCharSequence(int p_readCharSequence_1_, Charset p_readCharSequence_2_) {
+        return byteBuf.readCharSequence(p_readCharSequence_1_, p_readCharSequence_2_);
+    }
 
-    public int readBytes(FileChannel p_readBytes_1_, long p_readBytes_2_, int p_readBytes_4_) throws IOException { return byteBuf.readBytes(p_readBytes_1_, p_readBytes_2_, p_readBytes_4_); }
+    public int readBytes(FileChannel p_readBytes_1_, long p_readBytes_2_, int p_readBytes_4_) throws IOException {
+        return byteBuf.readBytes(p_readBytes_1_, p_readBytes_2_, p_readBytes_4_);
+    }
 
     public ByteBuf skipBytes(int p_skipBytes_1_) {
         return byteBuf.skipBytes(p_skipBytes_1_);
@@ -812,51 +891,77 @@ public class PacketBuffer extends ByteBuf {
         return byteBuf.writeBytes(p_writeBytes_1_);
     }
 
-    public ByteBuf writeBytes(ByteBuf p_writeBytes_1_, int p_writeBytes_2_) { return byteBuf.writeBytes(p_writeBytes_1_, p_writeBytes_2_); }
+    public ByteBuf writeBytes(ByteBuf p_writeBytes_1_, int p_writeBytes_2_) {
+        return byteBuf.writeBytes(p_writeBytes_1_, p_writeBytes_2_);
+    }
 
-    public ByteBuf writeBytes(ByteBuf p_writeBytes_1_, int p_writeBytes_2_, int p_writeBytes_3_) { return byteBuf.writeBytes(p_writeBytes_1_, p_writeBytes_2_, p_writeBytes_3_); }
+    public ByteBuf writeBytes(ByteBuf p_writeBytes_1_, int p_writeBytes_2_, int p_writeBytes_3_) {
+        return byteBuf.writeBytes(p_writeBytes_1_, p_writeBytes_2_, p_writeBytes_3_);
+    }
 
     public ByteBuf writeBytes(byte[] p_writeBytes_1_) {
         return byteBuf.writeBytes(p_writeBytes_1_);
     }
 
-    public ByteBuf writeBytes(byte[] p_writeBytes_1_, int p_writeBytes_2_, int p_writeBytes_3_) { return byteBuf.writeBytes(p_writeBytes_1_, p_writeBytes_2_, p_writeBytes_3_); }
+    public ByteBuf writeBytes(byte[] p_writeBytes_1_, int p_writeBytes_2_, int p_writeBytes_3_) {
+        return byteBuf.writeBytes(p_writeBytes_1_, p_writeBytes_2_, p_writeBytes_3_);
+    }
 
     public ByteBuf writeBytes(ByteBuffer p_writeBytes_1_) {
         return byteBuf.writeBytes(p_writeBytes_1_);
     }
 
-    public int writeBytes(InputStream p_writeBytes_1_, int p_writeBytes_2_) throws IOException { return byteBuf.writeBytes(p_writeBytes_1_, p_writeBytes_2_); }
+    public int writeBytes(InputStream p_writeBytes_1_, int p_writeBytes_2_) throws IOException {
+        return byteBuf.writeBytes(p_writeBytes_1_, p_writeBytes_2_);
+    }
 
-    public int writeBytes(ScatteringByteChannel p_writeBytes_1_, int p_writeBytes_2_) throws IOException { return byteBuf.writeBytes(p_writeBytes_1_, p_writeBytes_2_); }
+    public int writeBytes(ScatteringByteChannel p_writeBytes_1_, int p_writeBytes_2_) throws IOException {
+        return byteBuf.writeBytes(p_writeBytes_1_, p_writeBytes_2_);
+    }
 
-    public int writeBytes(FileChannel p_writeBytes_1_, long p_writeBytes_2_, int p_writeBytes_4_) throws IOException { return byteBuf.writeBytes(p_writeBytes_1_, p_writeBytes_2_, p_writeBytes_4_); }
+    public int writeBytes(FileChannel p_writeBytes_1_, long p_writeBytes_2_, int p_writeBytes_4_) throws IOException {
+        return byteBuf.writeBytes(p_writeBytes_1_, p_writeBytes_2_, p_writeBytes_4_);
+    }
 
     public ByteBuf writeZero(int p_writeZero_1_) {
         return byteBuf.writeZero(p_writeZero_1_);
     }
 
-    public int writeCharSequence(CharSequence p_writeCharSequence_1_, Charset p_writeCharSequence_2_) { return byteBuf.writeCharSequence(p_writeCharSequence_1_, p_writeCharSequence_2_); }
+    public int writeCharSequence(CharSequence p_writeCharSequence_1_, Charset p_writeCharSequence_2_) {
+        return byteBuf.writeCharSequence(p_writeCharSequence_1_, p_writeCharSequence_2_);
+    }
 
-    public int indexOf(int p_indexOf_1_, int p_indexOf_2_, byte p_indexOf_3_) { return byteBuf.indexOf(p_indexOf_1_, p_indexOf_2_, p_indexOf_3_); }
+    public int indexOf(int p_indexOf_1_, int p_indexOf_2_, byte p_indexOf_3_) {
+        return byteBuf.indexOf(p_indexOf_1_, p_indexOf_2_, p_indexOf_3_);
+    }
 
     public int bytesBefore(byte p_bytesBefore_1_) {
         return byteBuf.bytesBefore(p_bytesBefore_1_);
     }
 
-    public int bytesBefore(int p_bytesBefore_1_, byte p_bytesBefore_2_) { return byteBuf.bytesBefore(p_bytesBefore_1_, p_bytesBefore_2_); }
+    public int bytesBefore(int p_bytesBefore_1_, byte p_bytesBefore_2_) {
+        return byteBuf.bytesBefore(p_bytesBefore_1_, p_bytesBefore_2_);
+    }
 
-    public int bytesBefore(int p_bytesBefore_1_, int p_bytesBefore_2_, byte p_bytesBefore_3_) { return byteBuf.bytesBefore(p_bytesBefore_1_, p_bytesBefore_2_, p_bytesBefore_3_); }
+    public int bytesBefore(int p_bytesBefore_1_, int p_bytesBefore_2_, byte p_bytesBefore_3_) {
+        return byteBuf.bytesBefore(p_bytesBefore_1_, p_bytesBefore_2_, p_bytesBefore_3_);
+    }
 
     public int forEachByte(ByteProcessor p_forEachByte_1_) {
         return byteBuf.forEachByte(p_forEachByte_1_);
     }
 
-    public int forEachByte(int p_forEachByte_1_, int p_forEachByte_2_, ByteProcessor p_forEachByte_3_) { return byteBuf.forEachByte(p_forEachByte_1_, p_forEachByte_2_, p_forEachByte_3_); }
+    public int forEachByte(int p_forEachByte_1_, int p_forEachByte_2_, ByteProcessor p_forEachByte_3_) {
+        return byteBuf.forEachByte(p_forEachByte_1_, p_forEachByte_2_, p_forEachByte_3_);
+    }
 
-    public int forEachByteDesc(ByteProcessor p_forEachByteDesc_1_) { return byteBuf.forEachByteDesc(p_forEachByteDesc_1_); }
+    public int forEachByteDesc(ByteProcessor p_forEachByteDesc_1_) {
+        return byteBuf.forEachByteDesc(p_forEachByteDesc_1_);
+    }
 
-    public int forEachByteDesc(int p_forEachByteDesc_1_, int p_forEachByteDesc_2_, ByteProcessor p_forEachByteDesc_3_) { return byteBuf.forEachByteDesc(p_forEachByteDesc_1_, p_forEachByteDesc_2_, p_forEachByteDesc_3_); }
+    public int forEachByteDesc(int p_forEachByteDesc_1_, int p_forEachByteDesc_2_, ByteProcessor p_forEachByteDesc_3_) {
+        return byteBuf.forEachByteDesc(p_forEachByteDesc_1_, p_forEachByteDesc_2_, p_forEachByteDesc_3_);
+    }
 
     public ByteBuf copy() {
         return byteBuf.copy();
@@ -878,7 +983,9 @@ public class PacketBuffer extends ByteBuf {
         return byteBuf.slice(p_slice_1_, p_slice_2_);
     }
 
-    public ByteBuf retainedSlice(int p_retainedSlice_1_, int p_retainedSlice_2_) { return byteBuf.retainedSlice(p_retainedSlice_1_, p_retainedSlice_2_); }
+    public ByteBuf retainedSlice(int p_retainedSlice_1_, int p_retainedSlice_2_) {
+        return byteBuf.retainedSlice(p_retainedSlice_1_, p_retainedSlice_2_);
+    }
 
     public ByteBuf duplicate() {
         return byteBuf.duplicate();
@@ -896,15 +1003,21 @@ public class PacketBuffer extends ByteBuf {
         return byteBuf.nioBuffer();
     }
 
-    public ByteBuffer nioBuffer(int p_nioBuffer_1_, int p_nioBuffer_2_) { return byteBuf.nioBuffer(p_nioBuffer_1_, p_nioBuffer_2_); }
+    public ByteBuffer nioBuffer(int p_nioBuffer_1_, int p_nioBuffer_2_) {
+        return byteBuf.nioBuffer(p_nioBuffer_1_, p_nioBuffer_2_);
+    }
 
-    public ByteBuffer internalNioBuffer(int p_internalNioBuffer_1_, int p_internalNioBuffer_2_) { return byteBuf.internalNioBuffer(p_internalNioBuffer_1_, p_internalNioBuffer_2_); }
+    public ByteBuffer internalNioBuffer(int p_internalNioBuffer_1_, int p_internalNioBuffer_2_) {
+        return byteBuf.internalNioBuffer(p_internalNioBuffer_1_, p_internalNioBuffer_2_);
+    }
 
     public ByteBuffer[] nioBuffers() {
         return byteBuf.nioBuffers();
     }
 
-    public ByteBuffer[] nioBuffers(int p_nioBuffers_1_, int p_nioBuffers_2_) { return byteBuf.nioBuffers(p_nioBuffers_1_, p_nioBuffers_2_); }
+    public ByteBuffer[] nioBuffers(int p_nioBuffers_1_, int p_nioBuffers_2_) {
+        return byteBuf.nioBuffers(p_nioBuffers_1_, p_nioBuffers_2_);
+    }
 
     public boolean hasArray() {
         return byteBuf.hasArray();
@@ -930,11 +1043,17 @@ public class PacketBuffer extends ByteBuf {
         return byteBuf.toString(p_toString_1_);
     }
 
-    public String toString(int p_toString_1_, int p_toString_2_, Charset p_toString_3_) { return byteBuf.toString(p_toString_1_, p_toString_2_, p_toString_3_); }
+    public String toString(int p_toString_1_, int p_toString_2_, Charset p_toString_3_) {
+        return byteBuf.toString(p_toString_1_, p_toString_2_, p_toString_3_);
+    }
 
-    public int hashCode() { return byteBuf.hashCode(); }
+    public int hashCode() {
+        return byteBuf.hashCode();
+    }
 
-    public boolean equals(Object p_equals_1_) { return byteBuf.equals(p_equals_1_); }
+    public boolean equals(Object p_equals_1_) {
+        return byteBuf.equals(p_equals_1_);
+    }
 
     public int compareTo(ByteBuf p_compareTo_1_) {
         return byteBuf.compareTo(p_compareTo_1_);
@@ -960,7 +1079,9 @@ public class PacketBuffer extends ByteBuf {
         return byteBuf.touch(p_touch_1_);
     }
 
-    public int refCnt() { return byteBuf.refCnt(); }
+    public int refCnt() {
+        return byteBuf.refCnt();
+    }
 
     public boolean release() {
         return byteBuf.release();

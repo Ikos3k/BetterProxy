@@ -13,7 +13,9 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class CommandPlayers extends Command {
-    public CommandPlayers() { super("players", null, null, "[tablist/tabcomplete/tabcomplete2/api/clear]", ConnectedType.CONNECTED); }
+    public CommandPlayers() {
+        super("players", null, null, "[tablist/tabcomplete/tabcomplete2/api/clear]", ConnectedType.CONNECTED);
+    }
 
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {
@@ -60,7 +62,7 @@ public class CommandPlayers extends Command {
             out = out.replace("[", "");
             out = out.replace("]", "");
             ChatUtil.sendChatMessage("&f" + out + " &7[&f" + sender.getPlayers().size() + "&7]", sender, true);
-        } else if (args[1].equalsIgnoreCase("clear")){
+        } else if (args[1].equalsIgnoreCase("clear")) {
             if (sender.getPlayers().isEmpty()) {
                 ChatUtil.sendChatMessage("&cThere is no one on the list &c:[", sender, true);
                 return;

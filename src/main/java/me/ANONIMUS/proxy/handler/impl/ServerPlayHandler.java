@@ -8,11 +8,9 @@ import me.ANONIMUS.proxy.protocol.data.WindowAction;
 import me.ANONIMUS.proxy.protocol.data.WindowType;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
-import me.ANONIMUS.proxy.protocol.packet.impl.client.play.ClientChatPacket;
-import me.ANONIMUS.proxy.protocol.packet.impl.client.play.ClientKeepAlivePacket;
-import me.ANONIMUS.proxy.protocol.packet.impl.client.play.ClientPlayerPlaceBlockPacket;
-import me.ANONIMUS.proxy.protocol.packet.impl.client.play.ClientPlayerWindowActionPacket;
+import me.ANONIMUS.proxy.protocol.packet.impl.client.play.*;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerOpenWindowPacket;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerPlayerPosLookPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerWindowItemsPacket;
 import me.ANONIMUS.proxy.utils.ChatUtil;
 import me.ANONIMUS.proxy.utils.ItemUtil;
@@ -37,7 +35,7 @@ public class ServerPlayHandler extends ServerHandler {
     @Override
     public void handlePacket(Packet packet) {
         player.getLastPacket().setSent(System.currentTimeMillis());
-        if(player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol()) {
+        if (player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol()) {
             if (packet instanceof ClientPlayerPlaceBlockPacket) {
                 final ClientPlayerPlaceBlockPacket block = (ClientPlayerPlaceBlockPacket) packet;
                 if (!player.isConnected()) {
@@ -65,19 +63,26 @@ public class ServerPlayHandler extends ServerHandler {
                         }
                         items.add(ItemUtil.option(options));
                     });
-                    if (!player.isConnected()) { ItemUtil.loadStartItems(player); }
+                    if (!player.isConnected()) {
+                        ItemUtil.loadStartItems(player);
+                    }
                     player.getSession().sendPacket(new ServerOpenWindowPacket(234, WindowType.CHEST, "SETTINGS", 9));
                     player.getSession().sendPacket(new ServerWindowItemsPacket(234, items));
                     return;
                 }
             }
         }
+        if (packet instanceof ClientPlayerPositionPacket) {
+            if (((ClientPlayerPositionPacket) packet).getY() < 60 && !player.isConnected())
+                player.getSession().sendPacket(new ServerPlayerPosLookPacket(0.5, 70, 0.5, 0.0f, 0.0f));
+        }
+
         if (packet instanceof ClientChatPacket) {
             final String message = ((ClientChatPacket) packet).getMessage();
             if (message.startsWith(player.getPrefixCMD())) {
                 BetterProxy.getInstance().getCommandManager().onCommand(message, player);
             } else if (player.isLogged() && message.startsWith("@")) {
-                ChatUtil.sendBroadcastMessage("&8(&f" + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8) &8[" + player.getAccount().getGroup().getPrefix() + "&8] " + player.getThemeType().getColor(1) + player.getAccount().getUsername() + " &8>> &7" + message.substring(1),false);
+                ChatUtil.sendBroadcastMessage("&8(&f" + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8) &8[" + player.getAccount().getGroup().getPrefix() + "&8] " + player.getThemeType().getColor(1) + player.getAccount().getUsername() + " &8>> &7" + message.substring(1), false);
             } else {
                 forwardPacket(packet);
             }
@@ -89,7 +94,7 @@ public class ServerPlayHandler extends ServerHandler {
     private void forwardPacket(final Packet packet) {
         if (player.isConnected()) {
             if (player.isMother()) {
-                if(player.getMotherDelay() == 0){
+                if (player.getMotherDelay() == 0) {
                     player.getBots().forEach(bot ->
                             bot.getSession().sendPacket(packet)
                     );

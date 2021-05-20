@@ -38,20 +38,20 @@ public class ServerSpawnMobPacket extends Packet {
         this.motZ = motZ;
         this.metadata = metadata;
     }
-    
+
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
         out.writeVarInt(this.entityId);
         out.writeByte(this.type);
-        out.writeInt((int)(this.position.getX() * 32.0));
-        out.writeInt((int)(this.position.getY() * 32.0));
-        out.writeInt((int)(this.position.getZ() * 32.0));
-        out.writeByte((byte)(this.yaw * 256.0f / 360.0f));
-        out.writeByte((byte)(this.pitch * 256.0f / 360.0f));
-        out.writeByte((byte)(this.headYaw * 256.0f / 360.0f));
-        out.writeShort((int)(this.motX * 8000.0));
-        out.writeShort((int)(this.motY * 8000.0));
-        out.writeShort((int)(this.motZ * 8000.0));
+        out.writeInt((int) (this.position.getX() * 32.0));
+        out.writeInt((int) (this.position.getY() * 32.0));
+        out.writeInt((int) (this.position.getZ() * 32.0));
+        out.writeByte((byte) (this.yaw * 256.0f / 360.0f));
+        out.writeByte((byte) (this.pitch * 256.0f / 360.0f));
+        out.writeByte((byte) (this.headYaw * 256.0f / 360.0f));
+        out.writeShort((int) (this.motX * 8000.0));
+        out.writeShort((int) (this.motY * 8000.0));
+        out.writeShort((int) (this.motZ * 8000.0));
         NetUtil.writeEntityMetadata(out, this.metadata);
     }
 

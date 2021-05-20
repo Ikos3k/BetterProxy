@@ -15,7 +15,7 @@ public class Session {
     private String username;
 
     public void sendPacket(Packet p) {
-        if(channel.isOpen()) {
+        if (channel.isOpen()) {
             channel.writeAndFlush(p);
         }
     }
@@ -41,7 +41,7 @@ public class Session {
     }
 
     public void setCompressionThreshold(final int threshold) {
-        if(getConnectionState() == ConnectionState.LOGIN) {
+        if (getConnectionState() == ConnectionState.LOGIN) {
             if (channel.pipeline().get("compression") == null) {
                 channel.pipeline().addBefore("packetCodec", "compression", new CompressionCodec(threshold));
             } else {

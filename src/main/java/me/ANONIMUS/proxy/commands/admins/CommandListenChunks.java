@@ -18,20 +18,20 @@ public class CommandListenChunks extends Command {
 
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {
-        if(args[1].equals("listen")) {
+        if (args[1].equals("listen")) {
             sender.setListenChunks(!sender.isListenChunks());
             ChatUtil.sendChatMessage("listening chunks: " + sender.getThemeType().getColor(1) + sender.isListenChunks(), sender, false);
         } else if (args[1].equals("save")) {
             sender.setListenChunks(false);
 
-            if(sender.getListenedChunks().size() == 0) {
+            if (sender.getListenedChunks().size() == 0) {
                 ChatUtil.sendChatMessage("&cThe list is empty", sender, false);
                 return;
             }
 
             int i = 0;
-            for(Packet p : sender.getListenedChunks()) {
-                FileUtils.writeByteArrayToFile(new File(BetterProxy.getInstance().getDirFolder() + "/world/" + (sender.getSession().getProtocolID() == 47 ? "47" : "other") + "/world_" + i), ((CustomPacket)p).getCustomData());
+            for (Packet p : sender.getListenedChunks()) {
+                FileUtils.writeByteArrayToFile(new File(BetterProxy.getInstance().getDirFolder() + "/world/" + (sender.getSession().getProtocolID() == 47 ? "47" : "other") + "/world_" + i), ((CustomPacket) p).getCustomData());
                 i++;
             }
             ChatUtil.sendChatMessage("Successfully saved " + sender.getThemeType().getColor(1) + sender.getListenedChunks().size() + " &7chunks", sender, false);

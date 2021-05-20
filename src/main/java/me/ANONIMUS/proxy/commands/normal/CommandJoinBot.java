@@ -17,20 +17,20 @@ import java.util.concurrent.TimeUnit;
 
 public class CommandJoinBot extends Command {
     public CommandJoinBot() {
-        super("joinbot","connectbot","Connecting bots to server","[host:port] [usernames] [amount] [delay] [resolver] [ping]", ConnectedType.NONE);
+        super("joinbot", "connectbot", "Connecting bots to server", "[host:port] [usernames] [amount] [delay] [resolver] [ping]", ConnectedType.NONE);
     }
 
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {
         String host = args[1];
         int port = 25565;
-        if(host.contains(":")) {
-            final String[] sp = host.split(":",2);
+        if (host.contains(":")) {
+            final String[] sp = host.split(":", 2);
             host = sp[0];
             port = Integer.parseInt(sp[1]);
         }
 
-        if(Boolean.parseBoolean(args[5])) {
+        if (Boolean.parseBoolean(args[5])) {
             final String[] resolved = SRVResolver.getServerAddress(host);
             host = resolved[0];
             port = Integer.parseInt(resolved[1]);
@@ -54,8 +54,8 @@ public class CommandJoinBot extends Command {
             for (int i = 0; i < amount; i++) {
                 final String username = (usernames + i);
 
-                if(ping){
-                   new ServerPinger(sender,false).connect(host, port, Proxy.NO_PROXY);
+                if (ping) {
+                    new ServerPinger(sender, false).connect(host, port, Proxy.NO_PROXY);
                 }
                 new BotConnection().connect(host, port, Proxy.NO_PROXY, new Bot(sender), username);
                 try {

@@ -71,5 +71,7 @@ public class CommandManager {
         }
     }
 
-    public List<Command> getCommands() { return commands; }
+    public List<Command> getCommands() {
+        return commands;
+    }
 }

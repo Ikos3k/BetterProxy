@@ -1,6 +1,6 @@
 package me.ANONIMUS.proxy.utils;
 
-import me.ANONIMUS.proxy.managers.PlayerManager;
+import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.protocol.ProtocolType;
 import me.ANONIMUS.proxy.protocol.data.*;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntry;
@@ -29,16 +29,15 @@ public class PacketUtil {
     }
 
     public static void sendBroadcastPacket(final Packet packet) {
-        PlayerManager.getPlayers().forEach(p -> p.getSession().sendPacket(packet));
+        BetterProxy.getInstance().getPlayerManager().getPlayers().forEach(p -> p.getSession().sendPacket(packet));
     }
 
     public static void clearTabList(final Player player) {
         PlayerListEntry[] playerListEntries = new PlayerListEntry[player.getTabList().size()];
-        for(int i = 0; i < player.getTabList().size(); i++) {
+        for (int i = 0; i < player.getTabList().size(); i++) {
             playerListEntries[i] = player.getTabList().get(i);
         }
         player.getSession().sendPacket(new ServerPlayerListEntryPacket(PlayerListEntryAction.REMOVE_PLAYER, playerListEntries));
-        player.getSession().sendPacket(new ServerPlayerListHeaderFooter(" ", " "));
         player.getTabList().clear();
     }
 
@@ -47,8 +46,10 @@ public class PacketUtil {
     }
 
     public static void sendTitle(final Player player, final String header, final String footer, final int fadeIn, final int stay, final int fadeOut) {
-        if (header != null) player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TITLE, ChatUtil.fixColor(header)));
-        if (footer != null) player.getSession().sendPacket(new ServerTitlePacket(TitleAction.SUBTITLE, ChatUtil.fixColor(footer)));
+        if (header != null)
+            player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TITLE, ChatUtil.fixColor(header)));
+        if (footer != null)
+            player.getSession().sendPacket(new ServerTitlePacket(TitleAction.SUBTITLE, ChatUtil.fixColor(footer)));
         player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TIMES, fadeIn, stay, fadeOut));
     }
 
@@ -64,7 +65,7 @@ public class PacketUtil {
         if (player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol()) {
             player.getSession().sendPacket(new ServerSpawnMobPacket(1, (byte) 63, new Position(0, 0, 0), 0, 0, 0, 0, 0, 0, new EntityMetadata(2, MetadataType.STRING, ChatUtil.fixColor(message)), new EntityMetadata(4, MetadataType.BOOLEAN, true)));
         } else {
-            player.getSession().sendPacket(new ServerBossBarPacket(bossBarUUID, 0, ChatUtil.fixColor(message), 1, 0, 0, (byte)0));
+            player.getSession().sendPacket(new ServerBossBarPacket(bossBarUUID, 0, ChatUtil.fixColor(message), 1, 0, 0, (byte) 0));
         }
     }
 

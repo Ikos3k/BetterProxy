@@ -47,6 +47,8 @@ public class PlayerListEntry {
         return this.ping;
     }
 
-    public String getDisplayName() { return this.displayName; }
+    public String getDisplayName() {
+        return this.displayName;
+    }
 }
 

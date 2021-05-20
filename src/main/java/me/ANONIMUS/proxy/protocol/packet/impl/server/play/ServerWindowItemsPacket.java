@@ -27,6 +27,7 @@ public class ServerWindowItemsPacket extends Packet {
             this.itemStacks[i] = itemstack;
         }
     }
+
     public ServerWindowItemsPacket(int windowIdIn, ItemStack p_i45186_2_) {
         this.windowId = windowIdIn;
 

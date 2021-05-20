@@ -13,17 +13,17 @@ public enum TitleAction {
             case SUBTITLE:
                 return 1;
             case TIMES:
-                if(protocol == 340) {
+                if (protocol == 340) {
                     return 3;
                 }
                 return 2;
             case HIDE:
-                if(protocol == 340) {
+                if (protocol == 340) {
                     return 4;
                 }
                 return 3;
             case RESET:
-                if(protocol == 340) {
+                if (protocol == 340) {
                     return 5;
                 }
                 return 4;
@@ -35,7 +35,7 @@ public enum TitleAction {
     }
 
     public static TitleAction getById(int id, int protocol) {
-        if(protocol == 340) {
+        if (protocol == 340) {
             switch (id) {
                 case 0:
                     return TITLE;

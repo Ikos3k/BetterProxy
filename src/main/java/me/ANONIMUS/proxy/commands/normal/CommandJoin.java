@@ -21,13 +21,13 @@ public class CommandJoin extends Command {
     public void onCommand(Player sender, String[] args) throws Exception {
         String host = args[1];
         int port = 25565;
-        if(host.contains(":")) {
-            final String[] sp = host.split(":",2);
+        if (host.contains(":")) {
+            final String[] sp = host.split(":", 2);
             host = sp[0];
             port = Integer.parseInt(sp[1]);
         }
 
-        if(Boolean.parseBoolean(args[3])) {
+        if (Boolean.parseBoolean(args[3])) {
             final String[] resolved = SRVResolver.getServerAddress(host);
             host = resolved[0];
             port = Integer.parseInt(resolved[1]);

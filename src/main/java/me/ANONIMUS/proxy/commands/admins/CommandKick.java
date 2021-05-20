@@ -1,7 +1,7 @@
 package me.ANONIMUS.proxy.commands.admins;
 
+import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.enums.ConnectedType;
-import me.ANONIMUS.proxy.managers.PlayerManager;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.utils.ChatUtil;
@@ -14,9 +14,11 @@ public class CommandKick extends Command {
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {
         String text = "";
-        for (int i = 2; i < args.length; ++i) { text = (i != 2 ? text + " " : "") + args[i]; }
+        for (int i = 2; i < args.length; ++i) {
+            text = (i != 2 ? text + " " : "") + args[i];
+        }
         Player player;
-        player = PlayerManager.getPlayer(args[1]);
+        player = BetterProxy.getInstance().getPlayerManager().getPlayer(args[1]);
         if (player == null) {
             ChatUtil.sendChatMessage("&cThe specified player is offline!", sender, true);
             return;
@@ -25,7 +27,7 @@ public class CommandKick extends Command {
             ChatUtil.sendChatMessage("&cYou can't kick yourself out!", sender, true);
             return;
         }
-        if(player.getAccount().getGroup().getPermissionLevel() >= sender.getAccount().getGroup().getPermissionLevel()){
+        if (player.getAccount().getGroup().getPermissionLevel() >= sender.getAccount().getGroup().getPermissionLevel()) {
             ChatUtil.sendChatMessage("&cYou cannot kick this player!", sender, true);
             return;
         }

@@ -1,8 +1,8 @@
 package me.ANONIMUS.proxy.handler.impl;
 
+import lombok.SneakyThrows;
 import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.handler.ServerHandler;
-import me.ANONIMUS.proxy.managers.PlayerManager;
 import me.ANONIMUS.proxy.managers.SkinManager;
 import me.ANONIMUS.proxy.objects.Account;
 import me.ANONIMUS.proxy.protocol.ProtocolType;
@@ -18,24 +18,26 @@ import me.ANONIMUS.proxy.utils.*;
 import me.kbrewster.mojangapi.MojangAPI;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class ServerLoginHandler extends ServerHandler {
-    public ServerLoginHandler(Player player) { super(player); }
+    public ServerLoginHandler(Player player) {
+        super(player);
+    }
 
     @Override
     public void disconnected() {
-        if(player != null && player.getAccount() != null) {
+        if (player != null && player.getAccount() != null) {
             System.out.println("[" + player.getAccount().getUsername() + "] Disconnected during login sequence!");
         }
     }
 
+    @SneakyThrows
     @Override
     public void handlePacket(Packet packet) {
         if (packet instanceof ClientLoginStartPacket) {
             final String playerName = ((ClientLoginStartPacket) packet).getUsername();
-            if(PlayerManager.getPlayers().size() > 1) {
-                for (Player p : PlayerManager.getPlayers()) {
+            if (BetterProxy.getInstance().getPlayerManager().getPlayers().size() > 1) {
+                for (Player p : BetterProxy.getInstance().getPlayerManager().getPlayers()) {
                     if (p.getAccount() != null && p.getAccount().getUsername().equals(playerName)) {
                         player.getSession().sendPacket(new ServerLoginDisconnectPacket(ChatUtil.fixColor("&4The player with this nickname is already on the proxy!")));
                         return;
@@ -44,23 +46,25 @@ public class ServerLoginHandler extends ServerHandler {
             }
             for (Account account : BetterProxy.getInstance().getAccounts()) {
                 if (account.getUsername().equals(playerName)) {
+                    player.setUUID(MojangAPI.getUUID(playerName));
                     player.getSession().sendPacket(new ServerLoginSetCompressionPacket(256));
                     player.getSession().setCompressionThreshold(256);
-                    player.getSession().sendPacket(new ServerLoginSuccessPacket(UUID.randomUUID(), playerName));
+                    player.getSession().sendPacket(new ServerLoginSuccessPacket(player.getUUID(), playerName));
                     player.getSession().setConnectionState(ConnectionState.PLAY);
                     player.getSession().setPacketHandler(new ServerPlayHandler(player));
 
-                    try {
-                        new SkinManager(new GameProfile(MojangAPI.getUUID(playerName), playerName), player);
-                    } catch (Exception ignored) { }
-
                     player.setAccount(account);
+
+                    GameProfile gameProfile = new GameProfile(player.getUUID(), playerName);
+                    SkinManager.setupSkin(gameProfile, player);
+                    player.addSkin();
+
                     WorldUtil.emptyWorld(player);
                     System.out.println("[" + account.getUsername() + "] Connected!");
 
                     ChatUtil.clearChat(100, player);
                     ScoreboardUtil.sendScoreboard(player);
-                    if(CalendarUtil.isHoliday()) {
+                    if (CalendarUtil.isHoliday()) {
                         PacketUtil.sendTitle(player, ";D", player.getThemeType().getColor(1) + Objects.requireNonNull(CalendarUtil.getHoliday()).getWishes() + "!");
                     }
                     ChatUtil.sendBroadcastMessage(player.getThemeType().getColor(1) + ">> &8Player " + player.getThemeType().getColor(1) + playerName + " &8has connected to the " + player.getThemeType().getColor(1) + "BetterProxy &8(" + player.getThemeType().getColor(2) + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8)", false);

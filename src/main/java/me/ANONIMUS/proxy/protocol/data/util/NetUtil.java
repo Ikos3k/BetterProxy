@@ -79,7 +79,7 @@ public class NetUtil {
                     break;
                 }
                 case INT: {
-                    out.writeInt((int)meta.getValue());
+                    out.writeInt((int) meta.getValue());
                     break;
                 }
                 case FLOAT: {
@@ -99,14 +99,14 @@ public class NetUtil {
                     break;
                 }
                 case POSITION: {
-                    final Position pos = (Position)meta.getValue();
-                    out.writeInt((int)pos.getX());
-                    out.writeInt((int)pos.getY());
-                    out.writeInt((int)pos.getZ());
+                    final Position pos = (Position) meta.getValue();
+                    out.writeInt((int) pos.getX());
+                    out.writeInt((int) pos.getY());
+                    out.writeInt((int) pos.getZ());
                     break;
                 }
                 case ROTATION: {
-                    final Rotation rot = (Rotation)meta.getValue();
+                    final Rotation rot = (Rotation) meta.getValue();
                     out.writeFloat(rot.getX());
                     out.writeFloat(rot.getX());
                     out.writeFloat(rot.getZ());

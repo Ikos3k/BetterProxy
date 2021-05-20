@@ -1,22 +1,32 @@
 package me.ANONIMUS.proxy.managers;
 
+import lombok.Getter;
+import lombok.SneakyThrows;
+import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.objects.Config;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+@Getter
 public class ConfigManager {
     private final Config config;
 
-    public ConfigManager() {
+    public ConfigManager(File file) {
         this.config = new Config();
+        read(file);
+        readIconImage();
     }
+
+    private BufferedImage bufferedImage = null;
 
     public void read(File file) {
         JSONParser parser = new JSONParser();
@@ -40,7 +50,16 @@ public class ConfigManager {
         }
     }
 
-    public Config getConfig() {
-        return config;
+    @SneakyThrows
+    public void readIconImage() {
+        File iconFile = new File(BetterProxy.getInstance().getDirFolder(), config.icon);
+        if (!iconFile.exists()) return;
+
+        bufferedImage = ImageIO.read(iconFile);
+
+        if (bufferedImage.getWidth() != 64 || bufferedImage.getHeight() != 64) {
+            throw new IllegalStateException("> Icon must be 64 pixels wide and 64 pixels high");
+        }
     }
+
 }
