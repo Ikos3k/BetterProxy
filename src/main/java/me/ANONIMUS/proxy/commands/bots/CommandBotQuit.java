@@ -13,8 +13,8 @@ public class CommandBotQuit extends Command {
 
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {
-        if (args[1].equals("all")){
-            if(sender.getBots().isEmpty()){
+        if (args[1].equals("all")) {
+            if (sender.getBots().isEmpty()) {
                 ChatUtil.sendChatMessage("&cYou don't have any connected bots", sender, true);
                 return;
             }
@@ -23,8 +23,8 @@ public class CommandBotQuit extends Command {
             sender.getBots().clear();
         } else {
             Bot b = null;
-            for(Bot bot : sender.getBots()) {
-                if(bot.getSession().getUsername().equals(args[1])) {
+            for (Bot bot : sender.getBots()) {
+                if (bot.getSession().getUsername().equals(args[1])) {
                     b = bot;
                 }
             }

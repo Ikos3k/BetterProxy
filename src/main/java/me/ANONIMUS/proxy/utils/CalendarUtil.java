@@ -9,8 +9,8 @@ public class CalendarUtil {
     public static HolidayType getHoliday() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        for(HolidayType holidayType : HolidayType.values()) {
-            if(calendar.get(Calendar.MONTH) + 1 == holidayType.getMonth() && calendar.get(Calendar.DATE) == holidayType.getDay()) {
+        for (HolidayType holidayType : HolidayType.values()) {
+            if (calendar.get(Calendar.MONTH) + 1 == holidayType.getMonth() && calendar.get(Calendar.DATE) == holidayType.getDay()) {
                 return holidayType;
             }
         }

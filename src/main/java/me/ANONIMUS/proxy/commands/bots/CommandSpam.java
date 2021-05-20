@@ -14,7 +14,7 @@ public class CommandSpam extends Command {
 
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {
-        if(sender.getBots().isEmpty()) {
+        if (sender.getBots().isEmpty()) {
             ChatUtil.sendChatMessage("&cYou don't have any connected bots", sender, true);
             return;
         }

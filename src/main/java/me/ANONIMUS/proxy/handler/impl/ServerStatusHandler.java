@@ -17,10 +17,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.UUID;
@@ -31,26 +28,14 @@ public class ServerStatusHandler extends ServerHandler {
     }
 
     @Override
-    public void disconnected() { }
+    public void disconnected() {
+    }
 
     @Override
     public void handlePacket(Packet packet) {
         if (packet instanceof ClientStatusRequestPacket) {
             System.out.println("> Ping packet received from: " + player.getSession().getChannel().localAddress());
             try {
-                final File statusFile = new File(BetterProxy.getInstance().getDirFolder() + "/" + BetterProxy.getInstance().getConfigManager().getConfig().icon);
-                BufferedImage bufferedImage = null;
-                if (statusFile.exists()) {
-                    try {
-                        bufferedImage = ImageIO.read(new File(BetterProxy.getInstance().getDirFolder() + "/" + BetterProxy.getInstance().getConfigManager().getConfig().icon));
-
-                        if(bufferedImage.getWidth() != 64 || bufferedImage.getHeight() != 64) {
-                            throw new IllegalStateException("> Icon must be 64 pixels wide and 64 pixels high");
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
                 final VersionInfo versionInfo = new VersionInfo(ChatUtil.fixColor(BetterProxy.getInstance().getConfigManager().getConfig().versionInfo), BetterProxy.getInstance().getConfigManager().getConfig().protocol);
                 int i = 0;
                 GameProfile[] gp = new GameProfile[BetterProxy.getInstance().getConfigManager().getConfig().playerList.size()];
@@ -61,11 +46,10 @@ public class ServerStatusHandler extends ServerHandler {
                 final PlayerInfo playerInfo = new PlayerInfo(0, 0, gp);
                 final BaseComponent[] desc = new ComponentBuilder(ChatUtil.fixColor(BetterProxy.getInstance().getConfigManager().getConfig().line1 + "&r\n" + BetterProxy.getInstance().getConfigManager().getConfig().line2)).create();
                 final ByteArrayOutputStream os = new ByteArrayOutputStream();
-                assert bufferedImage != null;
-                ImageIO.write(bufferedImage, "png", Base64.getEncoder().wrap(os));
-
-                player.getSession().sendPacket(new ServerStatusResponsePacket(new ServerStatusInfo(versionInfo, playerInfo, desc, statusFile.exists() ? "data:image/png;base64," + os.toString(StandardCharsets.ISO_8859_1.name()) : null)));
-            } catch (Exception ignored) {}
+                ImageIO.write(BetterProxy.getInstance().getConfigManager().getBufferedImage(), "png", Base64.getEncoder().wrap(os));
+                player.getSession().sendPacket(new ServerStatusResponsePacket(new ServerStatusInfo(versionInfo, playerInfo, desc, "data:image/png;base64," + os.toString(StandardCharsets.ISO_8859_1.name()))));
+            } catch (Exception ignored) {
+            }
             player.getSession().sendPacket(new ServerStatusPongPacket(0));
             player.getSession().getChannel().close();
         } else if (packet instanceof ClientStatusPingPacket) {

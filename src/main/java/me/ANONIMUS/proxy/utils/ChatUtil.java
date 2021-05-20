@@ -1,6 +1,6 @@
 package me.ANONIMUS.proxy.utils;
 
-import me.ANONIMUS.proxy.managers.PlayerManager;
+import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerChatPacket;
 import net.md_5.bungee.api.ChatColor;
@@ -12,10 +12,10 @@ import java.util.stream.IntStream;
 public class ChatUtil {
     public static String fixColor(final String text) {
         return ChatColor.translateAlternateColorCodes('&', text
-            .replace(">>", "»")
-            .replace("<<", "«")
-            .replace("(o)", "●")
-            .replace("(*)", "•"));
+                .replace(">>", "»")
+                .replace("<<", "«")
+                .replace("(o)", "●")
+                .replace("(*)", "•"));
     }
 
     public static void sendHoverMessage(final Player player, final String s1, final String s2) {
@@ -29,7 +29,7 @@ public class ChatUtil {
     }
 
     public static void sendBroadcastMessage(final String message, final boolean prefix) {
-        PlayerManager.getPlayers().forEach(p -> sendChatMessage(message, p, prefix));
+        BetterProxy.getInstance().getPlayerManager().getPlayers().forEach(p -> sendChatMessage(message, p, prefix));
     }
 
     public static void clearChat(final int x, final Player player) {

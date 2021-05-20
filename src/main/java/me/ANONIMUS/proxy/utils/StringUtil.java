@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 public class StringUtil {
     public static int getStringWidth(final String s) {
         int width = 0;
-        for(char c : s.toCharArray()) {
+        for (char c : s.toCharArray()) {
             width += getCharWidth(c);
         }
         return width;

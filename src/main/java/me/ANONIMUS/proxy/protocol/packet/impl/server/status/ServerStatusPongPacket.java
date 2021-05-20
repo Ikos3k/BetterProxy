@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import me.ANONIMUS.proxy.protocol.Protocol;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
-import me.ANONIMUS.proxy.utils.PacketUtil;
 
 import java.util.Collections;
 import java.util.List;

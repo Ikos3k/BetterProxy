@@ -18,11 +18,17 @@ public enum GroupType {
         this.delayCMD = delayCMD;
     }
 
-    public String getPrefix() { return prefix; }
+    public String getPrefix() {
+        return prefix;
+    }
 
-    public int getPermissionLevel() { return permission; }
+    public int getPermissionLevel() {
+        return permission;
+    }
 
-    public int getDelayCMD() { return delayCMD; }
+    public int getDelayCMD() {
+        return delayCMD;
+    }
 
     public static GroupType getByPermission(int permission) {
         return Arrays.stream(GroupType.values()).filter(gp -> gp.permission == permission).findFirst().orElse(GroupType.USER);

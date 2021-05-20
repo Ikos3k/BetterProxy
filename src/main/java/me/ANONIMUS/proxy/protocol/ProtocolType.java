@@ -18,9 +18,13 @@ public enum ProtocolType {
         this.prefix = prefix;
     }
 
-    public String getPrefix() { return prefix; }
+    public String getPrefix() {
+        return prefix;
+    }
 
-    public int getProtocol() { return protocol; }
+    public int getProtocol() {
+        return protocol;
+    }
 
     public static ProtocolType getByProtocolID(int protocol) {
         return Arrays.stream(values()).filter(p -> p.protocol == protocol).findFirst().orElse(PROTOCOL_NONE);

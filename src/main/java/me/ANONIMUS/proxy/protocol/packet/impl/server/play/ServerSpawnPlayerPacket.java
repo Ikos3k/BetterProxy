@@ -26,8 +26,7 @@ public class ServerSpawnPlayerPacket extends Packet {
     private int currentItem;
     private EntityMetadata[] metadata;
 
-    public ServerSpawnPlayerPacket(int entityID, UUID uuid, double x, double y, double z, float yaw, float pitch, int currentItem, EntityMetadata[] metadata)
-    {
+    public ServerSpawnPlayerPacket(int entityID, UUID uuid, double x, double y, double z, float yaw, float pitch, int currentItem, EntityMetadata[] metadata) {
         this.entityID = entityID;
         this.uuid = uuid;
         this.x = MathHelper.floor_double(x * 32.0D);
@@ -43,7 +42,7 @@ public class ServerSpawnPlayerPacket extends Packet {
     public void write(PacketBuffer out, int protocol) throws Exception {
         out.writeVarInt(this.entityID);
         out.writeUuid(this.uuid);
-        if(protocol == 47) {
+        if (protocol == 47) {
             out.writeInt((int) (this.x));
             out.writeInt((int) (this.y));
             out.writeInt((int) (this.z));
@@ -62,7 +61,7 @@ public class ServerSpawnPlayerPacket extends Packet {
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.entityID = in.readVarInt();
         this.uuid = in.readUuid();
-        if(protocol == 47) {
+        if (protocol == 47) {
             this.x = in.readInt();
             this.y = in.readInt();
             this.z = in.readInt();

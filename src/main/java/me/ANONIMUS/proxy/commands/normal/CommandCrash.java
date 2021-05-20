@@ -25,7 +25,7 @@ public class CommandCrash extends Command {
             ChatUtil.sendChatMessage("&4Unknown method!", sender, true);
             return;
         }
-        if(sender.getBots().isEmpty() && !sender.isConnected()) {
+        if (sender.getBots().isEmpty() && !sender.isConnected()) {
             ChatUtil.sendChatMessage("&4You must be connected to the server!", sender, true);
             return;
         }

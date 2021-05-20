@@ -30,7 +30,7 @@ public class CommandOptions extends Command {
         }
         if (args[1].equals("set")) {
             Option option = sender.getOptionsManager().getOptionByName(args[2]);
-            if(option == null) {
+            if (option == null) {
                 ChatUtil.sendChatMessage("&cThe specified option was not found!", sender, true);
                 return;
             }

@@ -7,7 +7,9 @@ import me.ANONIMUS.proxy.protocol.packet.impl.client.play.ClientTabCompletePacke
 import me.ANONIMUS.proxy.utils.ChatUtil;
 
 public class CommandPlugins extends Command {
-    public CommandPlugins() { super("plugins", "pl", null, "[tabcomplete]", ConnectedType.CONNECTED); }
+    public CommandPlugins() {
+        super("plugins", "pl", null, "[tabcomplete]", ConnectedType.CONNECTED);
+    }
 
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {

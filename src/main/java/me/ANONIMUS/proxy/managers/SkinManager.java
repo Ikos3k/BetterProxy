@@ -3,6 +3,7 @@ package me.ANONIMUS.proxy.managers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import lombok.SneakyThrows;
 import me.ANONIMUS.proxy.protocol.data.Gamemode;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntry;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntryAction;
@@ -17,7 +18,9 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class SkinManager {
-    public SkinManager(GameProfile profile, Player player) throws IOException {
+    public static void setupSkin(GameProfile profile, Player player) throws IOException {
+        if (player.getValue() != null || player.getSignature() != null) return;
+
         URL url = new URL(String.format("https://sessionserver.mojang.com/session/minecraft/profile/%s?unsigned=false", profile.getId()));
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -33,10 +36,14 @@ public class SkinManager {
         JsonObject object = new JsonParser().parse(json).getAsJsonObject();
         JsonArray properties = object.getAsJsonArray("properties");
         JsonObject jsonObject = properties.get(0).getAsJsonObject();
-        String value = jsonObject.get("value").getAsString();
-        String signature = jsonObject.get("signature").getAsString();
+        player.setValue(jsonObject.get("value").getAsString());
+        player.setSignature(jsonObject.get("signature").getAsString());
+    }
 
-        profile.getProperties().add(new GameProfile.Property("textures", value, signature));
-        player.getSession().sendPacket(new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, new PlayerListEntry[] {new PlayerListEntry(profile, Gamemode.ADVENTURE, 0, profile.getName())}));
+    @SneakyThrows
+    public SkinManager(GameProfile profile, Player player) {
+        PlayerListEntry playerListEntry = new PlayerListEntry(profile, Gamemode.ADVENTURE, 0, profile.getName());
+        profile.getProperties().add(new GameProfile.Property("textures", player.getValue(), player.getSignature()));
+        player.getSession().sendPacket(new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, new PlayerListEntry[]{playerListEntry}));
     }
 }

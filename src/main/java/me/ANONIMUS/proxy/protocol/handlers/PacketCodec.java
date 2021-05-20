@@ -25,7 +25,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
     private PacketDirection packetDirection;
     private int protocol;
 
-    public PacketCodec(ConnectionState connectionState,PacketDirection packetDirection) {
+    public PacketCodec(ConnectionState connectionState, PacketDirection packetDirection) {
         this.connectionState = connectionState;
         this.packetDirection = packetDirection;
     }
@@ -46,7 +46,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
 
             final int packetID = packetBuffer.readVarInt();
 
-            Packet packet = BetterProxy.getInstance().getPacketRegistry().createPacket(connectionState,packetDirection,packetID,protocol);
+            Packet packet = BetterProxy.getInstance().getPacketRegistry().createPacket(connectionState, packetDirection, packetID, protocol);
 
             if (BetterProxy.getInstance().getConfigManager().getConfig().debug && packetBuffer.readableBytes() > 1 && !(packet instanceof ServerPlayerListEntryPacket)) {
                 final ByteBuf bufDUPLICATE = byteBuf.duplicate();
@@ -61,7 +61,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
             packet.read(packetBuffer, protocol);
 
             if (packetBuffer.isReadable()) {
-                throw new DecoderException(String.format("Packet (%s) was larger than i expected found %s bytes extra",packet.getClass().getSimpleName(),packetBuffer.readableBytes()));
+                throw new DecoderException(String.format("Packet (%s) was larger than i expected found %s bytes extra", packet.getClass().getSimpleName(), packetBuffer.readableBytes()));
             }
             list.add(packet);
             byteBuf.clear();
@@ -71,10 +71,12 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
     }
 
     private int getPacketIDByProtocol(Packet packet, int protocol) {
-        if(packet instanceof CustomPacket) { return ((CustomPacket)packet).getCustomPacketID(); }
-        for(Protocol p : packet.getProtocolList()) {
-            for(int protocol2 : p.getProtocols()) {
-                if(protocol2 == protocol) {
+        if (packet instanceof CustomPacket) {
+            return ((CustomPacket) packet).getCustomPacketID();
+        }
+        for (Protocol p : packet.getProtocolList()) {
+            for (int protocol2 : p.getProtocols()) {
+                if (protocol2 == protocol) {
                     return p.getId();
                 }
             }

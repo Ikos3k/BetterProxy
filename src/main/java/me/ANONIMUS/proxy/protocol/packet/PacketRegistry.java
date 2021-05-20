@@ -8,9 +8,7 @@ import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class PacketRegistry {
     public void init() {
@@ -24,8 +22,8 @@ public class PacketRegistry {
     }
 
     public Packet createPacket(ConnectionState connectionState, PacketDirection direction, int id, int protocol) {
-        Packet packetIn = getPacket(connectionState,direction,id, protocol);
-        if(packetIn == null) return new CustomPacket(id);
+        Packet packetIn = getPacket(connectionState, direction, id, protocol);
+        if (packetIn == null) return new CustomPacket(id);
         Class<? extends Packet> packet = packetIn.getClass();
         try {
             Constructor<? extends Packet> constructor = packet.getDeclaredConstructor();
@@ -38,21 +36,21 @@ public class PacketRegistry {
             }
 
             return constructor.newInstance();
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new IllegalStateException("Failed to instantiate packet \"" + packet.getName() + "\".", e);
         }
     }
 
     private Packet getPacket(ConnectionState connectionState, PacketDirection direction, int id, int protocol) {
-        if(connectionState == ConnectionState.HANDSHAKE) {
+        if (connectionState == ConnectionState.HANDSHAKE) {
             return new HandshakePacket();
         }
 
-        for(Packet packet : connectionState.getPacketsByDirection(direction)) {
-            for(Protocol protocol2 : packet.getProtocolList()) {
-                if(protocol2.getId() == id) {
-                    for(int p : protocol2.getProtocols()) {
-                        if(p == protocol) {
+        for (Packet packet : connectionState.getPacketsByDirection(direction)) {
+            for (Protocol protocol2 : packet.getProtocolList()) {
+                if (protocol2.getId() == id) {
+                    for (int p : protocol2.getProtocols()) {
+                        if (p == protocol) {
                             return packet;
                         }
                     }

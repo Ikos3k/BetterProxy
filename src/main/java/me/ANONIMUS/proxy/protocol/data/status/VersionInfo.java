@@ -3,8 +3,7 @@ package me.ANONIMUS.proxy.protocol.data.status;
 import lombok.Data;
 
 @Data
-public class VersionInfo
-{
+public class VersionInfo {
     private String versionName;
     private int protocolVersion;
 

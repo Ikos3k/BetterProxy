@@ -54,7 +54,11 @@ public class Option {
         return description;
     }
 
-    public void onEnable() { ChatUtil.sendChatMessage("&6>> &8Successfully &aenabled &8option &6" + name, player, false); }
+    public void onEnable() {
+        ChatUtil.sendChatMessage("&6>> &8Successfully &aenabled &8option &6" + name, player, false);
+    }
 
-    public void onDisable() { ChatUtil.sendChatMessage("&6>> &8Successfully &cdisabled &8option &6" + name, player, false); }
+    public void onDisable() {
+        ChatUtil.sendChatMessage("&6>> &8Successfully &cdisabled &8option &6" + name, player, false);
+    }
 }

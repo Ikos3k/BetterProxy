@@ -14,7 +14,6 @@ import me.ANONIMUS.proxy.protocol.data.status.VersionInfo;
 import me.ANONIMUS.proxy.protocol.objects.GameProfile;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
-import me.ANONIMUS.proxy.utils.PacketUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
