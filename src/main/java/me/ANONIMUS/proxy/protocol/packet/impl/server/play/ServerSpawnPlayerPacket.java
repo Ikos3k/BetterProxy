@@ -26,7 +26,7 @@ public class ServerSpawnPlayerPacket extends Packet {
     private int currentItem;
     private EntityMetadata[] metadata;
 
-    public ServerSpawnPlayerPacket(int entityID, UUID uuid, double x, double y, double z, float yaw, float pitch, int currentItem, EntityMetadata[] metadata) {
+    public ServerSpawnPlayerPacket(int entityID, UUID uuid, double x, double y, double z, float yaw, float pitch, int currentItem, EntityMetadata... metadata) {
         this.entityID = entityID;
         this.uuid = uuid;
         this.x = MathHelper.floor_double(x * 32.0D);

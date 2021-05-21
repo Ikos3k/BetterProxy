@@ -12,6 +12,7 @@ public class OptionsManager {
         options.add(new Option(true, "lastpacket", "last packet :D"));
         options.add(new Option(true, "titlelag", "title lag"));
         options.add(new Option(true, "scoreboard"));
+        options.add(new Option(false, "server tablist", "show server tablist"));
     }
 
     public Option getOptionByName(String name) {

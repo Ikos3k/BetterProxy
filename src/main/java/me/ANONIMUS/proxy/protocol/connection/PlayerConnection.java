@@ -64,6 +64,7 @@ public class PlayerConnection {
                         pipeline.addLast("handler", new SimpleChannelInboundHandler<Packet>() {
                             @Override
                             public void channelActive(ChannelHandlerContext ctx) throws Exception {
+                                PacketUtil.clearTabList(owner);
                                 ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Connecting to server &7[" + owner.getThemeType().getColor(1) + host + "&7]", owner, false);
                                 if (proxy != Proxy.NO_PROXY) {
                                     ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Used proxy: " + owner.getThemeType().getColor(2) + proxy.address().toString(), owner, false);
@@ -79,7 +80,6 @@ public class PlayerConnection {
                                 if (owner.isConnected()) {
                                     ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &cDisconnected!", owner, false);
                                     owner.setConnected(false);
-                                    owner.addSkin();
                                     WorldUtil.lobby(owner, true);
                                 }
                                 owner.setRemoteSession(null);
@@ -102,11 +102,9 @@ public class PlayerConnection {
                                     owner.setConnected(true);
                                     ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> Connected successfully&8!", owner, false);
                                 } else if (packet instanceof ServerDisconnectPacket) {
-                                    ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Connection to the server was lost: " + owner.getThemeType().getColor(1) + owner.getServerData().getHost() + " &8cause: " + owner.getThemeType().getColor(1) + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerDisconnectPacket) packet).getReason())), owner, false);
-                                    disconnect();
+                                    disconnect(BaseComponent.toLegacyText(((ServerDisconnectPacket) packet).getReason()));
                                 } else if (packet instanceof ServerLoginDisconnectPacket) {
-                                    ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Connection to the server was lost: " + owner.getThemeType().getColor(1) + owner.getServerData().getHost() + " &8cause: " + owner.getThemeType().getColor(1) + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerLoginDisconnectPacket) packet).getReason())), owner, false);
-                                    disconnect();
+                                    disconnect(BaseComponent.toLegacyText(((ServerLoginDisconnectPacket) packet).getReason()));
                                 } else if (packet instanceof ServerKeepAlivePacket) {
                                     owner.getRemoteSession().sendPacket(new ClientKeepAlivePacket(((ServerKeepAlivePacket) packet).getKeepaliveId()));
                                 } else if (packet instanceof ServerCustomPayloadPacket) {
@@ -115,7 +113,8 @@ public class PlayerConnection {
                                     }
                                 } else if (owner.isConnected() && owner.getRemoteSession().getConnectionState() == ConnectionState.PLAY) {
                                     if (owner.isListenChunks() && packet instanceof CustomPacket) {
-                                        if ((((owner).getSession().getProtocolID() == 47 && ((CustomPacket) packet).getCustomPacketID() == 0x26) || ((owner).getSession().getProtocolID() != 47 && ((CustomPacket) packet).getCustomPacketID() == 0x20))) {
+                                        if ((((owner).getSession().getProtocolID() == 47 && ((CustomPacket) packet).getCustomPacketID() == 0x26) ||
+                                            ((owner).getSession().getProtocolID() != 47 && ((CustomPacket) packet).getCustomPacketID() == 0x20))) {
                                             owner.getListenedChunks().add(packet);
                                             PacketUtil.sendTitle(owner, "[CHUNKS]", "listening... (" + owner.getListenedChunks().size() + ")");
                                         }
@@ -127,7 +126,7 @@ public class PlayerConnection {
                                             }
                                             String out = owner.getPlayers().toString();
                                             if (out.equals("[]")) {
-                                                ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &cNo players found!", owner, false);
+                                                ChatUtil.sendChatMessage("&cNo players found!", owner, true);
                                                 owner.setPlayersState(false);
                                                 return;
                                             }
@@ -148,7 +147,7 @@ public class PlayerConnection {
                                             }
                                             String out = matches.toString();
                                             if (out.equals("[]")) {
-                                                ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &cNo plugins found!", owner, false);
+                                                ChatUtil.sendChatMessage("&cNo players found!", owner, true);
                                                 owner.setPluginsState(false);
                                                 return;
                                             }
@@ -158,15 +157,18 @@ public class PlayerConnection {
                                         }
                                     }
                                     if (packet instanceof ServerPlayerListEntryPacket) {
-                                        if (((ServerPlayerListEntryPacket) packet).getAction().equals(PlayerListEntryAction.ADD_PLAYER)) {
-                                            for (PlayerListEntry playerListEntry : ((ServerPlayerListEntryPacket) packet).getEntries())
+                                        for (PlayerListEntry playerListEntry : ((ServerPlayerListEntryPacket) packet).getEntries()) {
+                                            if (((ServerPlayerListEntryPacket) packet).getAction() == PlayerListEntryAction.ADD_PLAYER) {
                                                 owner.getTabList().add(playerListEntry);
-                                        }
-                                        if (((ServerPlayerListEntryPacket) packet).getAction() == PlayerListEntryAction.REMOVE_PLAYER) {
-                                            for (PlayerListEntry playerListEntry : ((ServerPlayerListEntryPacket) packet).getEntries())
+                                            } else if (((ServerPlayerListEntryPacket) packet).getAction() == PlayerListEntryAction.REMOVE_PLAYER) {
                                                 owner.getTabList().remove(playerListEntry);
+                                            }
                                         }
                                     }
+                                    if(!owner.getOptionsManager().getOptionByName("server tablist").isEnabled() && packet instanceof ServerPlayerListHeaderFooter) {
+                                        return;
+                                    }
+
                                     if (packet instanceof ServerTimeUpdatePacket) {
                                         if (owner.getTimeType() != TimeType.DEFAULT) {
                                             owner.getSession().sendPacket(new ServerTimeUpdatePacket(owner.getTimeType().getAge(), owner.getTimeType().getTime()));
@@ -185,13 +187,14 @@ public class PlayerConnection {
         owner.getRemoteSession().setUsername(username);
     }
 
-    private void disconnect() {
+    private void disconnect(String cause) {
+        ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Connection to the server was lost: " + owner.getThemeType().getColor(1) + owner.getServerData().getHost() + " &8cause: " + owner.getThemeType().getColor(1) + ChatColor.stripColor(cause), owner, false);
+
         owner.getRemoteSession().getChannel().close();
         owner.setConnected(false);
         owner.setRemoteSession(null);
         owner.setServerData(null);
         group.shutdownGracefully();
-        owner.addSkin();
         WorldUtil.lobby(owner, true);
     }
 }

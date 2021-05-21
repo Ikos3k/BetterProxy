@@ -10,7 +10,6 @@ import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.play.*;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerOpenWindowPacket;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerPlayerPosLookPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerWindowItemsPacket;
 import me.ANONIMUS.proxy.utils.ChatUtil;
 import me.ANONIMUS.proxy.utils.ItemUtil;
@@ -74,7 +73,7 @@ public class ServerPlayHandler extends ServerHandler {
         }
         if (packet instanceof ClientPlayerPositionPacket) {
             if (((ClientPlayerPositionPacket) packet).getY() < 60 && !player.isConnected())
-                player.getSession().sendPacket(new ServerPlayerPosLookPacket(0.5, 70, 0.5, 0.0f, 0.0f));
+                PacketUtil.lobbyPosTeleport(player);
         }
 
         if (packet instanceof ClientChatPacket) {

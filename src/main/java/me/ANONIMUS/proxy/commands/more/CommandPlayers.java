@@ -5,12 +5,15 @@ import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.play.ClientTabCompletePacket;
 import me.ANONIMUS.proxy.utils.ChatUtil;
+import net.md_5.bungee.api.ChatColor;
 
 import javax.json.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class CommandPlayers extends Command {
     public CommandPlayers() {
@@ -22,13 +25,13 @@ public class CommandPlayers extends Command {
         if (args[1].equalsIgnoreCase("tablist")) {
             sender.getPlayers().clear();
             sender.setPlayersState(false);
+            sender.setPlayers(sender.getTabList().stream().map(p -> ChatColor.stripColor(p.getProfile().getName())).filter(n -> !n.isEmpty() && Pattern.compile("^[a-zA-Z0-9_]{3,16}$").matcher(n).matches()).collect(Collectors.toList()));
             String out = sender.getPlayers().toString();
             if (out.equals("[]")) {
                 ChatUtil.sendChatMessage("&cNo players found!", sender, true);
                 return;
             }
-            out = out.replace("[", "");
-            out = out.replace("]", "");
+            out = out.replace("[", "").replace("]", "");
             ChatUtil.sendChatMessage("&f" + out + " &7[&f" + sender.getPlayers().size() + "&7]", sender, true);
         } else if (args[1].equalsIgnoreCase("tabcomplete")) {
             sender.getPlayers().clear();
@@ -59,8 +62,7 @@ public class CommandPlayers extends Command {
                 ChatUtil.sendChatMessage("&cNo players found!", sender, true);
                 return;
             }
-            out = out.replace("[", "");
-            out = out.replace("]", "");
+            out = out.replace("[", "").replace("]", "");
             ChatUtil.sendChatMessage("&f" + out + " &7[&f" + sender.getPlayers().size() + "&7]", sender, true);
         } else if (args[1].equalsIgnoreCase("clear")) {
             if (sender.getPlayers().isEmpty()) {

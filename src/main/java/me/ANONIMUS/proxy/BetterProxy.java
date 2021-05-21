@@ -27,6 +27,7 @@ public class BetterProxy {
     private final List<Account> accounts;
     private final ProxyServer server;
     private final File dirFolder;
+    private final String icon;
 
     public BetterProxy() {
         instance = this;
@@ -35,6 +36,7 @@ public class BetterProxy {
         packetRegistry = new PacketRegistry();
         exploitManager = new ExploitManager();
         configManager = new ConfigManager(new File(dirFolder + "/config.json"));
+        icon = FileUtil.loadIconFile(configManager.getConfig().icon);
         playerManager = new PlayerManager();
         accounts = new ArrayList<>();
         server = new ProxyServer();
@@ -66,7 +68,7 @@ public class BetterProxy {
         timer.scheduleAtFixedRate(new ScoreboardThread(), 1000L, 1000L);
         timer.scheduleAtFixedRate(new MessageThread(), 80000L, 80000L);
         timer.scheduleAtFixedRate(new MemoryFreeThread(), 60000L, 60000L);
-        timer.scheduleAtFixedRate(new TabThread(), 1L, 25L);
+        timer.scheduleAtFixedRate(new TabThread(), 1000L, 1000L);
     }
 
     public static BetterProxy getInstance() {

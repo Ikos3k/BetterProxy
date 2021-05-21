@@ -16,10 +16,6 @@ import me.ANONIMUS.proxy.utils.ChatUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 
-import javax.imageio.ImageIO;
-import java.io.ByteArrayOutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.UUID;
 
 public class ServerStatusHandler extends ServerHandler {
@@ -28,29 +24,26 @@ public class ServerStatusHandler extends ServerHandler {
     }
 
     @Override
-    public void disconnected() {
-    }
+    public void disconnected() { }
 
     @Override
     public void handlePacket(Packet packet) {
         if (packet instanceof ClientStatusRequestPacket) {
             System.out.println("> Ping packet received from: " + player.getSession().getChannel().localAddress());
-            try {
-                final VersionInfo versionInfo = new VersionInfo(ChatUtil.fixColor(BetterProxy.getInstance().getConfigManager().getConfig().versionInfo), BetterProxy.getInstance().getConfigManager().getConfig().protocol);
-                int i = 0;
-                GameProfile[] gp = new GameProfile[BetterProxy.getInstance().getConfigManager().getConfig().playerList.size()];
-                for (String s : BetterProxy.getInstance().getConfigManager().getConfig().playerList) {
-                    gp[i] = new GameProfile(ChatUtil.fixColor(s), UUID.randomUUID());
-                    ++i;
-                }
-                final PlayerInfo playerInfo = new PlayerInfo(0, 0, gp);
-                final BaseComponent[] desc = new ComponentBuilder(ChatUtil.fixColor(BetterProxy.getInstance().getConfigManager().getConfig().line1 + "&r\n" + BetterProxy.getInstance().getConfigManager().getConfig().line2)).create();
-                final ByteArrayOutputStream os = new ByteArrayOutputStream();
-                ImageIO.write(BetterProxy.getInstance().getConfigManager().getBufferedImage(), "png", Base64.getEncoder().wrap(os));
-                player.getSession().sendPacket(new ServerStatusResponsePacket(new ServerStatusInfo(versionInfo, playerInfo, desc, "data:image/png;base64," + os.toString(StandardCharsets.ISO_8859_1.name()))));
-            } catch (Exception ignored) {
+
+            final VersionInfo versionInfo = new VersionInfo(ChatUtil.fixColor(BetterProxy.getInstance().getConfigManager().getConfig().versionInfo), BetterProxy.getInstance().getConfigManager().getConfig().protocol);
+            int i = 0;
+            GameProfile[] gp = new GameProfile[BetterProxy.getInstance().getConfigManager().getConfig().playerList.size()];
+            for (String s : BetterProxy.getInstance().getConfigManager().getConfig().playerList) {
+                gp[i] = new GameProfile(ChatUtil.fixColor(s), UUID.randomUUID());
+                ++i;
             }
+            final PlayerInfo playerInfo = new PlayerInfo(0, 0, gp);
+            final BaseComponent[] desc = new ComponentBuilder(ChatUtil.fixColor(BetterProxy.getInstance().getConfigManager().getConfig().line1 + "&r\n" + BetterProxy.getInstance().getConfigManager().getConfig().line2)).create();
+
+            player.getSession().sendPacket(new ServerStatusResponsePacket(new ServerStatusInfo(versionInfo, playerInfo, desc, BetterProxy.getInstance().getIcon())));
             player.getSession().sendPacket(new ServerStatusPongPacket(0));
+
             player.getSession().getChannel().close();
         } else if (packet instanceof ClientStatusPingPacket) {
             player.getSession().sendPacket(new ServerStatusPongPacket(((ClientStatusPingPacket) packet).getTime()));

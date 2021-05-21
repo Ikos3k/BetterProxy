@@ -7,6 +7,7 @@ import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.utils.ChatUtil;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class CommandTheme extends Command {
     public CommandTheme() {
@@ -20,8 +21,8 @@ public class CommandTheme extends Command {
             ChatUtil.sendChatMessage("Successfully changed theme to " + sender.getThemeType().getColor(1) + sender.getThemeType(), sender, true);
             return;
         }
+
         ChatUtil.sendChatMessage("Current theme: " + sender.getThemeType().getColor(1) + sender.getThemeType(), sender, true);
-        ChatUtil.sendChatMessage("themes: ", sender, true);
-        ChatUtil.sendChatMessage(sender.getThemeType().getColor(2) + Arrays.toString(ThemeType.values()), sender, true);
+        ChatUtil.sendChatMessage("Themes: " + Arrays.stream(ThemeType.values()).map(themeType -> themeType.getColor(1) + themeType.name()).collect(Collectors.joining(", ")), sender, true);
     }
 }

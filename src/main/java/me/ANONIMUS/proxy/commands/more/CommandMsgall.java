@@ -6,7 +6,6 @@ import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.play.ClientChatPacket;
 import me.ANONIMUS.proxy.utils.ChatUtil;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -32,8 +31,7 @@ public class CommandMsgall extends Command {
     }
 
     private void sendMSG(final Player player, final int delay, final String text) {
-        final ExecutorService service = Executors.newSingleThreadExecutor();
-        service.submit(() -> {
+        Executors.newSingleThreadExecutor().submit(() -> {
             ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + "Message sending has started &4" + text + player.getThemeType().getColor(1) + " to &c" + player.getPlayers().size() + player.getThemeType().getColor(1) + " players", player, true);
             player.getPlayers().forEach(s -> {
                 try {

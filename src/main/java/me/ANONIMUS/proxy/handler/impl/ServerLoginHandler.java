@@ -15,9 +15,11 @@ import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginDisconnect
 import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSetCompressionPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSuccessPacket;
 import me.ANONIMUS.proxy.utils.*;
+import me.kbrewster.exceptions.InvalidPlayerException;
 import me.kbrewster.mojangapi.MojangAPI;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class ServerLoginHandler extends ServerHandler {
     public ServerLoginHandler(Player player) {
@@ -46,18 +48,21 @@ public class ServerLoginHandler extends ServerHandler {
             }
             for (Account account : BetterProxy.getInstance().getAccounts()) {
                 if (account.getUsername().equals(playerName)) {
-                    player.setUUID(MojangAPI.getUUID(playerName));
+                    UUID uuid = null;
+                    try {
+                        uuid = MojangAPI.getUUID(playerName);
+                    } catch (InvalidPlayerException ignored) { }
+
                     player.getSession().sendPacket(new ServerLoginSetCompressionPacket(256));
                     player.getSession().setCompressionThreshold(256);
-                    player.getSession().sendPacket(new ServerLoginSuccessPacket(player.getUUID(), playerName));
+                    player.getSession().sendPacket(new ServerLoginSuccessPacket(uuid != null ? uuid : UUID.randomUUID(), playerName));
                     player.getSession().setConnectionState(ConnectionState.PLAY);
                     player.getSession().setPacketHandler(new ServerPlayHandler(player));
-
                     player.setAccount(account);
 
-                    GameProfile gameProfile = new GameProfile(player.getUUID(), playerName);
-                    SkinManager.setupSkin(gameProfile, player);
-                    player.addSkin();
+                    if(uuid != null) {
+                        new SkinManager(new GameProfile(uuid, playerName), player.getSession());
+                    }
 
                     WorldUtil.emptyWorld(player);
                     System.out.println("[" + account.getUsername() + "] Connected!");
