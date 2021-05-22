@@ -58,6 +58,6 @@ public class ServerWindowItemsPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x30, 47), new Protocol(0x14, 340));
+        return Arrays.asList(new Protocol(0x30, 47), new Protocol(0x14, 107, 108, 315, 316, 335, 338, 340));
     }
 }

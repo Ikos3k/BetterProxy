@@ -6,7 +6,8 @@
     "line2":  "        &c----&e/ &6✯ &eProxy by ANONIMUS &6✯ &e\\&c----",
     "playerList": [
       "&f---------------------------------------------------",
-      "  &8Supported versions: &e1.8.X&8, &e1.9.2&8, &e1.9.3&8, &e1.9.4&8, &e1.10.X&8, &e1.12.2",
+      "                     &8Supported versions:",
+      " &e%supported_versions%",
       "&f---------------------------------------------------"
     ],
     "icon": "icon.png",

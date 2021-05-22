@@ -33,7 +33,11 @@ public class ClientSettingsPacket extends Packet {
     public void write(PacketBuffer out, int protocol) throws Exception {
         out.writeString(locale);
         out.writeByte(viewDistance);
-        out.writeByte(chatMode);
+        if (protocol == 338) {
+            out.writeVarInt(chatMode);
+        } else {
+            out.writeByte(chatMode);
+        }
         out.writeBoolean(chatColors);
         out.writeByte(skinParts);
         if (protocol >= 110) {
@@ -45,7 +49,11 @@ public class ClientSettingsPacket extends Packet {
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.locale = in.readString(16);
         this.viewDistance = in.readByte();
-        this.chatMode = in.readByte();
+        if (protocol == 338) {
+            this.chatMode = (byte) in.readVarInt();
+        } else {
+            this.chatMode = in.readByte();
+        }
         this.chatColors = in.readBoolean();
         this.skinParts = in.readByte();
         if (protocol >= 110) {
@@ -55,6 +63,6 @@ public class ClientSettingsPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x15, 47, 110), new Protocol(0x04, 340));
+        return Arrays.asList(new Protocol(0x15, 47, 110), new Protocol(0x04, 338, 340));
     }
 }

@@ -37,6 +37,7 @@ public class SkinManager {
         JsonObject jsonObject = properties.get(0).getAsJsonObject();
 
         profile.getProperties().add(new GameProfile.Property("textures", jsonObject.get("value").getAsString(), jsonObject.get("signature").getAsString()));
+
         session.sendPacket(new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, new PlayerListEntry[]{ new PlayerListEntry(profile, Gamemode.ADVENTURE, 0, profile.getName()) }));
     }
 }

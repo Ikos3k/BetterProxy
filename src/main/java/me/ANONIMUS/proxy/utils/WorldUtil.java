@@ -45,11 +45,15 @@ public class WorldUtil {
             dimSwitch(player, null);
         }
 
-        if (player.getSession().getProtocolID() != ProtocolType.PROTOCOL_1_9_2.getProtocol()) {
+        if (player.getSession().getProtocolID() != ProtocolType.PROTOCOL_1_9_2.getProtocol() &&
+                player.getSession().getProtocolID() != ProtocolType.PROTOCOL_1_9.getProtocol() &&
+                player.getSession().getProtocolID() != ProtocolType.PROTOCOL_1_9_1.getProtocol() &&
+                player.getSession().getProtocolID() != ProtocolType.PROTOCOL_1_11.getProtocol()) {
             try {
                 int i = 0;
-                while (new File(BetterProxy.getInstance().getDirFolder() + "/world/" + (player.getSession().getProtocolID() != 47 ? "other" : "47") + "/world_" + i).exists()) {
-                    final byte[] data = Files.readAllBytes(new File(BetterProxy.getInstance().getDirFolder() + "/world/" + (player.getSession().getProtocolID() != 47 ? "other" : "47") + "/world_" + i).toPath());
+                File file;
+                while ((file = new File(BetterProxy.getInstance().getDirFolder() + "/world/" + (player.getSession().getProtocolID() != 47 ? "other" : "47") + "/world_" + i)).exists()) {
+                    final byte[] data = Files.readAllBytes(file.toPath());
                     player.getSession().sendPacket(new CustomPacket(player.getSession().getProtocolID() == 47 ? 0x26 : 0x20, data));
                     i++;
                 }

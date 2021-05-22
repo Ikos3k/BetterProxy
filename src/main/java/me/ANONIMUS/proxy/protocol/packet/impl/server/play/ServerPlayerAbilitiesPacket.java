@@ -50,6 +50,6 @@ public class ServerPlayerAbilitiesPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x39, 47), new Protocol(0x2B, 109, 110, 210), new Protocol(0x2C, 340));
+        return Arrays.asList(new Protocol(0x39, 47), new Protocol(0x2B, 107, 108, 109, 110, 210, 315, 316, 335), new Protocol(0x2C, 338, 340));
     }
 }

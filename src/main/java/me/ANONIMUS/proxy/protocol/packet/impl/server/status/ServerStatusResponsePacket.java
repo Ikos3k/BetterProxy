@@ -88,6 +88,6 @@ public class ServerStatusResponsePacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Collections.singletonList(new Protocol(0x00, 47, 109, 110, 210, 340));
+        return Collections.singletonList(new Protocol(0x00, 47, 107, 108, 109, 110, 210, 315, 335, 338, 340));
     }
 }

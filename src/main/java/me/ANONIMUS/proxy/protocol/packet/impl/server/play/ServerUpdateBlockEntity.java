@@ -36,6 +36,6 @@ public class ServerUpdateBlockEntity extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Collections.singletonList(new Protocol(0x09, 110));
+        return Collections.singletonList(new Protocol(0x09, 107, 108, 110, 315, 316, 335, 338));
     }
 }

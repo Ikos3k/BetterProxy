@@ -35,6 +35,6 @@ public class ServerSetSlotPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x2F, 47), new Protocol(0x16, 109, 110, 210, 340));
+        return Arrays.asList(new Protocol(0x2F, 47), new Protocol(0x16, 107, 108, 109, 110, 210, 315, 316, 335, 338, 340));
     }
 }

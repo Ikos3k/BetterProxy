@@ -2,6 +2,7 @@ package me.ANONIMUS.proxy.handler.impl;
 
 import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.handler.ServerHandler;
+import me.ANONIMUS.proxy.protocol.ProtocolType;
 import me.ANONIMUS.proxy.protocol.data.status.PlayerInfo;
 import me.ANONIMUS.proxy.protocol.data.status.ServerStatusInfo;
 import me.ANONIMUS.proxy.protocol.data.status.VersionInfo;
@@ -16,7 +17,9 @@ import me.ANONIMUS.proxy.utils.ChatUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 
+import java.util.Arrays;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class ServerStatusHandler extends ServerHandler {
     public ServerStatusHandler(Player player) {
@@ -35,6 +38,7 @@ public class ServerStatusHandler extends ServerHandler {
             int i = 0;
             GameProfile[] gp = new GameProfile[BetterProxy.getInstance().getConfigManager().getConfig().playerList.size()];
             for (String s : BetterProxy.getInstance().getConfigManager().getConfig().playerList) {
+                s = s.replace("%supported_versions%", "&e" + Arrays.stream(ProtocolType.values()).filter(protocolType -> protocolType != ProtocolType.PROTOCOL_UNKNOWN).map(ProtocolType::getPrefix).collect(Collectors.joining(ChatUtil.fixColor("&8, &e"))));
                 gp[i] = new GameProfile(ChatUtil.fixColor(s), UUID.randomUUID());
                 ++i;
             }

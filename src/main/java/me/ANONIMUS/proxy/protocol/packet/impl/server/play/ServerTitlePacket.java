@@ -99,6 +99,6 @@ public class ServerTitlePacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x45, 47, 109, 110, 210), new Protocol(0x48, 340));
+        return Arrays.asList(new Protocol(0x45, 47, 107, 108, 109, 110, 210, 315, 316), new Protocol(0x47, 335), new Protocol(0x48, 338, 340));
     }
 }

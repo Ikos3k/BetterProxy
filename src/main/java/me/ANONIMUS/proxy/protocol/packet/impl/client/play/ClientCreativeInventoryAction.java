@@ -8,7 +8,7 @@ import me.ANONIMUS.proxy.protocol.data.ItemStack;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -32,6 +32,6 @@ public class ClientCreativeInventoryAction extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Collections.singletonList(new Protocol(0x10, 47, 110, 340));
+        return Arrays.asList(new Protocol(0x10, 47, 110, 340), new Protocol(0x18, 107, 108, 315, 316), new Protocol(0x1B, 335));
     }
 }

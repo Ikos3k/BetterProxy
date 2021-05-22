@@ -29,7 +29,7 @@ public class ServerJoinGamePacket extends Packet {
     public void write(PacketBuffer out, int protocol) throws Exception {
         out.writeInt(this.entityId);
         out.writeByte(this.gamemode.getId());
-        if (protocol >= 109) {
+        if (protocol >= 108) {
             out.writeInt(this.dimension.getId());
         } else {
             out.writeByte(this.dimension.getId());
@@ -44,7 +44,7 @@ public class ServerJoinGamePacket extends Packet {
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.entityId = in.readInt();
         this.gamemode = Gamemode.getById(in.readUnsignedByte());
-        if (protocol >= 109) {
+        if (protocol >= 108) {
             this.dimension = Dimension.getById(in.readInt());
         } else {
             this.dimension = Dimension.getById(in.readByte());
@@ -62,6 +62,6 @@ public class ServerJoinGamePacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x01, 47), new Protocol(0x23, 109, 110, 210, 340));
+        return Arrays.asList(new Protocol(0x01, 47), new Protocol(0x23, 107, 108, 109, 110, 210, 315, 316, 335, 338, 340));
     }
 }

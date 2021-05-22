@@ -43,6 +43,6 @@ public class ClientPlayerPositionPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x04, 47), new Protocol(0x0C, 109, 110, 210), new Protocol(0x0D, 340));
+        return Arrays.asList(new Protocol(0x04, 47), new Protocol(0x0C, 107, 108, 109, 110, 210, 316), new Protocol(0x0E, 315, 335), new Protocol(0x0D, 338, 340));
     }
 }

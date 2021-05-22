@@ -29,6 +29,6 @@ public class ServerSpawnPositionPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x05, 47), new Protocol(0x43, 109, 110, 210), new Protocol(0x46, 340));
+        return Arrays.asList(new Protocol(0x05, 47), new Protocol(0x43, 107, 108, 109, 110, 210, 315, 316), new Protocol(0x45, 335), new Protocol(0x46, 338, 340));
     }
 }

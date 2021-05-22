@@ -34,6 +34,6 @@ public class ServerTabCompletePacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x3A, 47), new Protocol(0x0E, 109, 110, 340));
+        return Arrays.asList(new Protocol(0x3A, 47), new Protocol(0x0E, 107, 108, 109, 110, 315, 316, 335, 338, 340));
     }
 }

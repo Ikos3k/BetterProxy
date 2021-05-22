@@ -165,6 +165,7 @@ public class PlayerConnection {
                                             }
                                         }
                                     }
+
                                     if(!owner.getOptionsManager().getOptionByName("server tablist").isEnabled() && packet instanceof ServerPlayerListHeaderFooter) {
                                         return;
                                     }

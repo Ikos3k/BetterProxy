@@ -133,6 +133,6 @@ public class ServerPlayerListEntryPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x38, 47), new Protocol(0x2D, 109, 110, 210), new Protocol(0x2E, 340));
+        return Arrays.asList(new Protocol(0x38, 47), new Protocol(0x2D, 107, 108, 109, 110, 210, 315, 316, 335), new Protocol(0x2E, 338, 340));
     }
 }

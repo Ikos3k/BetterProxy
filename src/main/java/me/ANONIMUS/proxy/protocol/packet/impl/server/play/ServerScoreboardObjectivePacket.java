@@ -43,6 +43,6 @@ public class ServerScoreboardObjectivePacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x3B, 47), new Protocol(0x3F, 109, 110, 210), new Protocol(0x42, 340));
+        return Arrays.asList(new Protocol(0x3B, 47), new Protocol(0x3F, 107, 108, 109, 110, 210, 315, 316), new Protocol(0x41, 335), new Protocol(0x42, 338, 340));
     }
 }

@@ -8,7 +8,7 @@ import me.ANONIMUS.proxy.protocol.data.Position;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -38,6 +38,6 @@ public class ServerUpdateSignPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Collections.singletonList(new Protocol(0x33, 47));
+        return Arrays.asList(new Protocol(0x33, 47), new Protocol(0x1C, 338));
     }
 }

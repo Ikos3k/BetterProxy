@@ -9,7 +9,7 @@ public class ServerData {
     private final int port;
 
     public ServerData(String host) {
-        if(!host.contains(":")) {
+        if (!host.contains(":")) {
             host += ":25565";
         }
 

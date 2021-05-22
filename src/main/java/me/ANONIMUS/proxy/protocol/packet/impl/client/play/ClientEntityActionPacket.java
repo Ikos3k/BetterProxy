@@ -32,6 +32,6 @@ public class ClientEntityActionPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x0B, 47), new Protocol(0x14, 110), new Protocol(0x15, 340));
+        return Arrays.asList(new Protocol(0x0B, 47), new Protocol(0x14, 107, 108, 110, 315, 316), new Protocol(0x15, 335, 338, 340));
     }
 }
