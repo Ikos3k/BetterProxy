@@ -15,9 +15,13 @@ import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginDisconnect
 import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSetCompressionPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSuccessPacket;
 import me.ANONIMUS.proxy.utils.*;
+import me.kbrewster.exceptions.InvalidPlayerException;
 import me.kbrewster.mojangapi.MojangAPI;
 
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class ServerLoginHandler extends ServerHandler {
     public ServerLoginHandler(Player player) {
@@ -46,18 +50,22 @@ public class ServerLoginHandler extends ServerHandler {
             }
             for (Account account : BetterProxy.getInstance().getAccounts()) {
                 if (account.getUsername().equals(playerName)) {
-                    player.setUUID(MojangAPI.getUUID(playerName));
+                    UUID uuid = null;
+                    try {
+                        uuid = MojangAPI.getUUID(playerName);
+                    } catch (InvalidPlayerException ignored) {
+                    }
+
                     player.getSession().sendPacket(new ServerLoginSetCompressionPacket(256));
                     player.getSession().setCompressionThreshold(256);
-                    player.getSession().sendPacket(new ServerLoginSuccessPacket(player.getUUID(), playerName));
+                    player.getSession().sendPacket(new ServerLoginSuccessPacket(uuid != null ? uuid : UUID.randomUUID(), playerName));
                     player.getSession().setConnectionState(ConnectionState.PLAY);
                     player.getSession().setPacketHandler(new ServerPlayHandler(player));
-
                     player.setAccount(account);
 
-                    GameProfile gameProfile = new GameProfile(player.getUUID(), playerName);
-                    SkinManager.setupSkin(gameProfile, player);
-                    player.addSkin();
+                    if (uuid != null && player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol()) {
+                        new SkinManager(new GameProfile(uuid, playerName), player.getSession());
+                    }
 
                     WorldUtil.emptyWorld(player);
                     System.out.println("[" + account.getUsername() + "] Connected!");
@@ -69,7 +77,9 @@ public class ServerLoginHandler extends ServerHandler {
                     }
                     ChatUtil.sendBroadcastMessage(player.getThemeType().getColor(1) + ">> &8Player " + player.getThemeType().getColor(1) + playerName + " &8has connected to the " + player.getThemeType().getColor(1) + "BetterProxy &8(" + player.getThemeType().getColor(2) + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8)", false);
                     ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Welcome to " + player.getThemeType().getColor(1) + "BetterProxy &8by &4ANONIMUS", player, false);
-                    ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Supported versions: *1.8.X&8, *1.9.2&8, *1.9.3&8, *1.9.4&8, *1.10.X&8, *1.12.2".replace("*", player.getThemeType().getColor(2)), player, false);
+                    ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Supported versions: &e%supported_versions%".replace("%supported_versions%", "&e" + Arrays.stream(ProtocolType.values()).filter(protocolType ->
+                            protocolType != ProtocolType.PROTOCOL_UNKNOWN)
+                            .map(ProtocolType::getPrefix).collect(Collectors.joining(ChatUtil.fixColor("&8, &e")))), player, false);
                     ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Log in using the command: " + player.getThemeType().getColor(1) + player.getPrefixCMD() + "login [password]", player, false);
                     PacketUtil.sendBoosBar(player, ChatUtil.fixColor("&fWelcome to " + player.getThemeType().getColor(1) + "BetterProxy &fby &4ANONIMUS"));
                     return;

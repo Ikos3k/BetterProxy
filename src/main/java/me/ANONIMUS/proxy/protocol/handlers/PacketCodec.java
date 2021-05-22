@@ -33,6 +33,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Packet packet, ByteBuf byteBuf) throws Exception {
         final PacketBuffer packetbuffer = new PacketBuffer(byteBuf);
+
         packetbuffer.writeVarInt(getPacketIDByProtocol(packet, protocol));
         packet.write(packetbuffer, protocol);
     }

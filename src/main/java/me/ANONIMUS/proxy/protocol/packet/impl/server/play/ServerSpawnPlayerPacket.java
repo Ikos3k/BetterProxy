@@ -9,7 +9,7 @@ import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 import net.minecraft.util.MathHelper;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,7 +26,7 @@ public class ServerSpawnPlayerPacket extends Packet {
     private int currentItem;
     private EntityMetadata[] metadata;
 
-    public ServerSpawnPlayerPacket(int entityID, UUID uuid, double x, double y, double z, float yaw, float pitch, int currentItem, EntityMetadata[] metadata) {
+    public ServerSpawnPlayerPacket(int entityID, UUID uuid, double x, double y, double z, float yaw, float pitch, int currentItem, EntityMetadata... metadata) {
         this.entityID = entityID;
         this.uuid = uuid;
         this.x = MathHelper.floor_double(x * 32.0D);
@@ -53,7 +53,9 @@ public class ServerSpawnPlayerPacket extends Packet {
         }
         out.writeByte((byte) (this.yaw));
         out.writeByte((byte) (this.pitch));
-        out.writeShort(this.currentItem);
+        if (protocol == 47) {
+            out.writeShort(this.currentItem);
+        }
         NetUtil.writeEntityMetadata(out, this.metadata);
     }
 
@@ -72,12 +74,14 @@ public class ServerSpawnPlayerPacket extends Packet {
         }
         this.yaw = in.readByte();
         this.pitch = in.readByte();
-        this.currentItem = in.readShort();
+        if (protocol == 47) {
+            this.currentItem = in.readShort();
+        }
         this.metadata = NetUtil.readEntityMetadata(in);
     }
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Collections.singletonList(new Protocol(0x0C, 47));
+        return Arrays.asList(new Protocol(0x0C, 47), new Protocol(0x05, 338));
     }
 }

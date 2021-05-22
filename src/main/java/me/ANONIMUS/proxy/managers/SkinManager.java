@@ -8,19 +8,18 @@ import me.ANONIMUS.proxy.protocol.data.Gamemode;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntry;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntryAction;
 import me.ANONIMUS.proxy.protocol.objects.GameProfile;
-import me.ANONIMUS.proxy.protocol.objects.Player;
+import me.ANONIMUS.proxy.protocol.objects.Session;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerPlayerListEntryPacket;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
 public class SkinManager {
-    public static void setupSkin(GameProfile profile, Player player) throws IOException {
-        if (player.getValue() != null || player.getSignature() != null) return;
 
+    @SneakyThrows
+    public SkinManager(GameProfile profile, Session session) {
         URL url = new URL(String.format("https://sessionserver.mojang.com/session/minecraft/profile/%s?unsigned=false", profile.getId()));
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -36,14 +35,8 @@ public class SkinManager {
         JsonObject object = new JsonParser().parse(json).getAsJsonObject();
         JsonArray properties = object.getAsJsonArray("properties");
         JsonObject jsonObject = properties.get(0).getAsJsonObject();
-        player.setValue(jsonObject.get("value").getAsString());
-        player.setSignature(jsonObject.get("signature").getAsString());
-    }
 
-    @SneakyThrows
-    public SkinManager(GameProfile profile, Player player) {
-        PlayerListEntry playerListEntry = new PlayerListEntry(profile, Gamemode.ADVENTURE, 0, profile.getName());
-        profile.getProperties().add(new GameProfile.Property("textures", player.getValue(), player.getSignature()));
-        player.getSession().sendPacket(new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, new PlayerListEntry[]{playerListEntry}));
+        profile.getProperties().add(new GameProfile.Property("textures", jsonObject.get("value").getAsString(), jsonObject.get("signature").getAsString()));
+        session.sendPacket(new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, new PlayerListEntry[]{new PlayerListEntry(profile, Gamemode.ADVENTURE, 0, profile.getName())}));
     }
 }

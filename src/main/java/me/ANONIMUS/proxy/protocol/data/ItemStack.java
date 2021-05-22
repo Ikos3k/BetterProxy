@@ -24,6 +24,7 @@ public class ItemStack {
 
     public ItemStack(final int id, final String name) {
         this(id);
+
         setStackDisplayName(name);
     }
 

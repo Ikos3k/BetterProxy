@@ -46,10 +46,10 @@ public class ClientPlayerPlaceBlockPacket extends Packet {
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
         out.writePosition(position);
-        if (protocol >= 110) {
+        if (protocol >= 107) {
             out.writeVarInt(this.face.getId());
             out.writeVarInt(this.hand);
-            if (protocol == 110) {
+            if (protocol == 110 || protocol == 107 || protocol == 108) {
                 out.writeByte((int) this.cursorX);
                 out.writeByte((int) this.cursorY);
                 out.writeByte((int) this.cursorZ);
@@ -70,10 +70,10 @@ public class ClientPlayerPlaceBlockPacket extends Packet {
     @Override
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.position = in.readPosition();
-        if (protocol >= 110) {
+        if (protocol >= 107) {
             this.face = Face.getById(in.readVarInt());
             this.hand = in.readVarInt();
-            if (protocol == 110) {
+            if (protocol == 110 || protocol == 107 || protocol == 108) {
                 this.cursorX = in.readByte();
                 this.cursorY = in.readByte();
                 this.cursorZ = in.readByte();
@@ -93,6 +93,6 @@ public class ClientPlayerPlaceBlockPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x08, 47), new Protocol(0x1C, 110), new Protocol(0x1F, 340));
+        return Arrays.asList(new Protocol(0x08, 47), new Protocol(0x1C, 107, 108, 110, 315, 316), new Protocol(0x1F, 335, 338, 340));
     }
 }

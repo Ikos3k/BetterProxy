@@ -41,6 +41,6 @@ public class ServerUpdateScorePacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x3C, 47), new Protocol(0x42, 109, 110, 210), new Protocol(0x45, 340));
+        return Arrays.asList(new Protocol(0x3C, 47), new Protocol(0x42, 107, 108, 109, 110, 210, 315, 316), new Protocol(0x44, 335), new Protocol(0x45, 338, 340));
     }
 }

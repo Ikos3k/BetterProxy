@@ -81,7 +81,6 @@ public class CommandStay extends Command {
         bot.getSession().getChannel().close();
         bot.setSession(null);
         owner.getBots().remove(bot);
-        owner.addSkin();
         group.shutdownGracefully();
     }
 }

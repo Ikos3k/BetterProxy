@@ -18,7 +18,6 @@ public class CommandQuit extends Command {
         sender.setConnected(false);
         sender.getRemoteSession().getChannel().close();
         sender.setRemoteSession(null);
-        sender.addSkin();
         WorldUtil.lobby(sender, true);
     }
 }

@@ -32,6 +32,6 @@ public class ServerDisplayScoreboardPacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x3D, 47), new Protocol(0x38, 109, 110, 210, 340));
+        return Arrays.asList(new Protocol(0x3D, 47), new Protocol(0x3A, 335), new Protocol(0x38, 107, 108, 109, 110, 210, 315, 316, 340), new Protocol(0x3B, 338));
     }
 }

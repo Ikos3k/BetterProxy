@@ -31,6 +31,6 @@ public class ServerTimeUpdatePacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x03, 47), new Protocol(0x44, 109, 110), new Protocol(0x47, 340));
+        return Arrays.asList(new Protocol(0x03, 47), new Protocol(0x44, 107, 108, 109, 110, 315, 316), new Protocol(0x46, 335), new Protocol(0x47, 338, 340));
     }
 }

@@ -12,9 +12,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -22,11 +27,14 @@ import java.util.stream.IntStream;
 
 public class FileUtil {
     public static void createMissing() {
+        final String[] directories = new String[]{"world", "exploits", "schematics", "players"};
+
         try {
-            new File(BetterProxy.getInstance().getDirFolder() + "/accounts.txt").mkdir();
-            new File(BetterProxy.getInstance().getDirFolder() + "/world").mkdir();
-            new File(BetterProxy.getInstance().getDirFolder() + "/exploits").mkdir();
-            new File(BetterProxy.getInstance().getDirFolder() + "/schematics").mkdir();
+            for (String d : directories) {
+                new File(BetterProxy.getInstance().getDirFolder() + "/" + d).mkdir();
+            }
+
+            new File(BetterProxy.getInstance().getDirFolder() + "/accounts.txt").createNewFile();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -43,6 +51,24 @@ public class FileUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String loadIconFile(final String icon) {
+        try {
+            BufferedImage bufferedImage = ImageIO.read(new File(BetterProxy.getInstance().getDirFolder(), icon));
+            if (bufferedImage.getWidth() != 64 || bufferedImage.getHeight() != 64) {
+                throw new IllegalStateException("> Icon must be 64 pixels wide and 64 pixels high");
+            }
+
+            final ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", Base64.getEncoder().wrap(os));
+
+            return "data:image/png;base64," + os.toString(StandardCharsets.ISO_8859_1.name());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public static void loadExploits() {
@@ -63,6 +89,7 @@ public class FileUtil {
                     for (int i = 0; i < s.size(); i++) {
                         data[i] = s.get(i).byteValue();
                     }
+
                     Packet p = new CustomPacket(id, data);
 
                     BetterProxy.getInstance().getExploitManager().addExploit(new Exploit(f.getName().substring(0, f.getName().length() - 5), "[amount]") {

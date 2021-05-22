@@ -9,6 +9,10 @@ public class ServerData {
     private final int port;
 
     public ServerData(String host) {
+        if (!host.contains(":")) {
+            host += ":25565";
+        }
+
         this.host = host;
         this.ip = host.split(":")[0];
         this.port = Integer.parseInt(host.split(":")[1]);

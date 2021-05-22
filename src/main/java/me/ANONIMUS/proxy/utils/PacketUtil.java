@@ -20,16 +20,16 @@ public class PacketUtil {
         session.sendPacket(new ServerPlayerAbilitiesPacket(false, fly, fly, fly, 0.1f, 0.1f));
     }
 
-    public static void speed(final Session session, final int speed) {
-        session.sendPacket(new ServerPlayerAbilitiesPacket(false, false, false, false, 1.0f, (float) speed));
+    public static void speed(final Session session, final float speed) {
+        session.sendPacket(new ServerPlayerAbilitiesPacket(false, false, false, false, 1.0f, speed));
+    }
+
+    public static void lobbyPosTeleport(final Player player) {
+        player.getSession().sendPacket(new ServerPlayerPosLookPacket(0.5, 70, 0.5, 0.0f, 0.0f));
     }
 
     public static void clearInventory(final Player player) {
         IntStream.range(0, 45).forEach(i -> player.getSession().sendPacket(new ServerSetSlotPacket(0, i, null)));
-    }
-
-    public static void sendBroadcastPacket(final Packet packet) {
-        BetterProxy.getInstance().getPlayerManager().getPlayers().forEach(p -> p.getSession().sendPacket(packet));
     }
 
     public static void clearTabList(final Player player) {
@@ -41,15 +41,21 @@ public class PacketUtil {
         player.getTabList().clear();
     }
 
+    public static void sendBroadcastPacket(final Packet packet) {
+        BetterProxy.getInstance().getPlayerManager().getPlayers().forEach(p -> p.getSession().sendPacket(packet));
+    }
+
     public static void sendTitle(final Player player, final String header, final String footer) {
         sendTitle(player, header, footer, 10, 10, 10);
     }
 
     public static void sendTitle(final Player player, final String header, final String footer, final int fadeIn, final int stay, final int fadeOut) {
-        if (header != null)
+        if (header != null) {
             player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TITLE, ChatUtil.fixColor(header)));
-        if (footer != null)
+        }
+        if (footer != null) {
             player.getSession().sendPacket(new ServerTitlePacket(TitleAction.SUBTITLE, ChatUtil.fixColor(footer)));
+        }
         player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TIMES, fadeIn, stay, fadeOut));
     }
 

@@ -4,7 +4,7 @@ import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.utils.ChatUtil;
-import me.ANONIMUS.proxy.utils.WorldUtil;
+import me.ANONIMUS.proxy.utils.PacketUtil;
 
 public class CommandLobby extends Command {
     public CommandLobby() {
@@ -13,7 +13,7 @@ public class CommandLobby extends Command {
 
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {
-        WorldUtil.lobby(sender, false);
+        PacketUtil.lobbyPosTeleport(sender);
         ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Teleported to the lobby!", sender, false);
     }
 }

@@ -25,13 +25,16 @@ import java.util.UUID;
 
 public class WorldUtil {
     public static void dimSwitch(Player player, ServerJoinGamePacket packet) {
+        if (packet == null) {
+            packet = new ServerJoinGamePacket(0, Gamemode.SURVIVAL, Dimension.OVERWORLD, Difficulty.PEACEFULL, 1, "default_1_1", false);
+        }
         player.getSession().sendPacket(new ServerRespawnPacket(Dimension.END, Difficulty.PEACEFULL, Gamemode.SURVIVAL, "default_1_1"));
         player.getSession().sendPacket(packet);
         player.getSession().sendPacket(new ServerRespawnPacket(packet.getDimension(), packet.getDifficulty(), packet.getGamemode(), packet.getLevelType()));
     }
 
     public static void emptyWorld(Player player) {
-        dimSwitch(player, new ServerJoinGamePacket(0, Gamemode.SURVIVAL, Dimension.OVERWORLD, Difficulty.PEACEFULL, 1, "default_1_1", false));
+        dimSwitch(player, null);
         player.getSession().sendPacket(new ServerSpawnPositionPacket(new Position(0, 1, 0)));
         player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, true, false, false, 0f, 0f));
         player.getSession().sendPacket(new ServerPlayerPosLookPacket(0, 70, 0, 180, 90));
@@ -39,15 +42,18 @@ public class WorldUtil {
 
     public static void lobby(Player player, boolean clear) {
         if (clear) {
-            emptyWorld(player);
+            dimSwitch(player, null);
         }
-        PacketUtil.clearInventory(player);
 
-        if (player.getSession().getProtocolID() != ProtocolType.PROTOCOL_1_9_2.getProtocol()) {
+        if (player.getSession().getProtocolID() != ProtocolType.PROTOCOL_1_9_2.getProtocol() &&
+                player.getSession().getProtocolID() != ProtocolType.PROTOCOL_1_9.getProtocol() &&
+                player.getSession().getProtocolID() != ProtocolType.PROTOCOL_1_9_1.getProtocol() &&
+                player.getSession().getProtocolID() != ProtocolType.PROTOCOL_1_11.getProtocol()) {
             try {
                 int i = 0;
-                while (new File(BetterProxy.getInstance().getDirFolder() + "/world/" + (player.getSession().getProtocolID() != 47 ? "other" : "47") + "/world_" + i).exists()) {
-                    final byte[] data = Files.readAllBytes(new File(BetterProxy.getInstance().getDirFolder() + "/world/" + (player.getSession().getProtocolID() != 47 ? "other" : "47") + "/world_" + i).toPath());
+                File file;
+                while ((file = new File(BetterProxy.getInstance().getDirFolder() + "/world/" + (player.getSession().getProtocolID() != 47 ? "other" : "47") + "/world_" + i)).exists()) {
+                    final byte[] data = Files.readAllBytes(file.toPath());
                     player.getSession().sendPacket(new CustomPacket(player.getSession().getProtocolID() == 47 ? 0x26 : 0x20, data));
                     i++;
                 }
@@ -62,13 +68,16 @@ public class WorldUtil {
 //        }
 
         player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, false, false, false, 0f, 0f));
-        player.getSession().sendPacket(new ServerPlayerPosLookPacket(0.5, 70, 0.5, 0.0f, 0.0f));
+        PacketUtil.lobbyPosTeleport(player);
+
+        PacketUtil.clearTabList(player);
 
         if (player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol()) {
             spawnPlayers(player);
             loadTextsOnSign(player);
         }
-        PacketUtil.clearTabList(player);
+
+        PacketUtil.clearInventory(player);
         ItemUtil.loadStartItems(player);
     }
 
@@ -126,9 +135,11 @@ public class WorldUtil {
 
                 GameProfile profile = new GameProfile(UUID.randomUUID(), name);
                 profile.getProperties().add(new GameProfile.Property("textures", value, signature));
-                PlayerListEntry playerListEntry = new PlayerListEntry(profile, Gamemode.ADVENTURE, 0, name);
+
+                PlayerListEntry playerListEntry = new PlayerListEntry(profile, Gamemode.ADVENTURE, 0, null);
+
                 p.getSession().sendPacket(new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, new PlayerListEntry[]{playerListEntry}));
-                p.getSession().sendPacket(new ServerSpawnPlayerPacket(i, profile.getId(), x, y, z, 0, 0, 0, new EntityMetadata[]{new EntityMetadata(10, MetadataType.BYTE, Byte.MAX_VALUE)}));
+                p.getSession().sendPacket(new ServerSpawnPlayerPacket(i, profile.getId(), x, y, z, 0, 0, 0, new EntityMetadata(10, MetadataType.BYTE, Byte.MAX_VALUE)));
                 p.getTabList().add(playerListEntry);
                 i++;
             }
@@ -154,6 +165,7 @@ public class WorldUtil {
                 int x = ((Number) position.get("x")).intValue();
                 int y = ((Number) position.get("y")).intValue();
                 int z = ((Number) position.get("z")).intValue();
+
                 p.getSession().sendPacket(new ServerUpdateSignPacket(new Position(x, y, z), ChatUtil.fixColor(text_1), ChatUtil.fixColor(text_2), ChatUtil.fixColor(text_3), ChatUtil.fixColor(text_4)));
             });
         } catch (IOException | ParseException e) {

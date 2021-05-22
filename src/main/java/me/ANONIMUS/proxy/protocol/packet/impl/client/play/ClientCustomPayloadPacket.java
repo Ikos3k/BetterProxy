@@ -25,13 +25,13 @@ public class ClientCustomPayloadPacket extends Packet {
 
     @Override
     public void read(PacketBuffer in, int protocol) throws Exception {
-        this.channel = in.readString(16);
+        this.channel = in.readString(20);
         data = new byte[in.readableBytes()];
         in.readBytes(data);
     }
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x17, 47), new Protocol(0x09, 110, 340));
+        return Arrays.asList(new Protocol(0x17, 47), new Protocol(0x09, 107, 108, 110, 315, 316, 338, 340), new Protocol(0x0A, 335));
     }
 }

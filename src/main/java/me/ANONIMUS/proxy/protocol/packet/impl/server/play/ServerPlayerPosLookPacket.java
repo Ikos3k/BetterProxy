@@ -67,7 +67,7 @@ public class ServerPlayerPosLookPacket extends Packet {
         out.writeFloat(this.yaw);
         out.writeFloat(this.pitch);
         out.writeByte(this.flags);
-        if (protocol >= 109) {
+        if (protocol >= 107) {
             out.writeVarInt(this.teleport);
         }
     }
@@ -80,13 +80,13 @@ public class ServerPlayerPosLookPacket extends Packet {
         this.yaw = in.readFloat();
         this.pitch = in.readFloat();
         this.flags = in.readUnsignedByte();
-        if (protocol >= 109) {
+        if (protocol >= 107) {
             this.teleport = in.readVarInt();
         }
     }
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Arrays.asList(new Protocol(0x08, 47), new Protocol(0x2E, 109, 110, 210), new Protocol(0x2F, 340));
+        return Arrays.asList(new Protocol(0x08, 47), new Protocol(0x2E, 107, 108, 109, 110, 210, 315, 316, 335), new Protocol(0x2F, 338, 340));
     }
 }
