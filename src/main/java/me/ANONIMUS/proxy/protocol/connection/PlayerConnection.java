@@ -114,7 +114,7 @@ public class PlayerConnection {
                                 } else if (owner.isConnected() && owner.getRemoteSession().getConnectionState() == ConnectionState.PLAY) {
                                     if (owner.isListenChunks() && packet instanceof CustomPacket) {
                                         if ((((owner).getSession().getProtocolID() == 47 && ((CustomPacket) packet).getCustomPacketID() == 0x26) ||
-                                                ((owner).getSession().getProtocolID() != 47 && ((CustomPacket) packet).getCustomPacketID() == 0x20))) {
+                                            ((owner).getSession().getProtocolID() != 47 && ((CustomPacket) packet).getCustomPacketID() == 0x20))) {
                                             owner.getListenedChunks().add(packet);
                                             PacketUtil.sendTitle(owner, "[CHUNKS]", "listening... (" + owner.getListenedChunks().size() + ")");
                                         }
@@ -165,7 +165,8 @@ public class PlayerConnection {
                                             }
                                         }
                                     }
-                                    if (!owner.getOptionsManager().getOptionByName("server tablist").isEnabled() && packet instanceof ServerPlayerListHeaderFooter) {
+
+                                    if(!owner.getOptionsManager().getOptionByName("server tablist").isEnabled() && packet instanceof ServerPlayerListHeaderFooter) {
                                         return;
                                     }
 

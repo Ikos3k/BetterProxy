@@ -27,8 +27,7 @@ public class ServerStatusHandler extends ServerHandler {
     }
 
     @Override
-    public void disconnected() {
-    }
+    public void disconnected() { }
 
     @Override
     public void handlePacket(Packet packet) {

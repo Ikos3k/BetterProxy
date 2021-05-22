@@ -14,15 +14,15 @@ import java.util.TimerTask;
 public class TabThread extends TimerTask {
     @Override
     public void run() {
-        BetterProxy.getInstance().getPlayerManager().getPlayers().stream().filter(Player::isLogged).forEach(player -> player.getSession().sendPacket(new ServerPlayerListHeaderFooter(ChatUtil.fixColor(
-                "\n&l" + player.getThemeType().getColor(1) + "BetterProxy" +
-                        "\n" +
-                        "\n" +
-                        "&7Group: " + player.getAccount().getGroup().getPrefix() +
-                        "\n" +
-                        "&7Username: " + player.getThemeType().getColor(2) + player.getAccount().getUsername()
-                ),
-                        ChatUtil.fixColor("&7Session: " + player.getThemeType().getColor(2) + (!player.isConnected() ? "Not connected" : player.getServerData().getHost()) + "\n\n" + "&l" + player.getThemeType().getColor(1) + "BetterProxy\n"))
+       BetterProxy.getInstance().getPlayerManager().getPlayers().stream().filter(Player::isLogged).forEach(player -> player.getSession().sendPacket(new ServerPlayerListHeaderFooter(ChatUtil.fixColor(
+            "\n&l" + player.getThemeType().getColor(1) + "BetterProxy" +
+                "\n" +
+                "\n" +
+                "&7Group: " + player.getAccount().getGroup().getPrefix() +
+                "\n" +
+                "&7Username: " + player.getThemeType().getColor(2) + player.getAccount().getUsername()
+            ),
+            ChatUtil.fixColor("&7Session: " + player.getThemeType().getColor(2) + (!player.isConnected() ? "Not connected" : player.getServerData().getHost()) + "\n\n" + "&l" + player.getThemeType().getColor(1) + "BetterProxy\n"))
         ));
     }
 }

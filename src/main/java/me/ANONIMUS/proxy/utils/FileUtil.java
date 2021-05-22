@@ -27,10 +27,10 @@ import java.util.stream.IntStream;
 
 public class FileUtil {
     public static void createMissing() {
-        final String[] directories = new String[]{"world", "exploits", "schematics", "players"};
+        final String[] directories = new String[] { "world", "exploits", "schematics" };
 
         try {
-            for (String d : directories) {
+            for(String d : directories) {
                 new File(BetterProxy.getInstance().getDirFolder() + "/" + d).mkdir();
             }
 
@@ -80,8 +80,7 @@ public class FileUtil {
                     Object obj = null;
                     try {
                         obj = parser.parse(new FileReader(f));
-                    } catch (IOException | ParseException ignored) {
-                    }
+                    } catch (IOException | ParseException ignored) { }
                     JSONObject jsonObj = (JSONObject) obj;
                     int id = ((Long) jsonObj.get("id")).intValue();
                     List<Long> s = ((JSONArray) jsonObj.get("data"));

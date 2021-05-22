@@ -25,7 +25,7 @@ import java.util.UUID;
 
 public class WorldUtil {
     public static void dimSwitch(Player player, ServerJoinGamePacket packet) {
-        if (packet == null) {
+        if(packet == null) {
             packet = new ServerJoinGamePacket(0, Gamemode.SURVIVAL, Dimension.OVERWORLD, Difficulty.PEACEFULL, 1, "default_1_1", false);
         }
         player.getSession().sendPacket(new ServerRespawnPacket(Dimension.END, Difficulty.PEACEFULL, Gamemode.SURVIVAL, "default_1_1"));
@@ -57,8 +57,7 @@ public class WorldUtil {
                     player.getSession().sendPacket(new CustomPacket(player.getSession().getProtocolID() == 47 ? 0x26 : 0x20, data));
                     i++;
                 }
-            } catch (IOException ignored) {
-            }
+            } catch (IOException ignored) { }
         }
 
 //        try {
@@ -138,7 +137,7 @@ public class WorldUtil {
 
                 PlayerListEntry playerListEntry = new PlayerListEntry(profile, Gamemode.ADVENTURE, 0, null);
 
-                p.getSession().sendPacket(new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, new PlayerListEntry[]{playerListEntry}));
+                p.getSession().sendPacket(new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, new PlayerListEntry[]{ playerListEntry }));
                 p.getSession().sendPacket(new ServerSpawnPlayerPacket(i, profile.getId(), x, y, z, 0, 0, 0, new EntityMetadata(10, MetadataType.BYTE, Byte.MAX_VALUE)));
                 p.getTabList().add(playerListEntry);
                 i++;

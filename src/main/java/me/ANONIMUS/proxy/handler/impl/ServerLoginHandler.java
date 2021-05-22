@@ -53,8 +53,7 @@ public class ServerLoginHandler extends ServerHandler {
                     UUID uuid = null;
                     try {
                         uuid = MojangAPI.getUUID(playerName);
-                    } catch (InvalidPlayerException ignored) {
-                    }
+                    } catch (InvalidPlayerException ignored) { }
 
                     player.getSession().sendPacket(new ServerLoginSetCompressionPacket(256));
                     player.getSession().setCompressionThreshold(256);
