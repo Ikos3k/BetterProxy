@@ -44,7 +44,7 @@ public class ProxyServer {
 
                             @Override
                             public void channelInactive(ChannelHandlerContext ctx) {
-                                BetterProxy.getInstance().getPlayerManager().getPlayer(ctx.channel()).disconnected();
+                                BetterProxy.getInstance().getPlayerManager().getPlayer(ctx.channel()).disconnect();
                             }
 
                             @Override

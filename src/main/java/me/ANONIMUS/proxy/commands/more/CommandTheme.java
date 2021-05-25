@@ -15,7 +15,7 @@ public class CommandTheme extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) {
         if (args.length == 2) {
             sender.setThemeType(ThemeType.valueOf(args[1].toUpperCase()));
             ChatUtil.sendChatMessage("Successfully changed theme to " + sender.getThemeType().getColor(1) + sender.getThemeType(), sender, true);

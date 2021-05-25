@@ -13,7 +13,7 @@ public class CommandLogin extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) {
         if (sender.isLogged()) {
             ChatUtil.sendChatMessage("&4You are already logged!", sender, true);
             return;

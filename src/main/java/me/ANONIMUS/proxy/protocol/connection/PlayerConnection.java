@@ -45,7 +45,7 @@ public class PlayerConnection {
 
     EventLoopGroup group = new NioEventLoopGroup();
 
-    public void connect(String host, int port, Proxy proxy) {
+    public void connect(String ip, int port, Proxy proxy) {
         final Bootstrap bootstrap = new Bootstrap()
                 .group(group)
                 .channel(NioSocketChannel.class)
@@ -65,14 +65,14 @@ public class PlayerConnection {
                             @Override
                             public void channelActive(ChannelHandlerContext ctx) throws Exception {
                                 PacketUtil.clearTabList(owner);
-                                ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Connecting to server &7[" + owner.getThemeType().getColor(1) + host + "&7]", owner, false);
+                                ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Connecting to server &7[" + owner.getThemeType().getColor(1) + ip + "&7]", owner, false);
                                 if (proxy != Proxy.NO_PROXY) {
                                     ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Used proxy: " + owner.getThemeType().getColor(2) + proxy.address().toString(), owner, false);
                                 }
                                 TimeUnit.MILLISECONDS.sleep(150);
-                                owner.getRemoteSession().sendPacket(new HandshakePacket(owner.getSession().getProtocolID(), host, port, 2));
+                                owner.getRemoteSession().sendPacket(new HandshakePacket(owner.getSession().getProtocolID(), ip, port, 2));
                                 owner.getRemoteSession().sendPacket(new ClientLoginStartPacket(username));
-                                owner.setServerData(new ServerData(host, port));
+                                owner.setServerData(new ServerData(ip, port));
                             }
 
                             @Override
@@ -90,7 +90,7 @@ public class PlayerConnection {
                             @Override
                             protected void channelRead0(ChannelHandlerContext channelHandlerContext, Packet packet) {
                                 owner.getLastPacket().setReceived(System.currentTimeMillis());
-                                owner.getLastPacket().setPacket(packet);
+                                owner.getLastPacket().setLastReceivedPacket(packet);
                                 if (packet instanceof ServerLoginSetCompressionPacket) {
                                     owner.getRemoteSession().setCompressionThreshold(((ServerLoginSetCompressionPacket) packet).getThreshold());
                                 } else if (packet instanceof ServerLoginSuccessPacket) {
@@ -130,8 +130,7 @@ public class PlayerConnection {
                                                 owner.setPlayersState(false);
                                                 return;
                                             }
-                                            out = out.replace("[", "").replace("]", "");
-                                            ChatUtil.sendChatMessage("&f" + out + " &8[&f" + owner.getPlayers().size() + "&8]", owner, true);
+                                            ChatUtil.sendChatMessage("&f" + out.replace("[", "").replace("]", "") + " &8[&f" + owner.getPlayers().size() + "&8]", owner, true);
                                             owner.setPlayersState(false);
                                         }
                                         if (owner.isPluginsState()) {
@@ -151,8 +150,7 @@ public class PlayerConnection {
                                                 owner.setPluginsState(false);
                                                 return;
                                             }
-                                            out = out.replace("[", "").replace("]", "");
-                                            ChatUtil.sendChatMessage("&f" + out, owner, true);
+                                            ChatUtil.sendChatMessage("&f" + out.replace("[", "").replace("]", ""), owner, true);
                                             owner.setPluginsState(false);
                                         }
                                     }
@@ -182,7 +180,7 @@ public class PlayerConnection {
                         });
                     }
                 });
-        owner.setRemoteSession(new Session(bootstrap.connect(host, port).syncUninterruptibly().channel()));
+        owner.setRemoteSession(new Session(bootstrap.connect(ip, port).syncUninterruptibly().channel()));
         owner.getRemoteSession().setProtocolID(owner.getSession().getProtocolID());
         owner.getRemoteSession().setConnectionState(ConnectionState.LOGIN);
         owner.getRemoteSession().setUsername(username);

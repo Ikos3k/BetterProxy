@@ -12,7 +12,7 @@ public class CommandPlugins extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) {
         if (args[1].equals("tabcomplete")) {
             ChatUtil.sendChatMessage("Try to get plugins! &7(" + sender.getThemeType().getColor(1) + "TabComplete&7)", sender, true);
             sender.setPluginsState(true);

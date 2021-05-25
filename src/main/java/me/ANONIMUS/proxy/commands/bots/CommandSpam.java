@@ -13,11 +13,12 @@ public class CommandSpam extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) {
         if (sender.getBots().isEmpty()) {
             ChatUtil.sendChatMessage("&cYou don't have any connected bots", sender, true);
             return;
         }
+
         ChatUtil.sendChatMessage("&7message : " + args[1], sender, true);
         sender.getBots().forEach(bot -> {
             String start = StringUtil.generateString(1);

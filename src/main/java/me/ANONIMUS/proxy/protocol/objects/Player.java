@@ -7,16 +7,24 @@ import me.ANONIMUS.proxy.enums.TimeType;
 import me.ANONIMUS.proxy.handler.impl.ServerLoginHandler;
 import me.ANONIMUS.proxy.handler.impl.ServerStatusHandler;
 import me.ANONIMUS.proxy.managers.OptionsManager;
-import me.ANONIMUS.proxy.objects.Account;
-import me.ANONIMUS.proxy.objects.LastPacket;
-import me.ANONIMUS.proxy.objects.ServerData;
+import me.ANONIMUS.proxy.objects.*;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntry;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.HandshakePacket;
+import me.ANONIMUS.proxy.utils.SkinUtil;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class Player {
@@ -40,6 +48,7 @@ public class Player {
     private Account account;
     private boolean mother;
     private boolean logged;
+    private Skin skin;
 
     public void packetReceived(final Packet packet) {
         if (packet instanceof HandshakePacket) {
@@ -63,15 +72,90 @@ public class Player {
         }
     }
 
-    public void disconnected() {
-        connected = false;
-        if (remoteSession != null) {
-            remoteSession.getChannel().close();
+    public void createOptionsFile() {
+        try {
+            File file = new File(BetterProxy.getInstance().getDirFolder() + "/players", account.getUsername() + ".json");
+            if(file.exists()) {
+                file.delete();
+            }
+            file.createNewFile();
+
+            JSONObject jsonObj = new JSONObject();
+
+            JSONObject optionsObj = new JSONObject();
+            for(Option option : optionsManager.getOptions()) {
+                optionsObj.put(option.getName(), option.isEnabled());
+            }
+            optionsObj.put("prefixCMD", prefixCMD);
+            optionsObj.put("theme", themeType.name());
+
+            jsonObj.put("options", optionsObj);
+
+            JSONObject skinObj = new JSONObject();
+
+            if(skin == null) {
+                this.skin = SkinUtil.getSkin(this.account.getUsername(), null);
+            }
+
+            if(skin != null) {
+                skinObj.put("value", skin.getValue());
+                skinObj.put("signature", skin.getSignature());
+                jsonObj.put("skin", skinObj);
+            }
+
+            FileWriter fileWriter = new FileWriter(file);
+            fileWriter.write(new ObjectMapper().defaultPrettyPrintingWriter().writeValueAsString(jsonObj));
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
+
+    public void loadOptions() {
+        File file = new File(BetterProxy.getInstance().getDirFolder() + "/players", account.getUsername() + ".json");
+        if(!file.exists()) {
+            createOptionsFile();
+        }
+
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader(file));
+            JSONObject jsonObj = (JSONObject) obj;
+
+            JSONObject optionsObj = (JSONObject) jsonObj.get("options");
+            for(Option option : this.optionsManager.getOptions()) {
+                option.setEnabled(this, (Boolean) optionsObj.get(option.getName()));
+            }
+            this.prefixCMD = (String) optionsObj.get("prefixCMD");
+            this.themeType = ThemeType.valueOf((String) optionsObj.get("theme"));
+
+            JSONObject skinObj = (JSONObject) jsonObj.get("skin");
+            if(skinObj != null) {
+                GameProfile gameProfile = new GameProfile(UUID.randomUUID(), this.account.getUsername());
+                gameProfile.getProperties().add(new GameProfile.Property("textures", (String) skinObj.get("value"), (String) skinObj.get("signature")));
+
+                this.skin = new Skin(gameProfile);
+            } else {
+                this.skin = SkinUtil.getSkin(this.account.getUsername(), null);
+            }
+        } catch (ParseException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void disconnect() {
+        connected = false;
         if (session != null) {
             if (session.getPacketHandler() != null) {
                 session.getPacketHandler().disconnected();
+                if(account != null) {
+                    createOptionsFile();
+                }
             }
+        }
+        if (remoteSession != null) {
+            remoteSession.getChannel().close();
         }
         BetterProxy.getInstance().getPlayerManager().removePlayer(this);
     }

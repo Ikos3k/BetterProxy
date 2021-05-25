@@ -3,7 +3,7 @@ package me.ANONIMUS.proxy.protocol.objects;
 import java.util.*;
 
 public class GameProfile {
-    private final UUID id;
+    private UUID id;
     private final String name;
     private List<Property> properties;
     private Map<TextureType, Texture> textures;
@@ -30,6 +30,10 @@ public class GameProfile {
 
     public boolean isComplete() {
         return this.id != null && this.name != null && !this.name.equals("");
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public UUID getId() {

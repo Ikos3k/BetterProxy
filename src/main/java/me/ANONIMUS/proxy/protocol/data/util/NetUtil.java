@@ -28,7 +28,7 @@ public class NetUtil {
                     value = in.readShort();
                     break;
                 }
-                case INT: {
+                case INTEGER: {
                     value = in.readInt();
                     break;
                 }
@@ -78,7 +78,7 @@ public class NetUtil {
                     out.writeShort((short) meta.getValue());
                     break;
                 }
-                case INT: {
+                case INTEGER: {
                     out.writeInt((int) meta.getValue());
                     break;
                 }

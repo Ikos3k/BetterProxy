@@ -15,6 +15,6 @@ public enum Gamemode {
     }
 
     public static Gamemode getById(int id) {
-        return Arrays.stream(Gamemode.values()).filter(gm -> gm.id == id).findFirst().orElse(Gamemode.SURVIVAL);
+        return Arrays.stream(values()).filter(gm -> gm.id == id).findFirst().orElse(Gamemode.SURVIVAL);
     }
 }

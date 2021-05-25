@@ -12,11 +12,12 @@ public class CommandRespawn extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) {
         if (sender.getBots().isEmpty()) {
             ChatUtil.sendChatMessage("&cYou don't have any connected bots", sender, true);
             return;
         }
+
         sender.getBots().forEach(bot -> bot.getSession().sendPacket(new ClientStatusPacket(0)));
         ChatUtil.sendChatMessage("&cSuccessfully respawns bots!", sender, true);
     }

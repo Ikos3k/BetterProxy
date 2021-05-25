@@ -21,7 +21,7 @@ public class CommandJoinBot extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) {
         String host = args[1];
         int port = 25565;
         if (host.contains(":")) {
@@ -48,16 +48,14 @@ public class CommandJoinBot extends Command {
         connect(sender, Integer.parseInt(args[4]), host, port, args[2], Integer.parseInt(args[3]), Boolean.parseBoolean(args[6]));
     }
 
-    private void connect(final Player sender, final int delay, final String host, final int port, final String usernames, final int amount, final boolean ping) {
+    private void connect(final Player sender, final int delay, final String host, final int port, final String username, final int amount, final boolean ping) {
         Executors.newSingleThreadExecutor().submit(() -> {
             ChatUtil.sendChatMessage(sender.getThemeType().getColor(2) + "Sending!", sender, true);
             for (int i = 0; i < amount; i++) {
-                final String username = (usernames + i);
-
                 if (ping) {
                     new ServerPinger(sender, false).connect(host, port, Proxy.NO_PROXY);
                 }
-                new BotConnection().connect(host, port, Proxy.NO_PROXY, new Bot(sender), username);
+                new BotConnection().connect(host, port, Proxy.NO_PROXY, new Bot(sender), username + i);
                 try {
                     TimeUnit.MILLISECONDS.sleep(delay);
                 } catch (InterruptedException e) {

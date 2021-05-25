@@ -2,10 +2,9 @@ package me.ANONIMUS.proxy.utils;
 
 import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.objects.Schematic;
+import me.ANONIMUS.proxy.objects.Skin;
 import me.ANONIMUS.proxy.protocol.ProtocolType;
 import me.ANONIMUS.proxy.protocol.data.*;
-import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntry;
-import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntryAction;
 import me.ANONIMUS.proxy.protocol.objects.GameProfile;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.impl.CustomPacket;
@@ -68,7 +67,6 @@ public class WorldUtil {
 
         player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, false, false, false, 0f, 0f));
         PacketUtil.lobbyPosTeleport(player);
-
         PacketUtil.clearTabList(player);
 
         if (player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol()) {
@@ -135,11 +133,8 @@ public class WorldUtil {
                 GameProfile profile = new GameProfile(UUID.randomUUID(), name);
                 profile.getProperties().add(new GameProfile.Property("textures", value, signature));
 
-                PlayerListEntry playerListEntry = new PlayerListEntry(profile, Gamemode.ADVENTURE, 0, null);
-
-                p.getSession().sendPacket(new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, new PlayerListEntry[]{ playerListEntry }));
+                p.getTabList().add(SkinUtil.showSkin(p.getSession(), null, Skin.fromProfile(profile)));
                 p.getSession().sendPacket(new ServerSpawnPlayerPacket(i, profile.getId(), x, y, z, 0, 0, 0, new EntityMetadata(10, MetadataType.BYTE, Byte.MAX_VALUE)));
-                p.getTabList().add(playerListEntry);
                 i++;
             }
         } catch (IOException | ParseException e) {

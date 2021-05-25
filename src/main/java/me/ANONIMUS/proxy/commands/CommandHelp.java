@@ -20,7 +20,7 @@ public class CommandHelp extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) {
         List<Command> list = BetterProxy.getInstance().getCommandManager().getCommands();
         list.sort(Comparator.comparingInt(s -> StringUtil.getStringWidth(s.getPrefix())));
 

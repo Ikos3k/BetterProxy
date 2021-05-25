@@ -13,15 +13,17 @@ public class CommandAlert extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) {
         String out = "";
         for (int i = 1; i < args.length; ++i) {
             out = (!out.equals("") ? out + " " : "") + args[i];
         }
+
         if (out.equals("")) {
             ChatUtil.sendChatMessage("&cYou cannot send an empty message!", sender, true);
             return;
         }
+
         String finalOut = out;
         BetterProxy.getInstance().getPlayerManager().getPlayers().forEach(player -> PacketUtil.sendTitle(player, "&8[&4ALERT&8]", "&n" + finalOut, 13, 18, 13));
     }

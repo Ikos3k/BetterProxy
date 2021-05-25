@@ -5,9 +5,10 @@ import me.ANONIMUS.proxy.protocol.packet.Packet;
 
 @Data
 public class LastPacket {
+    private Packet lastSentPacket;
     private long sent;
+    private Packet lastReceivedPacket;
     private long received;
-    private Packet packet;
 
     public int getLastMs() {
         int ms = (int) (received - sent);

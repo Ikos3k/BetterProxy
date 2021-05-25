@@ -11,9 +11,10 @@ public class CommandFree extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) {
         System.gc();
         System.runFinalization();
+
         ChatUtil.sendChatMessage("Freeing memory", sender, true);
     }
 }

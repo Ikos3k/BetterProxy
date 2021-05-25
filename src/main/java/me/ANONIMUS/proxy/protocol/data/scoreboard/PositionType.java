@@ -12,7 +12,7 @@ public enum PositionType {
     }
 
     public static PositionType getById(int id) {
-        return Arrays.stream(PositionType.values()).filter(pos -> pos.id == id).findFirst().orElse(PositionType.LIST);
+        return Arrays.stream(values()).filter(pos -> pos.id == id).findFirst().orElse(PositionType.LIST);
     }
 
     public int getId() {

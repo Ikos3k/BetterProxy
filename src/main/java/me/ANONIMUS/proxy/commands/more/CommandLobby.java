@@ -12,7 +12,7 @@ public class CommandLobby extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) {
         PacketUtil.lobbyPosTeleport(sender);
         ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Teleported to the lobby!", sender, false);
     }

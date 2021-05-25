@@ -6,7 +6,6 @@ import java.util.Arrays;
 
 @Getter
 public enum ObjectiveMode {
-
     CREATE(0), REMOVE(1), UPDATE(2);
 
     private final int id;
@@ -16,6 +15,6 @@ public enum ObjectiveMode {
     }
 
     public static ObjectiveMode getById(int id) {
-        return Arrays.stream(ObjectiveMode.values()).filter(ob -> ob.id == id).findFirst().orElse(ObjectiveMode.CREATE);
+        return Arrays.stream(values()).filter(ob -> ob.id == id).findFirst().orElse(ObjectiveMode.CREATE);
     }
 }

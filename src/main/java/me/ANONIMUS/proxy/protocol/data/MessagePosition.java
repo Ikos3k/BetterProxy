@@ -15,6 +15,6 @@ public enum MessagePosition {
     }
 
     public static MessagePosition getById(int id) {
-        return Arrays.stream(MessagePosition.values()).filter(m -> m.id == id).findFirst().orElse(MessagePosition.CHATBOX);
+        return Arrays.stream(values()).filter(m -> m.id == id).findFirst().orElse(MessagePosition.CHATBOX);
     }
 }

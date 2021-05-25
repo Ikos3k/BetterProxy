@@ -18,7 +18,6 @@ import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketDirection;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.HandshakePacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.status.ClientStatusRequestPacket;
-import me.ANONIMUS.proxy.protocol.packet.impl.server.status.ServerStatusPongPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.status.ServerStatusResponsePacket;
 import me.ANONIMUS.proxy.utils.ChatUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -79,7 +78,7 @@ public class ServerPinger {
                                     ChatUtil.sendChatMessage("&7Version: " + owner.getThemeType().getColor(1) + info.getVersionInfo().getVersionName() + "(" + info.getVersionInfo().getProtocolVersion() + ")", owner, false);
                                     session.getChannel().close();
                                     group.shutdownGracefully();
-                                } else if (packet instanceof ServerStatusPongPacket) {
+                                } else {
                                     session.getChannel().close();
                                     group.shutdownGracefully();
                                 }

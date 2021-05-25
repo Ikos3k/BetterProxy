@@ -15,9 +15,10 @@ public class CommandTime extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) {
         sender.setTimeType(TimeType.valueOf(args[1].toUpperCase()));
         ChatUtil.sendChatMessage("&7You have set the game time to: " + sender.getThemeType().getColor(1) + args[1].toUpperCase(), sender, true);
+
         if (sender.getTimeType() != TimeType.DEFAULT) {
             sender.getSession().sendPacket(new ServerTimeUpdatePacket(sender.getTimeType().getAge(), sender.getTimeType().getTime()));
         }

@@ -16,6 +16,6 @@ public enum Difficulty {
     }
 
     public static Difficulty getById(int id) {
-        return Arrays.stream(Difficulty.values()).filter(gm -> gm.id == id).findFirst().orElse(Difficulty.NORMAL);
+        return Arrays.stream(values()).filter(gm -> gm.id == id).findFirst().orElse(Difficulty.NORMAL);
     }
 }

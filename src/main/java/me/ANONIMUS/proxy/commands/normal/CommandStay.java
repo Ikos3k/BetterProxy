@@ -32,7 +32,7 @@ public class CommandStay extends Command {
     EventLoopGroup group = new NioEventLoopGroup();
 
     @Override
-    public void onCommand(Player sender, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) {
         final Bot bot = new Bot(sender);
 
         sender.getRemoteSession().getChannel().pipeline().replace("handler", "handler", new SimpleChannelInboundHandler<Packet>() {

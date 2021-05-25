@@ -3,11 +3,9 @@ package me.ANONIMUS.proxy.handler.impl;
 import lombok.SneakyThrows;
 import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.handler.ServerHandler;
-import me.ANONIMUS.proxy.managers.SkinManager;
 import me.ANONIMUS.proxy.objects.Account;
 import me.ANONIMUS.proxy.protocol.ProtocolType;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
-import me.ANONIMUS.proxy.protocol.objects.GameProfile;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.login.ClientLoginStartPacket;
@@ -50,36 +48,41 @@ public class ServerLoginHandler extends ServerHandler {
             }
             for (Account account : BetterProxy.getInstance().getAccounts()) {
                 if (account.getUsername().equals(playerName)) {
-                    UUID uuid = null;
+                    UUID uuid;
                     try {
                         uuid = MojangAPI.getUUID(playerName);
-                    } catch (InvalidPlayerException ignored) { }
+                    } catch (InvalidPlayerException ignored) {
+                        uuid = UUID.randomUUID();
+                    }
 
                     player.getSession().sendPacket(new ServerLoginSetCompressionPacket(256));
                     player.getSession().setCompressionThreshold(256);
-                    player.getSession().sendPacket(new ServerLoginSuccessPacket(uuid != null ? uuid : UUID.randomUUID(), playerName));
+                    player.getSession().sendPacket(new ServerLoginSuccessPacket(uuid, playerName));
                     player.getSession().setConnectionState(ConnectionState.PLAY);
                     player.getSession().setPacketHandler(new ServerPlayHandler(player));
                     player.setAccount(account);
+                    player.loadOptions();
 
-                    if (uuid != null && player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol()) {
-                        new SkinManager(new GameProfile(uuid, playerName), player.getSession());
-                    }
+                    SkinUtil.showSkin(player.getSession(), uuid, player.getSkin());
 
                     WorldUtil.emptyWorld(player);
                     System.out.println("[" + account.getUsername() + "] Connected!");
-
                     ChatUtil.clearChat(100, player);
+
                     ScoreboardUtil.sendScoreboard(player);
+
                     if (CalendarUtil.isHoliday()) {
                         PacketUtil.sendTitle(player, ";D", player.getThemeType().getColor(1) + Objects.requireNonNull(CalendarUtil.getHoliday()).getWishes() + "!");
                     }
+
                     ChatUtil.sendBroadcastMessage(player.getThemeType().getColor(1) + ">> &8Player " + player.getThemeType().getColor(1) + playerName + " &8has connected to the " + player.getThemeType().getColor(1) + "BetterProxy &8(" + player.getThemeType().getColor(2) + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8)", false);
+
                     ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Welcome to " + player.getThemeType().getColor(1) + "BetterProxy &8by &4ANONIMUS", player, false);
-                    ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Supported versions: &e%supported_versions%".replace("%supported_versions%", "&e" + Arrays.stream(ProtocolType.values()).filter(protocolType ->
+                    ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Supported versions: &e" + Arrays.stream(ProtocolType.values()).filter(protocolType ->
                             protocolType != ProtocolType.PROTOCOL_UNKNOWN)
-                            .map(ProtocolType::getPrefix).collect(Collectors.joining(ChatUtil.fixColor("&8, &e")))), player, false);
+                            .map(ProtocolType::getPrefix).collect(Collectors.joining(ChatUtil.fixColor("&8, &e"))), player, false);
                     ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Log in using the command: " + player.getThemeType().getColor(1) + player.getPrefixCMD() + "login [password]", player, false);
+
                     PacketUtil.sendBoosBar(player, ChatUtil.fixColor("&fWelcome to " + player.getThemeType().getColor(1) + "BetterProxy &fby &4ANONIMUS"));
                     return;
                 }

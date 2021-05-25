@@ -16,6 +16,6 @@ public enum ObjectiveType {
     }
 
     public static ObjectiveType getByValue(String val) {
-        return Arrays.stream(ObjectiveType.values()).filter(ob -> ob.value.equals(val)).findFirst().orElse(ObjectiveType.INTEGER);
+        return Arrays.stream(values()).filter(ob -> ob.value.equals(val)).findFirst().orElse(ObjectiveType.INTEGER);
     }
 }

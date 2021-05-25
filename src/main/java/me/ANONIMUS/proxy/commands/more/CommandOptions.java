@@ -20,7 +20,7 @@ public class CommandOptions extends Command {
     }
 
     @Override
-    public void onCommand(Player sender, String[] args) throws Exception {
+    public void onCommand(Player sender, String[] args) {
         if (args[1].equals("list") && sender.getSession().getProtocolID() == 47) {
             List<ItemStack> items = new ArrayList<>();
             sender.getOptionsManager().getOptions().forEach(option -> items.add(ItemUtil.option(option)));
@@ -28,6 +28,7 @@ public class CommandOptions extends Command {
             sender.getSession().sendPacket(new ServerWindowItemsPacket(234, items));
             return;
         }
+
         if (args[1].equals("set")) {
             Option option = sender.getOptionsManager().getOptionByName(args[2]);
             if (option == null) {

@@ -20,6 +20,6 @@ public enum PlayerListEntryAction {
     }
 
     public static PlayerListEntryAction getById(int id) {
-        return Arrays.stream(values()).filter(gt -> gt.id == id).findFirst().get();
+        return Arrays.stream(values()).filter(gt -> gt.id == id).findFirst().orElse(null);
     }
 }

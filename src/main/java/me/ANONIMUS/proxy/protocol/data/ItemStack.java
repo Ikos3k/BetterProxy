@@ -55,6 +55,10 @@ public class ItemStack {
         return this.nbt;
     }
 
+    public void setNbt(NBTTagCompound nbt) {
+        this.nbt = nbt;
+    }
+
     public ItemStack setStackDisplayName(String displayName) {
         if (this.nbt == null) {
             this.nbt = new NBTTagCompound();

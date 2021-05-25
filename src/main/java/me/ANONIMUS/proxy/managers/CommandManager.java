@@ -56,6 +56,7 @@ public class CommandManager {
             ChatUtil.sendChatMessage("&4You cannot be connected to the server!", sender, true);
             return;
         }
+
         try {
             if (!(command instanceof CommandHelp) && cooldown.containsKey(sender.getAccount().getUsername())) {
                 final long secondsLeft = cooldown.get(sender.getAccount().getUsername()) / 1000L + sender.getAccount().getGroup().getDelayCMD() - System.currentTimeMillis() / 1000L;
@@ -65,6 +66,7 @@ public class CommandManager {
                 }
                 cooldown.put(sender.getAccount().getUsername(), System.currentTimeMillis());
             }
+
             command.onCommand(sender, args);
         } catch (final Exception e) {
             ChatUtil.sendChatMessage("&8Correct usage: " + sender.getThemeType().getColor(1) + sender.getPrefixCMD() + command.getPrefix() + " " + command.getUsage(), sender, true);

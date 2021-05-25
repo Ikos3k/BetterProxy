@@ -2,6 +2,7 @@ package me.ANONIMUS.proxy.managers;
 
 import lombok.Getter;
 import me.ANONIMUS.proxy.objects.Config;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -9,6 +10,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -21,7 +23,43 @@ public class ConfigManager {
         this.config = new Config();
         this.file = file;
 
+        if(!file.exists()) {
+            create();
+        }
+
         read();
+    }
+
+    public void create() {
+        JSONObject jsonObj = new JSONObject();
+
+        jsonObj.put("port", 1337);
+
+        JSONObject motdObj = new JSONObject();
+        motdObj.put("versionInfo", "&4BetterProxy");
+        motdObj.put("line1", "     &f✖ &l&m\\-\\-\\-\\-&r&f&l>> &6BetterProxy &f&l<<&m-/-/-/-/&r&f ✖&r");
+        motdObj.put("line2", "        &c----&e/ &6✯ &eProxy by ANONIMUS &6✯ &e\\&c----");
+
+        JSONArray playersArray = new JSONArray();
+        playersArray.add("&f---------------------------------------------------");
+        playersArray.add("                     &8Supported versions:");
+        playersArray.add(" &e%supported_versions%");
+        playersArray.add("&f---------------------------------------------------");
+        motdObj.put("playerList", playersArray);
+
+        motdObj.put("icon", "icon.png");
+        motdObj.put("protocol", 0);
+
+        jsonObj.put("motd", motdObj);
+
+        jsonObj.put("packet_debugger", false);
+
+        try (FileWriter fileWriter = new FileWriter(file)) {
+            fileWriter.write(new ObjectMapper().defaultPrettyPrintingWriter().writeValueAsString(jsonObj));
+            fileWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void read() {
