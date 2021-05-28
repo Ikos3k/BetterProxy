@@ -24,7 +24,7 @@ public class PlayerManager {
 
     public Player getPlayer(String name) {
         for (Player p : players) {
-            if (p.getAccount().getUsername().equals(name)) {
+            if (p.getUsername().equals(name)) {
                 return p;
             }
         }

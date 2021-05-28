@@ -8,7 +8,7 @@ import me.ANONIMUS.proxy.protocol.packet.Packet;
 public abstract class ServerHandler {
     public final Player player;
 
-    public abstract void disconnected();
+    public abstract void disconnect();
 
     public abstract void handlePacket(final Packet packet);
 }

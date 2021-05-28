@@ -58,13 +58,13 @@ public class CommandManager {
         }
 
         try {
-            if (!(command instanceof CommandHelp) && cooldown.containsKey(sender.getAccount().getUsername())) {
-                final long secondsLeft = cooldown.get(sender.getAccount().getUsername()) / 1000L + sender.getAccount().getGroup().getDelayCMD() - System.currentTimeMillis() / 1000L;
+            if (!(command instanceof CommandHelp) && cooldown.containsKey(sender.getUsername())) {
+                final long secondsLeft = cooldown.get(sender.getUsername()) / 1000L + sender.getAccount().getGroup().getDelayCMD() - System.currentTimeMillis() / 1000L;
                 if (secondsLeft > 0L) {
                     ChatUtil.sendChatMessage("&7The next command can be used in " + sender.getThemeType().getColor(1) + secondsLeft + "s&7!", sender, true);
                     return;
                 }
-                cooldown.put(sender.getAccount().getUsername(), System.currentTimeMillis());
+                cooldown.put(sender.getUsername(), System.currentTimeMillis());
             }
 
             command.onCommand(sender, args);

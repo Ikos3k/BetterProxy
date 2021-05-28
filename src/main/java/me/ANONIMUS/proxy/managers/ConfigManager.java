@@ -24,13 +24,13 @@ public class ConfigManager {
         this.file = file;
 
         if(!file.exists()) {
-            create();
+            write();
         }
 
         read();
     }
 
-    public void create() {
+    public void write() {
         JSONObject jsonObj = new JSONObject();
 
         jsonObj.put("port", 1337);

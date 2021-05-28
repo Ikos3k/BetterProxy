@@ -74,7 +74,7 @@ public class Player {
 
     public void createOptionsFile() {
         try {
-            File file = new File(BetterProxy.getInstance().getDirFolder() + "/players", account.getUsername() + ".json");
+            File file = new File(BetterProxy.getInstance().getDirFolder() + "/players", getUsername() + ".json");
             if(file.exists()) {
                 file.delete();
             }
@@ -94,7 +94,7 @@ public class Player {
             JSONObject skinObj = new JSONObject();
 
             if(skin == null) {
-                this.skin = SkinUtil.getSkin(this.account.getUsername(), null);
+                this.skin = SkinUtil.getSkin(getUsername(), null);
             }
 
             if(skin != null) {
@@ -113,7 +113,7 @@ public class Player {
     }
 
     public void loadOptions() {
-        File file = new File(BetterProxy.getInstance().getDirFolder() + "/players", account.getUsername() + ".json");
+        File file = new File(BetterProxy.getInstance().getDirFolder() + "/players", getUsername() + ".json");
         if(!file.exists()) {
             createOptionsFile();
         }
@@ -132,12 +132,12 @@ public class Player {
 
             JSONObject skinObj = (JSONObject) jsonObj.get("skin");
             if(skinObj != null) {
-                GameProfile gameProfile = new GameProfile(UUID.randomUUID(), this.account.getUsername());
+                GameProfile gameProfile = new GameProfile(UUID.randomUUID(), this.getUsername());
                 gameProfile.getProperties().add(new GameProfile.Property("textures", (String) skinObj.get("value"), (String) skinObj.get("signature")));
 
                 this.skin = new Skin(gameProfile);
             } else {
-                this.skin = SkinUtil.getSkin(this.account.getUsername(), null);
+                this.skin = SkinUtil.getSkin(this.getUsername(), null);
             }
         } catch (ParseException | IOException e) {
             e.printStackTrace();
@@ -148,7 +148,7 @@ public class Player {
         connected = false;
         if (session != null) {
             if (session.getPacketHandler() != null) {
-                session.getPacketHandler().disconnected();
+                session.getPacketHandler().disconnect();
                 if(account != null) {
                     createOptionsFile();
                 }
@@ -158,6 +158,10 @@ public class Player {
             remoteSession.getChannel().close();
         }
         BetterProxy.getInstance().getPlayerManager().removePlayer(this);
+    }
+
+    public String getUsername() {
+        return session.getUsername();
     }
 
     public boolean isConnected() {

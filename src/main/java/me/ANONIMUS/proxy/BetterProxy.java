@@ -12,8 +12,8 @@ import me.ANONIMUS.proxy.threads.*;
 import me.ANONIMUS.proxy.utils.FileUtil;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 
 @Getter
@@ -24,10 +24,9 @@ public class BetterProxy {
     private final ConfigManager configManager;
     private final PlayerManager playerManager;
     private static BetterProxy instance;
-    private final List<Account> accounts;
+    private final Map<String, Account> accounts;
     private final ProxyServer server;
     private final File dirFolder;
-    private final String icon;
 
     public BetterProxy() {
         instance = this;
@@ -36,10 +35,9 @@ public class BetterProxy {
         packetRegistry = new PacketRegistry();
         exploitManager = new ExploitManager();
         configManager = new ConfigManager(new File(dirFolder + "/config.json"));
-        icon = FileUtil.loadIconFile(configManager.getConfig().icon);
         playerManager = new PlayerManager();
-        accounts = new ArrayList<>();
-        server = new ProxyServer();
+        accounts = new HashMap<>();
+        server = new ProxyServer(FileUtil.getIconFile(configManager.getConfig().icon));
     }
 
     public void run() {
@@ -60,7 +58,7 @@ public class BetterProxy {
         System.out.println("> Loading accounts...");
         FileUtil.loadAccounts();
         System.out.println("> Starting the server...");
-        server.bind();
+        server.bind(playerManager);
         System.out.println();
 
         final Timer timer = new Timer();

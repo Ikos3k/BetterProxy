@@ -8,6 +8,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.Data;
 import me.ANONIMUS.proxy.BetterProxy;
+import me.ANONIMUS.proxy.managers.PlayerManager;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
 import me.ANONIMUS.proxy.protocol.handlers.PacketCodec;
 import me.ANONIMUS.proxy.protocol.handlers.VarInt21FrameCodec;
@@ -23,7 +24,9 @@ import java.util.concurrent.TimeUnit;
 public class ProxyServer {
     EventLoopGroup worker = new NioEventLoopGroup();
 
-    public void bind() {
+    private final String icon;
+
+    public void bind(PlayerManager playerManager) {
         new ServerBootstrap()
                 .group(worker)
                 .channel(NioServerSocketChannel.class)
@@ -39,21 +42,25 @@ public class ProxyServer {
                         pipeline.addLast(new SimpleChannelInboundHandler<Packet>() {
                             @Override
                             public void channelActive(ChannelHandlerContext ctx) {
-                                BetterProxy.getInstance().getPlayerManager().createPlayer(new Session(ctx.channel()));
+                                playerManager.createPlayer(new Session(ctx.channel()));
                             }
 
                             @Override
                             public void channelInactive(ChannelHandlerContext ctx) {
-                                BetterProxy.getInstance().getPlayerManager().getPlayer(ctx.channel()).disconnect();
+                                playerManager.getPlayer(ctx.channel()).disconnect();
                             }
 
                             @Override
                             protected void channelRead0(ChannelHandlerContext ctx, Packet packet) {
-                                BetterProxy.getInstance().getPlayerManager().getPlayer(ctx.channel()).packetReceived(packet);
+                                playerManager.getPlayer(ctx.channel()).packetReceived(packet);
                             }
                         });
                     }
                 }).bind(BetterProxy.getInstance().getConfigManager().getConfig().port);
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> BetterProxy.getInstance().getPlayerManager().getPlayers().stream().filter(p -> p.getSession().getConnectionState() == ConnectionState.PLAY).forEach(p -> p.getSession().sendPacket(new ServerKeepAlivePacket(System.currentTimeMillis()))), 3, 3, TimeUnit.SECONDS);
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> playerManager.getPlayers().stream().filter(p -> p.getSession().getConnectionState() == ConnectionState.PLAY).forEach(p -> p.getSession().sendPacket(new ServerKeepAlivePacket(System.currentTimeMillis()))), 3, 3, TimeUnit.SECONDS);
+    }
+
+    public String getIcon() {
+        return icon;
     }
 }

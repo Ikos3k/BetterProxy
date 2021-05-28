@@ -20,7 +20,7 @@ public class TabThread extends TimerTask {
                 "\n" +
                 "&7Group: " + player.getAccount().getGroup().getPrefix() +
                 "\n" +
-                "&7Username: " + player.getThemeType().getColor(2) + player.getAccount().getUsername()
+                "&7Username: " + player.getThemeType().getColor(2) + player.getUsername()
             ),
             ChatUtil.fixColor("&7Session: " + player.getThemeType().getColor(2) + (!player.isConnected() ? "Not connected" : player.getServerData().getHost()) + "\n\n" + "&l" + player.getThemeType().getColor(1) + "BetterProxy\n"))
         ));

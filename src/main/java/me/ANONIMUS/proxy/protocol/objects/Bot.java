@@ -6,4 +6,8 @@ import lombok.Data;
 public class Bot {
     private final Player owner;
     private Session session;
+
+    public String getUsername() {
+        return session.getUsername();
+    }
 }

@@ -7,12 +7,6 @@ import java.util.TimerTask;
 
 public class ScoreboardThread extends TimerTask {
     public void run() {
-        BetterProxy.getInstance().getPlayerManager().getPlayers().forEach(p -> {
-            if (p.getOptionsManager() != null && p.getOptionsManager().getOptionByName("scoreboard").isEnabled()) {
-                ScoreboardUtil.updateScoreboard(p);
-            } else {
-                ScoreboardUtil.sendEmptyScoreboard(p);
-            }
-        });
+        BetterProxy.getInstance().getPlayerManager().getPlayers().forEach(ScoreboardUtil::updateScoreboard);
     }
 }

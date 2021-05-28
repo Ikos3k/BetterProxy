@@ -31,9 +31,9 @@ public class ServerPlayHandler extends ServerHandler {
     }
 
     @Override
-    public void disconnected() {
-        System.out.println("[" + player.getAccount().getUsername() + "] Disconnected.");
-        ChatUtil.sendBroadcastMessage(player.getThemeType().getColor(1) + ">> &8The player " + player.getThemeType().getColor(1) + player.getAccount().getUsername() + " &8has disconnected from the " + player.getThemeType().getColor(1) + "BetterProxy&8!", false);
+    public void disconnect() {
+        System.out.println("[" + player.getUsername() + "] Disconnected.");
+        ChatUtil.sendBroadcastMessage(player.getThemeType().getColor(1) + ">> &8The player " + player.getThemeType().getColor(1) + player.getUsername() + " &8has disconnected from the " + player.getThemeType().getColor(1) + "BetterProxy&8!", false);
     }
 
     @SneakyThrows
@@ -111,7 +111,7 @@ public class ServerPlayHandler extends ServerHandler {
             }
         }
         if (packet instanceof ClientPlayerPositionPacket) {
-            if (((ClientPlayerPositionPacket) packet).getY() < 60 && !player.isConnected()) {
+            if (((ClientPlayerPositionPacket) packet).getY() < 65 && !player.isConnected()) {
                 PacketUtil.lobbyPosTeleport(player);
             }
         }
@@ -121,7 +121,7 @@ public class ServerPlayHandler extends ServerHandler {
             if (message.startsWith(player.getPrefixCMD())) {
                 BetterProxy.getInstance().getCommandManager().onCommand(message, player);
             } else if (player.isLogged() && message.startsWith("@")) {
-                ChatUtil.sendBroadcastMessage("&8(&f" + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8) &8[" + player.getAccount().getGroup().getPrefix() + "&8] " + player.getThemeType().getColor(1) + player.getAccount().getUsername() + " &8>> &7" + message.substring(1), false);
+                ChatUtil.sendBroadcastMessage("&8(&f" + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8) &8[" + player.getAccount().getGroup().getPrefix() + "&8] " + player.getThemeType().getColor(1) + player.getUsername() + " &8>> &7" + message.substring(1), false);
             } else {
                 forwardPacket(packet);
             }

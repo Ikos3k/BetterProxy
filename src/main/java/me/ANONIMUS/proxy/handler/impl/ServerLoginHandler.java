@@ -17,6 +17,7 @@ import me.kbrewster.exceptions.InvalidPlayerException;
 import me.kbrewster.mojangapi.MojangAPI;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,10 +28,8 @@ public class ServerLoginHandler extends ServerHandler {
     }
 
     @Override
-    public void disconnected() {
-        if (player != null && player.getAccount() != null) {
-            System.out.println("[" + player.getAccount().getUsername() + "] Disconnected during login sequence!");
-        }
+    public void disconnect() {
+        System.out.println("[" + player.getUsername() + "] Disconnected during login sequence!");
     }
 
     @SneakyThrows
@@ -38,16 +37,18 @@ public class ServerLoginHandler extends ServerHandler {
     public void handlePacket(Packet packet) {
         if (packet instanceof ClientLoginStartPacket) {
             final String playerName = ((ClientLoginStartPacket) packet).getUsername();
+            player.getSession().setUsername(playerName);
             if (BetterProxy.getInstance().getPlayerManager().getPlayers().size() > 1) {
                 for (Player p : BetterProxy.getInstance().getPlayerManager().getPlayers()) {
-                    if (p.getAccount() != null && p.getAccount().getUsername().equals(playerName)) {
+                    if (p.getAccount() != null && p.getUsername().equals(playerName)) {
                         player.getSession().sendPacket(new ServerLoginDisconnectPacket(ChatUtil.fixColor("&4The player with this nickname is already on the proxy!")));
                         return;
                     }
                 }
             }
-            for (Account account : BetterProxy.getInstance().getAccounts()) {
-                if (account.getUsername().equals(playerName)) {
+
+            for(Map.Entry<String, Account> account : BetterProxy.getInstance().getAccounts().entrySet()) {
+                if (account.getKey().equals(playerName)) {
                     UUID uuid;
                     try {
                         uuid = MojangAPI.getUUID(playerName);
@@ -60,13 +61,13 @@ public class ServerLoginHandler extends ServerHandler {
                     player.getSession().sendPacket(new ServerLoginSuccessPacket(uuid, playerName));
                     player.getSession().setConnectionState(ConnectionState.PLAY);
                     player.getSession().setPacketHandler(new ServerPlayHandler(player));
-                    player.setAccount(account);
+                    player.setAccount(account.getValue());
                     player.loadOptions();
 
                     SkinUtil.showSkin(player.getSession(), uuid, player.getSkin());
 
                     WorldUtil.emptyWorld(player);
-                    System.out.println("[" + account.getUsername() + "] Connected!");
+                    System.out.println("[" + playerName + "] Connected!");
                     ChatUtil.clearChat(100, player);
 
                     ScoreboardUtil.sendScoreboard(player);

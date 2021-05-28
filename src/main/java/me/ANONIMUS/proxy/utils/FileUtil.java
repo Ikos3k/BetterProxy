@@ -21,7 +21,7 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 public class FileUtil {
-    private final static File accountsFile = new File(BetterProxy.getInstance().getDirFolder() + "/accounts.txt");
+    private final static File accountsFile = new File(BetterProxy.getInstance().getDirFolder(), "accounts.txt");
 
     public static void createMissing() {
         final String[] directories = new String[] { "world", "exploits", "schematics", "players" };
@@ -49,7 +49,7 @@ public class FileUtil {
             final Scanner s = new Scanner(accountsFile);
             while (s.hasNext()) {
                 final String[] split = s.next().split(":", 3);
-                BetterProxy.getInstance().getAccounts().add(new Account(split[0], split[1], GroupType.valueOf(split[2])));
+                BetterProxy.getInstance().getAccounts().put(split[0], new Account(split[1], GroupType.valueOf(split[2])));
             }
             s.close();
         } catch (Exception e) {
@@ -58,9 +58,9 @@ public class FileUtil {
         }
     }
 
-    public static String loadIconFile(final String icon) {
+    public static String getIconFile(final String s) {
         try {
-            BufferedImage bufferedImage = ImageIO.read(new File(BetterProxy.getInstance().getDirFolder(), icon));
+            BufferedImage bufferedImage = ImageIO.read(new File(BetterProxy.getInstance().getDirFolder(), s));
             if (bufferedImage.getWidth() != 64 || bufferedImage.getHeight() != 64) {
                 throw new IllegalStateException("> Icon must be 64 pixels wide and 64 pixels high");
             }
@@ -72,7 +72,6 @@ public class FileUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -115,7 +114,7 @@ public class FileUtil {
 
                 Packet p = new CustomPacket(id, data);
 
-                BetterProxy.getInstance().getExploitManager().addExploit(new Exploit(f.getName().substring(0, f.getName().length() - 5), "[amount]") {
+                BetterProxy.getInstance().getExploitManager().getExploits().add(new Exploit(f.getName().substring(0, f.getName().length() - 5), "[amount]") {
 
                     @Override
                     public void execute(Player sender, Object... objects) {

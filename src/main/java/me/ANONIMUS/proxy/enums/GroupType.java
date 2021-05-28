@@ -31,6 +31,6 @@ public enum GroupType {
     }
 
     public static GroupType getByPermission(int permission) {
-        return Arrays.stream(GroupType.values()).filter(gp -> gp.permission == permission).findFirst().orElse(GroupType.USER);
+        return Arrays.stream(values()).filter(gp -> gp.permission == permission).findFirst().orElse(GroupType.USER);
     }
 }

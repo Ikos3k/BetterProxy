@@ -27,7 +27,7 @@ public class ServerStatusHandler extends ServerHandler {
     }
 
     @Override
-    public void disconnected() { }
+    public void disconnect() { }
 
     @Override
     public void handlePacket(Packet packet) {
@@ -45,7 +45,7 @@ public class ServerStatusHandler extends ServerHandler {
             final PlayerInfo playerInfo = new PlayerInfo(0, 0, gp);
             final BaseComponent[] desc = new ComponentBuilder(ChatUtil.fixColor(BetterProxy.getInstance().getConfigManager().getConfig().line1 + "&r\n" + BetterProxy.getInstance().getConfigManager().getConfig().line2)).create();
 
-            player.getSession().sendPacket(new ServerStatusResponsePacket(new ServerStatusInfo(versionInfo, playerInfo, desc, BetterProxy.getInstance().getIcon())));
+            player.getSession().sendPacket(new ServerStatusResponsePacket(new ServerStatusInfo(versionInfo, playerInfo, desc, BetterProxy.getInstance().getServer().getIcon())));
             player.getSession().sendPacket(new ServerStatusPongPacket(0));
 
             player.getSession().getChannel().close();

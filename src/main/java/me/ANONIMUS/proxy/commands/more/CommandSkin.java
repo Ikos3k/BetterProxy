@@ -17,7 +17,7 @@ public class CommandSkin extends Command {
         final String player = args[1];
 
         if (player.equalsIgnoreCase("default")) {
-            sender.setSkin(SkinUtil.getSkin(sender.getAccount().getUsername(), null));
+            sender.setSkin(SkinUtil.getSkin(sender.getUsername(), null));
             ChatUtil.sendChatMessage("&7Skin has been successfully reset", sender, true);
             ChatUtil.sendChatMessage("&cYou need to reconnect to the proxy!", sender, true);
             return;

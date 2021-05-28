@@ -25,7 +25,7 @@ public class CommandKick extends Command {
             return;
         }
 
-        if (sender.getAccount().getUsername().equals(args[1])) {
+        if (sender.getUsername().equals(args[1])) {
             ChatUtil.sendChatMessage("&cYou can't kick yourself out!", sender, true);
             return;
         }

@@ -38,7 +38,7 @@ public class CommandStay extends Command {
         sender.getRemoteSession().getChannel().pipeline().replace("handler", "handler", new SimpleChannelInboundHandler<Packet>() {
             @Override
             public void channelInactive(ChannelHandlerContext ctx) {
-                ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Bot &c" + bot.getSession().getUsername() + " &8disconnected from the server &fcause: &c" + ctx.getClass(), bot.getOwner(), true);
+                ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &fcause: &c" + ctx.getClass(), bot.getOwner(), true);
                 disconnect(bot, sender);
             }
 
@@ -51,16 +51,16 @@ public class CommandStay extends Command {
                 } else if (packet instanceof ServerKeepAlivePacket) {
                     bot.getSession().sendPacket(new ClientKeepAlivePacket(((ServerKeepAlivePacket) packet).getKeepaliveId()));
                 } else if (packet instanceof ServerJoinGamePacket) {
-                    ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Bot &a" + bot.getSession().getUsername() + " &8connected to the server", bot.getOwner(), true);
+                    ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Bot &a" + bot.getUsername() + " &8connected to the server", bot.getOwner(), true);
                     bot.getOwner().getBots().add(bot);
                     bot.getSession().sendPacket(new ClientCustomPayloadPacket("MC|Brand", "vanilla".getBytes()));
                     bot.getSession().sendPacket(new ClientSettingsPacket("pl_PL", (byte) 32, (byte) 0, false, (byte) 1));
                 } else if (packet instanceof ServerDisconnectPacket) {
-                    ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Bot &c" + bot.getSession().getUsername() + " &8disconnected from the server &fcause: &c" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerDisconnectPacket) packet).getReason())), bot.getOwner(), true);
+                    ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &fcause: &c" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerDisconnectPacket) packet).getReason())), bot.getOwner(), true);
                     disconnect(bot, sender);
 
                 } else if (packet instanceof ServerLoginDisconnectPacket) {
-                    ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Bot &c" + bot.getSession().getUsername() + " &8disconnected from the server &fause: &c" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerLoginDisconnectPacket) packet).getReason())), bot.getOwner(), true);
+                    ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &fause: &c" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerLoginDisconnectPacket) packet).getReason())), bot.getOwner(), true);
                     disconnect(bot, sender);
                 }
             }
