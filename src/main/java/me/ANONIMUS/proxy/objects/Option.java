@@ -1,26 +1,28 @@
 package me.ANONIMUS.proxy.objects;
 
+import lombok.Data;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.utils.ChatUtil;
 
+@Data
 public class Option {
-    private Player player;
+    private final Player player;
     private final String name;
     private final String[] description;
     private boolean enabled;
 
-    public Option(String name, String... description) {
-        this(false, name, description);
+    public Option(Player player, String name, String... description) {
+        this(player, false, name, description);
     }
 
-    public Option(boolean defaultValue, String name, String... description) {
+    public Option(Player player, boolean defaultValue, String name, String... description) {
+        this.player = player;
         this.name = name;
         this.description = description;
         this.enabled = defaultValue;
     }
 
-    public void toggle(Player player) {
-        this.player = player;
+    public void toggle() {
         enabled = !enabled;
         if (enabled) {
             onEnable();
@@ -29,29 +31,16 @@ public class Option {
         }
     }
 
-    public void setEnabled(Player player, boolean enabled) {
-        this.player = player;
+    public void setEnabled(boolean enabled) {
         if (this.enabled != enabled) {
-            toggle(player);
+            toggle();
         } else {
             ChatUtil.sendChatMessage("&6>> &8The &6" + name + " &8option is already " + (enabled ? "&a" : "&c") + enabled, player, false);
         }
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public boolean hasDescription() {
         return description.length > 0;
-    }
-
-    public String[] getDescription() {
-        return description;
     }
 
     public void onEnable() {

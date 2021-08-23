@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class StringUtil {
-    public static int getStringWidth(final String s) {
+    public static int getStringWidth(String s) {
         int width = 0;
         for (char c : s.toCharArray()) {
             width += getCharWidth(c);
@@ -13,7 +13,7 @@ public class StringUtil {
         return width;
     }
 
-    public static int getCharWidth(final char c) {
+    public static int getCharWidth(char c) {
         switch (c) {
             case '`': {
                 return 0;
@@ -109,7 +109,7 @@ public class StringUtil {
     }
 
     public static String generateString(int length) {
-        final char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890".toCharArray();
+        char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890".toCharArray();
         return IntStream.range(0, length).mapToObj(i -> Character.toString(chars[new Random().nextInt(chars.length)])).collect(Collectors.joining());
     }
 }

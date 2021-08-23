@@ -6,6 +6,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.util.concurrent.Future;
 import lombok.Data;
 import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.managers.PlayerManager;
@@ -56,11 +57,11 @@ public class ProxyServer {
                             }
                         });
                     }
-                }).bind(BetterProxy.getInstance().getConfigManager().getConfig().port);
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> playerManager.getPlayers().stream().filter(p -> p.getSession().getConnectionState() == ConnectionState.PLAY).forEach(p -> p.getSession().sendPacket(new ServerKeepAlivePacket(System.currentTimeMillis()))), 3, 3, TimeUnit.SECONDS);
-    }
-
-    public String getIcon() {
-        return icon;
+                }).bind(BetterProxy.getInstance().getConfigManager().getConfig().port).addListener((Future<? super Void> future) -> {
+                    if (!future.isSuccess()) {
+                        System.err.println("[DEBUG] ERROR TEST!");
+                    }
+                });
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> playerManager.elements.stream().filter(p -> p.getSession().getConnectionState() == ConnectionState.PLAY).forEach(p -> p.getSession().sendPacket(new ServerKeepAlivePacket(System.currentTimeMillis()))), 3, 3, TimeUnit.SECONDS);
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ItemUtil {
     public static ItemStack option(Option option) {
-        final List<String> lores = new ArrayList<>();
+        List<String> lores = new ArrayList<>();
         lores.add("");
         if (option.hasDescription()) {
             lores.add(ChatUtil.fixColor("&fDescription: "));

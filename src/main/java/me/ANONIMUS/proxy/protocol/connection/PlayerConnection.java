@@ -8,6 +8,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.proxy.Socks4ProxyHandler;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.Data;
+import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.enums.TimeType;
 import me.ANONIMUS.proxy.objects.ServerData;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
@@ -32,6 +33,9 @@ import me.ANONIMUS.proxy.utils.PacketUtil;
 import me.ANONIMUS.proxy.utils.WorldUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 import java.net.Proxy;
 import java.util.ArrayList;
@@ -43,10 +47,10 @@ public class PlayerConnection {
     private final Player owner;
     private final String username;
 
-    EventLoopGroup group = new NioEventLoopGroup();
+    private final EventLoopGroup group = new NioEventLoopGroup();
 
     public void connect(String ip, int port, Proxy proxy) {
-        final Bootstrap bootstrap = new Bootstrap()
+        Bootstrap bootstrap = new Bootstrap()
                 .group(group)
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.TCP_NODELAY, true)
@@ -54,7 +58,7 @@ public class PlayerConnection {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) {
-                        final ChannelPipeline pipeline = socketChannel.pipeline();
+                        ChannelPipeline pipeline = socketChannel.pipeline();
                         if (proxy != Proxy.NO_PROXY) {
                             pipeline.addFirst(new Socks4ProxyHandler(proxy.address()));
                         }
@@ -77,14 +81,7 @@ public class PlayerConnection {
 
                             @Override
                             public void channelInactive(ChannelHandlerContext ctx) {
-                                if (owner.isConnected()) {
-                                    ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &cDisconnected!", owner, false);
-                                    owner.setConnected(false);
-                                    WorldUtil.lobby(owner, true);
-                                }
-                                owner.setRemoteSession(null);
-                                owner.setServerData(null);
-                                group.shutdownGracefully();
+                                disconnect(null);
                             }
 
                             @Override
@@ -99,7 +96,7 @@ public class PlayerConnection {
                                 } else if (packet instanceof ServerJoinGamePacket) {
                                     ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Downloading terrain!", owner, false);
                                     WorldUtil.dimSwitch(owner, (ServerJoinGamePacket) packet);
-                                    owner.setConnected(true);
+                                    owner.setConnectedType(ConnectedType.CONNECTED);
                                     ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> Connected successfully&8!", owner, false);
                                 } else if (packet instanceof ServerDisconnectPacket) {
                                     disconnect(BaseComponent.toLegacyText(((ServerDisconnectPacket) packet).getReason()));
@@ -119,6 +116,7 @@ public class PlayerConnection {
                                             PacketUtil.sendTitle(owner, "[CHUNKS]", "listening... (" + owner.getListenedChunks().size() + ")");
                                         }
                                     }
+
                                     if (packet instanceof ServerTabCompletePacket) {
                                         if (owner.isPlayersState()) {
                                             for (String m : ((ServerTabCompletePacket) packet).getMatches()) {
@@ -133,6 +131,7 @@ public class PlayerConnection {
                                             ChatUtil.sendChatMessage("&f" + out.replace("[", "").replace("]", "") + " &8[&f" + owner.getPlayers().size() + "&8]", owner, true);
                                             owner.setPlayersState(false);
                                         }
+
                                         if (owner.isPluginsState()) {
                                             List<String> matches = new ArrayList<>();
                                             for (String m : ((ServerTabCompletePacket) packet).getMatches()) {
@@ -154,6 +153,7 @@ public class PlayerConnection {
                                             owner.setPluginsState(false);
                                         }
                                     }
+
                                     if (packet instanceof ServerPlayerListEntryPacket) {
                                         for (PlayerListEntry playerListEntry : ((ServerPlayerListEntryPacket) packet).getEntries()) {
                                             if (((ServerPlayerListEntryPacket) packet).getAction() == PlayerListEntryAction.ADD_PLAYER) {
@@ -164,16 +164,17 @@ public class PlayerConnection {
                                         }
                                     }
 
-                                    if(!owner.getOptionsManager().getOptionByName("server tablist").isEnabled() && packet instanceof ServerPlayerListHeaderFooter) {
-                                        return;
-                                    }
-
                                     if (packet instanceof ServerTimeUpdatePacket) {
                                         if (owner.getTimeType() != TimeType.DEFAULT) {
                                             owner.getSession().sendPacket(new ServerTimeUpdatePacket(owner.getTimeType().getAge(), owner.getTimeType().getTime()));
                                             return;
                                         }
                                     }
+
+                                    if(packet instanceof ServerPlayerListHeaderFooter && !owner.getOptionsManager().getOptionByName("server tablist").isEnabled()) {
+                                        return;
+                                    }
+
                                     owner.getSession().sendPacket(packet);
                                 }
                             }
@@ -187,11 +188,13 @@ public class PlayerConnection {
     }
 
     private void disconnect(String cause) {
-        ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Connection to the server was lost: " + owner.getThemeType().getColor(1) + owner.getServerData().getHost() + " &8cause: " + owner.getThemeType().getColor(1) + ChatColor.stripColor(cause), owner, false);
+        TextComponent msg = new TextComponent(ChatUtil.fixColor(owner.getThemeType().getColor(1) + ">> &8Connection to the server was lost: " + owner.getThemeType().getColor(1) + owner.getServerData().getHost() + (cause != null ? " &8cause: " + owner.getThemeType().getColor(1) + ChatColor.stripColor(cause) : "")));
+        msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(owner.getThemeType().getColor(1)  + "click to reconnect &8[" + owner.getThemeType().getColor(2) + owner.getServerData().getHost() + (!owner.getServerData().getHost().contains(owner.getServerData().getIp()) ? "(" + owner.getServerData().getIp() + ")&8]" : "")))));
+        msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, owner.getPrefixCMD() + "join " + owner.getServerData().getHost() + " " + username + " false false"));
+        owner.getSession().sendPacket(new ServerChatPacket(msg));
 
         owner.getRemoteSession().getChannel().close();
-        owner.setConnected(false);
-        owner.setRemoteSession(null);
+        owner.setConnectedType(ConnectedType.DISCONNECTED);
         owner.setServerData(null);
         group.shutdownGracefully();
         WorldUtil.lobby(owner, true);

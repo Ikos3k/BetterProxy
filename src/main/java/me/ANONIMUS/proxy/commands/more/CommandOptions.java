@@ -23,7 +23,7 @@ public class CommandOptions extends Command {
     public void onCommand(Player sender, String[] args) {
         if (args[1].equals("list") && sender.getSession().getProtocolID() == 47) {
             List<ItemStack> items = new ArrayList<>();
-            sender.getOptionsManager().getOptions().forEach(option -> items.add(ItemUtil.option(option)));
+            sender.getOptionsManager().elements.forEach(option -> items.add(ItemUtil.option(option)));
             sender.getSession().sendPacket(new ServerOpenWindowPacket(234, WindowType.CHEST, "SETTINGS", 9));
             sender.getSession().sendPacket(new ServerWindowItemsPacket(234, items));
             return;
@@ -31,11 +31,13 @@ public class CommandOptions extends Command {
 
         if (args[1].equals("set")) {
             Option option = sender.getOptionsManager().getOptionByName(args[2]);
+
             if (option == null) {
                 ChatUtil.sendChatMessage("&cThe specified option was not found!", sender, true);
                 return;
             }
-            option.setEnabled(sender, Boolean.parseBoolean(args[3]));
+
+            option.setEnabled(Boolean.parseBoolean(args[3]));
         }
     }
 }

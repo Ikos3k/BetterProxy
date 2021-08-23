@@ -3,10 +3,10 @@ package me.ANONIMUS.proxy.protocol.packet.impl.server.play;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.ANONIMUS.proxy.protocol.Protocol;
-import me.ANONIMUS.proxy.protocol.data.Chunk;
+import me.ANONIMUS.proxy.protocol.data.chunk.Chunk;
+import me.ANONIMUS.proxy.protocol.data.chunk.NetworkChunkData;
+import me.ANONIMUS.proxy.protocol.data.chunk.ParsedChunkData;
 import me.ANONIMUS.proxy.protocol.data.util.NetUtil;
-import me.ANONIMUS.proxy.protocol.data.util.NetworkChunkData;
-import me.ANONIMUS.proxy.protocol.data.util.ParsedChunkData;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 
@@ -38,7 +38,7 @@ public class ServerChunkDataPacket extends Packet {
 
             for (Chunk chunk : chunks) {
                 if (chunk != null) {
-                    if (chunk.getSkyLight() == null) {
+                    if (chunk.getSkylight() == null) {
                         noSkylight = true;
                     } else {
                         skylight = true;

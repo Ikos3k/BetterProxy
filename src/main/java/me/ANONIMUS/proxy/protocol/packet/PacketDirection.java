@@ -1,7 +1,7 @@
 package me.ANONIMUS.proxy.protocol.packet;
 
 public enum PacketDirection {
-    SERVERBOUND("CLIENT"), CLIENTBOUND("SERVER");
+    SERVERBOUND("client"), CLIENTBOUND("server");
 
     final String packetsPackageName;
 

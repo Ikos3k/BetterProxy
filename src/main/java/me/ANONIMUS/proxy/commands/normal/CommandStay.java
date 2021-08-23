@@ -29,7 +29,7 @@ public class CommandStay extends Command {
         super("stay", "detach", null, null, ConnectedType.CONNECTED);
     }
 
-    EventLoopGroup group = new NioEventLoopGroup();
+    private final EventLoopGroup group = new NioEventLoopGroup();
 
     @Override
     public void onCommand(Player sender, String[] args) {
@@ -71,9 +71,8 @@ public class CommandStay extends Command {
 
         sender.getBots().add(bot);
 
-        sender.setRemoteSession(null);
-        sender.setConnected(false);
-        sender.setServerData(null);
+        sender.getRemoteSession().getChannel().close();
+        sender.setConnectedType(ConnectedType.DISCONNECTED);
         WorldUtil.lobby(sender, true);
     }
 

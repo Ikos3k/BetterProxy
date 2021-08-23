@@ -1,7 +1,12 @@
 package me.ANONIMUS.proxy.protocol.data;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.Arrays;
 
+@Getter
+@AllArgsConstructor
 public enum WindowType {
     GENERIC_INVENTORY("minecraft:container"),
     ANVIL("minecraft:anvil"),
@@ -17,17 +22,9 @@ public enum WindowType {
     VILLAGER("minecraft:villager"),
     HORSE("EntityHorse");
 
-    private final String id;
+    private final String value;
 
-    WindowType(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return this.id;
-    }
-
-    public static WindowType getById(String id) {
-        return Arrays.stream(values()).filter((gm) -> gm.id.equals(id)).findFirst().orElse(GENERIC_INVENTORY);
+    public static WindowType getById(String value) {
+        return Arrays.stream(values()).filter(v -> v.value.equals(value)).findFirst().orElse(GENERIC_INVENTORY);
     }
 }

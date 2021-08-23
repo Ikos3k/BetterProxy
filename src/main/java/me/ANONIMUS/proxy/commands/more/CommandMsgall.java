@@ -27,6 +27,7 @@ public class CommandMsgall extends Command {
             ChatUtil.sendChatMessage("&cYou need to download players first " + sender.getThemeType().getColor(1) + sender.getPrefixCMD() + "players", sender, true);
             return;
         }
+
         sendMSG(sender, delay, text);
     }
 

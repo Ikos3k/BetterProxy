@@ -20,11 +20,11 @@ import java.util.Timer;
 public class BetterProxy {
     private final CommandManager commandManager;
     private final PacketRegistry packetRegistry;
+    private final Map<String, Account> accounts;
     private final ExploitManager exploitManager;
     private final ConfigManager configManager;
     private final PlayerManager playerManager;
     private static BetterProxy instance;
-    private final Map<String, Account> accounts;
     private final ProxyServer server;
     private final File dirFolder;
 

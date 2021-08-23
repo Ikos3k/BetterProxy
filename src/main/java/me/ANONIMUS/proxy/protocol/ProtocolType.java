@@ -1,7 +1,12 @@
 package me.ANONIMUS.proxy.protocol;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.Arrays;
 
+@Getter
+@AllArgsConstructor
 public enum ProtocolType {
     PROTOCOL_UNKNOWN(0, "UNKNOWN"),
     PROTOCOL_1_8_X(47, "1.8.X"),
@@ -18,19 +23,6 @@ public enum ProtocolType {
 
     private final int protocol;
     private final String prefix;
-
-    ProtocolType(int protocol, String prefix) {
-        this.protocol = protocol;
-        this.prefix = prefix;
-    }
-
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public int getProtocol() {
-        return protocol;
-    }
 
     public static ProtocolType getByProtocolID(int protocol) {
         return Arrays.stream(values()).filter(p -> p.protocol == protocol).findFirst().orElse(PROTOCOL_UNKNOWN);

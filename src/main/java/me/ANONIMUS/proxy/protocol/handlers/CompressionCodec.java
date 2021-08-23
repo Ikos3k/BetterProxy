@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.handler.codec.DecoderException;
+import lombok.AllArgsConstructor;
 import lombok.Setter;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 
@@ -13,17 +14,12 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 @Setter
+@AllArgsConstructor
 public class CompressionCodec extends ByteToMessageCodec<ByteBuf> {
     private final byte[] buffer = new byte[8192];
-    private final Deflater deflater;
-    private final Inflater inflater;
+    private final Deflater deflater = new Deflater();
+    private final Inflater inflater = new Inflater();
     private int compressionThreshold;
-
-    public CompressionCodec(int thresholdIn) {
-        this.compressionThreshold = thresholdIn;
-        this.deflater = new Deflater();
-        this.inflater = new Inflater();
-    }
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, ByteBuf in, ByteBuf out) {

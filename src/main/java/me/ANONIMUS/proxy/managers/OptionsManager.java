@@ -1,25 +1,20 @@
 package me.ANONIMUS.proxy.managers;
 
+import lombok.Getter;
+import me.ANONIMUS.proxy.objects.Manager;
 import me.ANONIMUS.proxy.objects.Option;
+import me.ANONIMUS.proxy.protocol.objects.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class OptionsManager {
-    private final List<Option> options = new ArrayList<>();
-
-    public OptionsManager() {
-        options.add(new Option(true, "lastpacket", "last packet :D"));
-        options.add(new Option(true, "titlelag", "title lag"));
-        options.add(new Option(true, "scoreboard"));
-        options.add(new Option("server tablist", "show server tablist"));
+@Getter
+public class OptionsManager extends Manager<Option> {
+    public OptionsManager(Player player) {
+        elements.add(new Option(player, true, "lastpacket", "last packet :D"));
+        elements.add(new Option(player, true, "titlelag", "title lag"));
+        elements.add(new Option(player, true, "scoreboard"));
+        elements.add(new Option(player, "server tablist", "show server tablist"));
     }
 
     public Option getOptionByName(String name) {
-        return options.stream().filter(s -> s.getName().equals(name)).findFirst().orElse(null);
-    }
-
-    public List<Option> getOptions() {
-        return options;
+        return elements.stream().filter(s -> s.getName().equals(name)).findFirst().orElse(null);
     }
 }

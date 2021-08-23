@@ -1,17 +1,16 @@
 {
-  "port": 1337,
-  "motd": {
-    "versionInfo": "&4BetterProxy",
-    "line1": "     &f✖ &l&m\\-\\-\\-\\-&r&f&l>> &6BetterProxy &f&l<<&m-/-/-/-/&r&f ✖&r",
-    "line2":  "        &c----&e/ &6✯ &eProxy by ANONIMUS &6✯ &e\\&c----",
-    "playerList": [
-      "&f---------------------------------------------------",
-      "                     &8Supported versions:",
-      " &e%supported_versions%",
-      "&f---------------------------------------------------"
-    ],
-    "icon": "icon.png",
-    "protocol": 0
+  "motd" : {
+    "protocol" : 0,
+    "playerList" : [ "&f---------------------------------------------------", "                     &8Supported versions:", " &e%supported_versions%", "&f---------------------------------------------------" ],
+    "icon" : "icon.png",
+    "versionInfo" : "&4BetterProxy",
+    "line2" : "        &c----&e/ &6✯ &eProxy by ANONIMUS &6✯ &e\\&c----",
+    "line1" : "     &f✖ &l&m\\-\\-\\-\\-&r&f&l>> &6BetterProxy &f&l<<&m-/-/-/-/&r&f ✖&r"
   },
-  "packet_debugger": true
+  "debug" : {
+    "debugType" : "LEGIBLE",
+    "debugger" : true,
+    "showCustomPackets" : false
+  },
+  "port" : 1337
 }

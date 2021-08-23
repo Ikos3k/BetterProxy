@@ -14,25 +14,25 @@ import java.util.UUID;
 import java.util.stream.IntStream;
 
 public class PacketUtil {
-    private final static UUID bossBarUUID = UUID.randomUUID();
+    private static final UUID bossBarUUID = UUID.randomUUID();
 
-    public static void fly(final Session session, final boolean fly) {
+    public static void fly(Session session, boolean fly) {
         session.sendPacket(new ServerPlayerAbilitiesPacket(false, fly, fly, fly, 0.1f, 0.1f));
     }
 
-    public static void speed(final Session session, final float speed) {
+    public static void speed(Session session, float speed) {
         session.sendPacket(new ServerPlayerAbilitiesPacket(false, false, false, false, 1.0f, speed));
     }
 
-    public static void lobbyPosTeleport(final Player player) {
+    public static void lobbyPosTeleport(Player player) {
         player.getSession().sendPacket(new ServerPlayerPosLookPacket(0.5, 70, 0.5, 0.0f, 0.0f));
     }
 
-    public static void clearInventory(final Player player) {
+    public static void clearInventory(Player player) {
         IntStream.range(0, 45).forEach(i -> player.getSession().sendPacket(new ServerSetSlotPacket(0, i, null)));
     }
 
-    public static void clearTabList(final Player player) {
+    public static void clearTabList(Player player) {
         PlayerListEntry[] playerListEntries = new PlayerListEntry[player.getTabList().size()];
         for (int i = 0; i < player.getTabList().size(); i++) {
             playerListEntries[i] = player.getTabList().get(i);
@@ -41,15 +41,15 @@ public class PacketUtil {
         player.getTabList().clear();
     }
 
-    public static void sendBroadcastPacket(final Packet packet) {
-        BetterProxy.getInstance().getPlayerManager().getPlayers().forEach(p -> p.getSession().sendPacket(packet));
+    public static void sendBroadcastPacket(Packet packet) {
+        BetterProxy.getInstance().getPlayerManager().elements.forEach(p -> p.getSession().sendPacket(packet));
     }
 
-    public static void sendTitle(final Player player, final String header, final String footer) {
+    public static void sendTitle(Player player, String header, String footer) {
         sendTitle(player, header, footer, 10, 10, 10);
     }
 
-    public static void sendTitle(final Player player, final String header, final String footer, final int fadeIn, final int stay, final int fadeOut) {
+    public static void sendTitle(Player player, String header, String footer, int fadeIn, int stay, int fadeOut) {
         if (header != null) {
             player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TITLE, ChatUtil.fixColor(header)));
         }
@@ -59,7 +59,7 @@ public class PacketUtil {
         player.getSession().sendPacket(new ServerTitlePacket(TitleAction.TIMES, fadeIn, stay, fadeOut));
     }
 
-    public static void sendActionBar(final String message, final Player player) {
+    public static void sendActionBar(String message, Player player) {
         if (player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_12_2.getProtocol()) {
             player.getSession().sendPacket(new ServerTitlePacket(TitleAction.ACTIONBAR, ChatUtil.fixColor(message)));
         } else {
@@ -67,7 +67,7 @@ public class PacketUtil {
         }
     }
 
-    public static void sendBoosBar(final Player player, final String message) {
+    public static void sendBoosBar(Player player, String message) {
         if (player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol()) {
             player.getSession().sendPacket(new ServerSpawnMobPacket(1, (byte) 63, new Position(0, 0, 0), 0, 0, 0, 0, 0, 0, new EntityMetadata(2, MetadataType.STRING, ChatUtil.fixColor(message)), new EntityMetadata(4, MetadataType.BOOLEAN, true)));
         } else {
@@ -75,7 +75,7 @@ public class PacketUtil {
         }
     }
 
-    public static void clearBossBar(final Player player) {
+    public static void clearBossBar(Player player) {
         if (player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol()) {
             player.getSession().sendPacket(new ServerDestroyEntitiesPacket(1));
         } else {

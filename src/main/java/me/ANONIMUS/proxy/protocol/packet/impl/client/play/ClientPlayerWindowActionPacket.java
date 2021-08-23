@@ -44,9 +44,9 @@ public class ClientPlayerWindowActionPacket extends Packet {
         this.button = packetBuffer.readByte();
         this.action = packetBuffer.readShort();
         if (protocol >= 110) {
-            this.mode = WindowAction.getActionById(packetBuffer.readVarInt());
+            this.mode = WindowAction.getById(packetBuffer.readVarInt());
         } else {
-            this.mode = WindowAction.getActionById(packetBuffer.readByte());
+            this.mode = WindowAction.getById(packetBuffer.readByte());
         }
         this.item = packetBuffer.readItemStackFromBuffer();
     }

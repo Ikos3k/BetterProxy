@@ -3,23 +3,21 @@ package me.ANONIMUS.proxy.managers;
 import me.ANONIMUS.proxy.commands.CommandHelp;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
+import me.ANONIMUS.proxy.objects.Manager;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.utils.ChatUtil;
-import org.reflections.Reflections;
+import me.ANONIMUS.proxy.utils.ReflectionUtil;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
-public class CommandManager {
+public class CommandManager extends Manager<Command> {
     private final HashMap<String, Long> cooldown = new HashMap<>();
-    private final List<Command> commands = new ArrayList<>();
 
     public void init() {
-        new Reflections("me.ANONIMUS.proxy.commands").getSubTypesOf(Command.class).forEach(cmd -> {
+        ReflectionUtil.getClasses("me.ANONIMUS.proxy.commands", Command.class).forEach(cmd -> {
             try {
-                commands.add(cmd.newInstance());
+                elements.add(cmd.newInstance());
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -28,13 +26,13 @@ public class CommandManager {
 
     public void onCommand(final String message, final Player sender) {
         final String[] args = message.split(" ");
-        Optional<Command> optionalCommand = commands.stream().filter(cmd -> (sender.getPrefixCMD() + cmd.getPrefix()).equalsIgnoreCase(args[0])).findFirst();
+        Optional<Command> optionalCommand = elements.stream().filter(cmd -> (sender.getPrefixCMD() + cmd.getPrefix()).equalsIgnoreCase(args[0])).findFirst();
         if (!sender.isLogged() && !(message.startsWith(sender.getPrefixCMD() + "login ") || message.startsWith(sender.getPrefixCMD() + "l "))) {
             ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + "You must login! &c" + sender.getPrefixCMD() + "login <password>", sender, true);
             return;
         }
         if (!optionalCommand.isPresent()) {
-            optionalCommand = commands.stream().filter(cmd -> cmd.getAlias() != null && (sender.getPrefixCMD() + cmd.getAlias()).equalsIgnoreCase(args[0])).findFirst();
+            optionalCommand = elements.stream().filter(cmd -> cmd.getAlias() != null && (sender.getPrefixCMD() + cmd.getAlias()).equalsIgnoreCase(args[0])).findFirst();
             if (!optionalCommand.isPresent()) {
                 ChatUtil.sendChatMessage("&cCommand not found!", sender, true);
                 return;
@@ -44,7 +42,7 @@ public class CommandManager {
         final Command command = optionalCommand.get();
         final String packageName = command.getClass().getPackage().getName();
         final String commandType = packageName.substring(packageName.lastIndexOf(".")).substring(1);
-        if (commandType.equals("admins") && sender.getAccount().getGroup().getPermissionLevel() < 2) {
+        if (commandType.equals("admins") && sender.getAccount().getGroup().getPermission() < 2) {
             ChatUtil.sendChatMessage("&cYou are not permitted to this command!", sender, true);
             return;
         }
@@ -59,7 +57,7 @@ public class CommandManager {
 
         try {
             if (!(command instanceof CommandHelp) && cooldown.containsKey(sender.getUsername())) {
-                final long secondsLeft = cooldown.get(sender.getUsername()) / 1000L + sender.getAccount().getGroup().getDelayCMD() - System.currentTimeMillis() / 1000L;
+                long secondsLeft = cooldown.get(sender.getUsername()) / 1000L + sender.getAccount().getGroup().getDelayCMD() - System.currentTimeMillis() / 1000L;
                 if (secondsLeft > 0L) {
                     ChatUtil.sendChatMessage("&7The next command can be used in " + sender.getThemeType().getColor(1) + secondsLeft + "s&7!", sender, true);
                     return;
@@ -68,12 +66,8 @@ public class CommandManager {
             }
 
             command.onCommand(sender, args);
-        } catch (final Exception e) {
+        } catch (Exception e) {
             ChatUtil.sendChatMessage("&8Correct usage: " + sender.getThemeType().getColor(1) + sender.getPrefixCMD() + command.getPrefix() + " " + command.getUsage(), sender, true);
         }
-    }
-
-    public List<Command> getCommands() {
-        return commands;
     }
 }

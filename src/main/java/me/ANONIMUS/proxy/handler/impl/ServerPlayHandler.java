@@ -48,7 +48,7 @@ public class ServerPlayHandler extends ServerHandler {
                     if (block.getHeld() != null) {
                         if (ItemUtil.optionsMenu().getName().equals(block.getHeld().getName())) {
                             List<ItemStack> items = new ArrayList<>();
-                            player.getOptionsManager().getOptions().forEach(option -> items.add(ItemUtil.option(option)));
+                            player.getOptionsManager().elements.forEach(option -> items.add(ItemUtil.option(option)));
                             player.getSession().sendPacket(new ServerOpenWindowPacket(234, WindowType.CHEST, "SETTINGS", 9));
                             player.getSession().sendPacket(new ServerWindowItemsPacket(234, items));
                             return;
@@ -61,7 +61,7 @@ public class ServerPlayHandler extends ServerHandler {
                             };
 
                             for(String nick : nicknames) {
-                                items.add(ItemUtil.skull(SkinUtil.getSkin(nick, null)));
+                                items.add(ItemUtil.skull(SkinUtil.getSkin(nick)));
                             }
 
                             player.getSession().sendPacket(new ServerOpenWindowPacket(235, WindowType.CHEST, "SKINS", 36));
@@ -78,9 +78,9 @@ public class ServerPlayHandler extends ServerHandler {
                         PacketUtil.clearInventory(player);
                     }
                     List<ItemStack> items = new ArrayList<>();
-                    player.getOptionsManager().getOptions().forEach(options -> {
+                    player.getOptionsManager().elements.forEach(options -> {
                         if (window.getItem() != null && window.getMode() == WindowAction.CLICK_ITEM && options.getName().equalsIgnoreCase(ChatColor.stripColor(window.getItem().getName()))) {
-                            options.toggle(player);
+                            options.toggle();
                         }
                         items.add(ItemUtil.option(options));
                     });
@@ -92,7 +92,7 @@ public class ServerPlayHandler extends ServerHandler {
                     return;
                 }
                 if (window.getWindowId() == -21) {
-                    //:p
+                    //soon
                     return;
                 }
             }
@@ -101,17 +101,17 @@ public class ServerPlayHandler extends ServerHandler {
             ClientTabCompletePacket tabCompletePacket = (ClientTabCompletePacket) packet;
 
             if(tabCompletePacket.getText().startsWith(player.getPrefixCMD())) {
-                Optional<Command> optionalCommand = BetterProxy.getInstance().getCommandManager().getCommands().stream().filter(cmd -> (player.getPrefixCMD() + cmd.getPrefix()).startsWith(tabCompletePacket.getText())).findFirst();
+                Optional<Command> optionalCommand = BetterProxy.getInstance().getCommandManager().elements.stream().filter(cmd -> (player.getPrefixCMD() + cmd.getPrefix()).startsWith(tabCompletePacket.getText())).findFirst();
                 if (!optionalCommand.isPresent()) {
-                    optionalCommand = BetterProxy.getInstance().getCommandManager().getCommands().stream().filter(cmd -> cmd.getAlias() != null && (player.getPrefixCMD() + cmd.getAlias()).startsWith(tabCompletePacket.getText())).findFirst();
+                    optionalCommand = BetterProxy.getInstance().getCommandManager().elements.stream().filter(cmd -> cmd.getAlias() != null && (player.getPrefixCMD() + cmd.getAlias()).startsWith(tabCompletePacket.getText())).findFirst();
                     optionalCommand.ifPresent(command -> player.getSession().sendPacket(new ServerTabCompletePacket(new String[]{player.getPrefixCMD() + command.getAlias()})));
                 } else {
                     player.getSession().sendPacket(new ServerTabCompletePacket(new String[]{player.getPrefixCMD() + optionalCommand.get().getPrefix()}));
                 }
             }
         }
-        if (packet instanceof ClientPlayerPositionPacket) {
-            if (((ClientPlayerPositionPacket) packet).getY() < 65 && !player.isConnected()) {
+        if (!player.isConnected() && packet instanceof ClientPlayerPositionPacket) {
+            if (((ClientPlayerPositionPacket) packet).getY() < 65) {
                 PacketUtil.lobbyPosTeleport(player);
             }
         }
@@ -120,14 +120,14 @@ public class ServerPlayHandler extends ServerHandler {
             final String message = ((ClientChatPacket) packet).getMessage();
             if (message.startsWith(player.getPrefixCMD())) {
                 BetterProxy.getInstance().getCommandManager().onCommand(message, player);
+                return;
             } else if (player.isLogged() && message.startsWith("@")) {
                 ChatUtil.sendBroadcastMessage("&8(&f" + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8) &8[" + player.getAccount().getGroup().getPrefix() + "&8] " + player.getThemeType().getColor(1) + player.getUsername() + " &8>> &7" + message.substring(1), false);
-            } else {
-                forwardPacket(packet);
+                return;
             }
-        } else {
-            forwardPacket(packet);
         }
+
+        forwardPacket(packet);
     }
 
     private void forwardPacket(final Packet packet) {

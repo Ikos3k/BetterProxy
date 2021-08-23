@@ -69,7 +69,7 @@ public class CommandPlayers extends Command {
                 ChatUtil.sendChatMessage("&cThere is no one on the list &c:[", sender, true);
                 return;
             }
-            ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + "The list with players was cleared successfully &8(" + sender.getThemeType().getColor(2) + sender.getPlayers().size() + ")", sender, true);
+            ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + "The list with players was cleared successfully &8(" + sender.getThemeType().getColor(2) + sender.getPlayers().size() + "&8)", sender, true);
             sender.getPlayers().clear();
         }
     }

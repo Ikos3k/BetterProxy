@@ -32,10 +32,10 @@ public class ServerPinger {
 
     private Session session;
 
-    EventLoopGroup group = new NioEventLoopGroup();
+    private final EventLoopGroup group = new NioEventLoopGroup();
 
     public void connect(String host, int port, Proxy proxy) {
-        final Bootstrap bootstrap = new Bootstrap()
+        Bootstrap bootstrap = new Bootstrap()
                 .group(group)
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.TCP_NODELAY, true)
@@ -43,7 +43,7 @@ public class ServerPinger {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) {
-                        final ChannelPipeline pipeline = socketChannel.pipeline();
+                        ChannelPipeline pipeline = socketChannel.pipeline();
                         if (proxy != Proxy.NO_PROXY) {
                             pipeline.addFirst(new Socks4ProxyHandler(proxy.address()));
                         }
@@ -76,12 +76,10 @@ public class ServerPinger {
                                     ChatUtil.sendChatMessage("&7Online players: " + owner.getThemeType().getColor(1) + info.getPlayerInfo().getOnlinePlayers(), owner, false);
                                     ChatUtil.sendChatMessage("&7MOTD: " + owner.getThemeType().getColor(1) + BaseComponent.toLegacyText(info.getDescription()), owner, false);
                                     ChatUtil.sendChatMessage("&7Version: " + owner.getThemeType().getColor(1) + info.getVersionInfo().getVersionName() + "(" + info.getVersionInfo().getProtocolVersion() + ")", owner, false);
-                                    session.getChannel().close();
-                                    group.shutdownGracefully();
-                                } else {
-                                    session.getChannel().close();
-                                    group.shutdownGracefully();
                                 }
+
+                                session.getChannel().close();
+                                group.shutdownGracefully();
                             }
                         });
                     }

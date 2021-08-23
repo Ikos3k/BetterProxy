@@ -1,7 +1,12 @@
 package me.ANONIMUS.proxy.protocol.data;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.Arrays;
 
+@Getter
+@AllArgsConstructor
 public enum WindowAction {
     CLICK_ITEM(0),
     SHIFT_CLICK_ITEM(1),
@@ -13,16 +18,8 @@ public enum WindowAction {
 
     private final int id;
 
-    WindowAction(final int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public static WindowAction getActionById(final int id) {
-        return Arrays.stream(values()).filter(a -> a.getId() == id).findFirst().orElse(null);
+    public static WindowAction getById(int id) {
+        return Arrays.stream(values()).filter(v -> v.id == id).findFirst().orElse(null);
     }
 }
 

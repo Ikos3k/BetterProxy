@@ -18,11 +18,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClientPlayerPositionPacket extends Packet {
-
     private double X;
     private double Y;
     private double Z;
-
     private boolean ground;
 
     @Override

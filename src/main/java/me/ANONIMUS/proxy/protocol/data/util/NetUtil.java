@@ -1,6 +1,9 @@
 package me.ANONIMUS.proxy.protocol.data.util;
 
 import me.ANONIMUS.proxy.protocol.data.*;
+import me.ANONIMUS.proxy.protocol.data.chunk.Chunk;
+import me.ANONIMUS.proxy.protocol.data.chunk.NetworkChunkData;
+import me.ANONIMUS.proxy.protocol.data.chunk.ParsedChunkData;
 import me.ANONIMUS.proxy.protocol.packet.PacketBuffer;
 
 import java.io.IOException;
@@ -17,7 +20,7 @@ public class NetUtil {
         while ((b = in.readByte()) != 127) {
             final int typeId = (b & 0xE0) >> 5;
             final int id = b & 0x1F;
-            final MetadataType type = MetadataType.getActionById(typeId);
+            final MetadataType type = MetadataType.getById(typeId);
             Object value;
             switch (type) {
                 case BYTE: {
@@ -62,7 +65,7 @@ public class NetUtil {
             }
             ret.add(new EntityMetadata(id, type, value));
         }
-        return ret.toArray(new EntityMetadata[ret.size()]);
+        return ret.toArray(new EntityMetadata[0]);
     }
 
     public static void writeEntityMetadata(final PacketBuffer out, final EntityMetadata[] metadata) throws IOException {
@@ -133,19 +136,19 @@ public class NetUtil {
                     expected += 10240;
                 }
                 if (pass == 1) {
-                    chunks[ind] = new Chunk(sky || data.hasSkyLight());
+                    chunks[ind] = new Chunk(sky || data.isSky());
                     ShortArray3d blocks = chunks[ind].getBlocks();
                     buf.position(pos / 2);
                     buf.get(blocks.getData(), 0, blocks.getData().length);
                     pos += blocks.getData().length * 2;
                 }
                 if (pass == 2) {
-                    NibbleArray3d blocklight = chunks[ind].getBlockLight();
+                    NibbleArray3d blocklight = chunks[ind].getBlocklight();
                     System.arraycopy(data.getData(), pos, blocklight.getData(), 0, blocklight.getData().length);
                     pos += blocklight.getData().length;
                 }
-                if (pass != 3 || !sky && !data.hasSkyLight()) continue;
-                NibbleArray3d skylight = chunks[ind].getSkyLight();
+                if (pass != 3 || !sky && !data.isSky()) continue;
+                NibbleArray3d skylight = chunks[ind].getSkylight();
                 System.arraycopy(data.getData(), pos, skylight.getData(), 0, skylight.getData().length);
                 pos += skylight.getData().length;
             }
@@ -156,7 +159,6 @@ public class NetUtil {
         if (data.isFullChunk()) {
             biomeData = new byte[256];
             System.arraycopy(data.getData(), pos, biomeData, 0, biomeData.length);
-            pos += biomeData.length;
         }
         return new ParsedChunkData(chunks, biomeData);
     }
@@ -176,9 +178,9 @@ public class NetUtil {
                 if (pass == 0) {
                     chunkMask |= 1 << ind;
                     length += chunk.getBlocks().getData().length * 2;
-                    length += chunk.getBlockLight().getData().length;
-                    if (chunk.getSkyLight() != null) {
-                        length += chunk.getSkyLight().getData().length;
+                    length += chunk.getBlocklight().getData().length;
+                    if (chunk.getSkylight() != null) {
+                        length += chunk.getSkylight().getData().length;
                     }
                 }
                 if (pass == 1) {
@@ -188,12 +190,12 @@ public class NetUtil {
                     pos += blocks.length * 2;
                 }
                 if (pass == 2) {
-                    byte[] blocklight = chunk.getBlockLight().getData();
+                    byte[] blocklight = chunk.getBlocklight().getData();
                     System.arraycopy(blocklight, 0, data, pos, blocklight.length);
                     pos += blocklight.length;
                 }
-                if (pass != 3 || chunk.getSkyLight() == null) continue;
-                byte[] skylight = chunk.getSkyLight().getData();
+                if (pass != 3 || chunk.getSkylight() == null) continue;
+                byte[] skylight = chunk.getSkylight().getData();
                 System.arraycopy(skylight, 0, data, pos, skylight.length);
                 pos += skylight.length;
                 sky = true;
@@ -204,7 +206,6 @@ public class NetUtil {
         }
         if (fullChunk) {
             System.arraycopy(chunks.getBiomes(), 0, data, pos, chunks.getBiomes().length);
-            pos += chunks.getBiomes().length;
         }
         return new NetworkChunkData(chunkMask, fullChunk, sky, data);
     }

@@ -9,7 +9,7 @@ import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerUpdateScorePacke
 
 import java.text.DecimalFormat;
 
-public final class ScoreboardUtil {
+public class ScoreboardUtil {
     private static final DecimalFormat format = new DecimalFormat("##.##");
 
     public static void sendScoreboard(Player player) {
@@ -32,11 +32,8 @@ public final class ScoreboardUtil {
     }
 
     public static void sendEmptyScoreboard(Player player) {
-        String sidebarName = format.format(System.currentTimeMillis());
-        player.getSession().sendPacket(new ServerScoreboardObjectivePacket(sidebarName, ObjectiveMode.CREATE, ChatUtil.fixColor(player.getThemeType().getColor(1) + "&lBetterProxy"), ObjectiveType.INTEGER));
+        player.getSession().sendPacket(new ServerScoreboardObjectivePacket("emptySidebar", ObjectiveMode.CREATE, "", ObjectiveType.INTEGER));
         player.getSession().sendPacket(new ServerDisplayScoreboardPacket(1, "emptySidebar"));
-        player.getSession().sendPacket(new ServerScoreboardObjectivePacket("emptySidebar", ObjectiveMode.CREATE, ChatUtil.fixColor(player.getThemeType().getColor(1) + "&lBetterProxy"), ObjectiveType.HEARTS));
-        player.getSession().sendPacket(new ServerDisplayScoreboardPacket(2, "emptySidebar"));
     }
 
     public static void updateScoreboard(Player player) {

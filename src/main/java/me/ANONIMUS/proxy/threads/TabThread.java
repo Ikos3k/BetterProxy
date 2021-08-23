@@ -12,9 +12,8 @@ import java.util.TimerTask;
  * @created 20.05.2021 - 20:35
  */
 public class TabThread extends TimerTask {
-    @Override
     public void run() {
-       BetterProxy.getInstance().getPlayerManager().getPlayers().stream().filter(Player::isLogged).forEach(player -> player.getSession().sendPacket(new ServerPlayerListHeaderFooter(ChatUtil.fixColor(
+       BetterProxy.getInstance().getPlayerManager().elements.stream().filter(Player::isLogged).forEach(player -> player.getSession().sendPacket(new ServerPlayerListHeaderFooter(ChatUtil.fixColor(
             "\n&l" + player.getThemeType().getColor(1) + "BetterProxy" +
                 "\n" +
                 "\n" +

@@ -24,7 +24,7 @@ public class CommandListenChunks extends Command {
         } else if (args[1].equals("save")) {
             sender.setListenChunks(false);
 
-            if (sender.getListenedChunks().size() == 0) {
+            if (sender.getListenedChunks().isEmpty()) {
                 ChatUtil.sendChatMessage("&cThe list is empty", sender, false);
                 return;
             }

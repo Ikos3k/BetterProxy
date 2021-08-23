@@ -9,8 +9,7 @@ import java.util.List;
 public enum ConnectionState {
     HANDSHAKE, LOGIN, PLAY, STATUS;
 
-    private final List<Packet> clientPackets;
-    private final List<Packet> serverPackets;
+    private final List<Packet> clientPackets, serverPackets;
 
     ConnectionState() {
         this.clientPackets = new ArrayList<>();

@@ -10,11 +10,8 @@ import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntryAction;
 import me.ANONIMUS.proxy.protocol.objects.GameProfile;
 import me.ANONIMUS.proxy.protocol.objects.Session;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerPlayerListEntryPacket;
-import me.kbrewster.exceptions.APIException;
-import me.kbrewster.exceptions.InvalidPlayerException;
 import me.kbrewster.mojangapi.MojangAPI;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
@@ -38,15 +35,9 @@ public class SkinUtil {
         return playerListEntry;
     }
 
-    public static Skin getSkin(final String name, UUID uuid) {
+    public static Skin getSkin(String name) {
         try {
-            if(uuid == null) {
-                try {
-                    uuid = MojangAPI.getUUID(name);
-                } catch (InvalidPlayerException | APIException ignored) {
-                    return null;
-                }
-            }
+            UUID uuid = MojangAPI.getUUID(name);
 
             GameProfile gameProfile = new GameProfile(uuid, name);
 
@@ -68,7 +59,7 @@ public class SkinUtil {
             gameProfile.getProperties().add(new GameProfile.Property("textures", jsonObject.get("value").getAsString(), jsonObject.get("signature").getAsString()));
 
             return new Skin(gameProfile);
-        } catch (IOException e) {
+        } catch (Exception e) {
             return null;
         }
     }

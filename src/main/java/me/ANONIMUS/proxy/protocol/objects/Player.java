@@ -2,6 +2,8 @@ package me.ANONIMUS.proxy.protocol.objects;
 
 import lombok.Data;
 import me.ANONIMUS.proxy.BetterProxy;
+import me.ANONIMUS.proxy.enums.ConnectedType;
+import me.ANONIMUS.proxy.enums.LanguageType;
 import me.ANONIMUS.proxy.enums.ThemeType;
 import me.ANONIMUS.proxy.enums.TimeType;
 import me.ANONIMUS.proxy.handler.impl.ServerLoginHandler;
@@ -29,14 +31,16 @@ import java.util.UUID;
 @Data
 public class Player {
     private final Session session;
-    private OptionsManager optionsManager = new OptionsManager();
-    private List<PlayerListEntry> tabList = new ArrayList<>();
-    private List<Packet> listenedChunks = new ArrayList<>();
+    private ConnectedType connectedType = ConnectedType.DISCONNECTED;
+    private final OptionsManager optionsManager = new OptionsManager(this);
+    private final List<PlayerListEntry> tabList = new ArrayList<>();
+    private final List<Packet> listenedChunks = new ArrayList<>();
+    private LanguageType languageType = LanguageType.ENGLISH;
+    private final LastPacket lastPacket = new LastPacket();
+    private final List<Bot> bots = new ArrayList<>();
     private List<String> players = new ArrayList<>();
-    private LastPacket lastPacket = new LastPacket();
     private ThemeType themeType = ThemeType.DEFAULT;
     private TimeType timeType = TimeType.DEFAULT;
-    private List<Bot> bots = new ArrayList<>();
     private boolean listenChunks = false;
     private Session remoteSession;
     private String prefixCMD = "#";
@@ -44,7 +48,6 @@ public class Player {
     private boolean pluginsState;
     private boolean playersState;
     private int motherDelay = 25;
-    private boolean connected;
     private Account account;
     private boolean mother;
     private boolean logged;
@@ -78,23 +81,26 @@ public class Player {
             if(file.exists()) {
                 file.delete();
             }
+
             file.createNewFile();
 
             JSONObject jsonObj = new JSONObject();
 
             JSONObject optionsObj = new JSONObject();
-            for(Option option : optionsManager.getOptions()) {
+            for(Option option : optionsManager.elements) {
                 optionsObj.put(option.getName(), option.isEnabled());
             }
+
             optionsObj.put("prefixCMD", prefixCMD);
             optionsObj.put("theme", themeType.name());
+            optionsObj.put("language", languageType.name());
 
             jsonObj.put("options", optionsObj);
 
             JSONObject skinObj = new JSONObject();
 
             if(skin == null) {
-                this.skin = SkinUtil.getSkin(getUsername(), null);
+                this.skin = SkinUtil.getSkin(getUsername());
             }
 
             if(skin != null) {
@@ -124,20 +130,21 @@ public class Player {
             JSONObject jsonObj = (JSONObject) obj;
 
             JSONObject optionsObj = (JSONObject) jsonObj.get("options");
-            for(Option option : this.optionsManager.getOptions()) {
-                option.setEnabled(this, (Boolean) optionsObj.get(option.getName()));
+            for(Option option : this.optionsManager.elements) {
+                option.setEnabled((Boolean) optionsObj.get(option.getName()));
             }
             this.prefixCMD = (String) optionsObj.get("prefixCMD");
             this.themeType = ThemeType.valueOf((String) optionsObj.get("theme"));
+            this.languageType = LanguageType.valueOf((String) optionsObj.get("language"));
 
             JSONObject skinObj = (JSONObject) jsonObj.get("skin");
             if(skinObj != null) {
-                GameProfile gameProfile = new GameProfile(UUID.randomUUID(), this.getUsername());
+                GameProfile gameProfile = new GameProfile(UUID.randomUUID(), getUsername());
                 gameProfile.getProperties().add(new GameProfile.Property("textures", (String) skinObj.get("value"), (String) skinObj.get("signature")));
 
                 this.skin = new Skin(gameProfile);
             } else {
-                this.skin = SkinUtil.getSkin(this.getUsername(), null);
+                this.skin = SkinUtil.getSkin(getUsername());
             }
         } catch (ParseException | IOException e) {
             e.printStackTrace();
@@ -145,17 +152,17 @@ public class Player {
     }
 
     public void disconnect() {
-        connected = false;
-        if (session != null) {
-            if (session.getPacketHandler() != null) {
-                session.getPacketHandler().disconnect();
-                if(account != null) {
+        if (this.session != null) {
+            if (this.session.getPacketHandler() != null) {
+                this.session.getPacketHandler().disconnect();
+                if(this.account != null) {
                     createOptionsFile();
                 }
             }
         }
-        if (remoteSession != null) {
-            remoteSession.getChannel().close();
+        if(this.remoteSession != null) {
+            this.remoteSession.getChannel().close();
+            this.connectedType = ConnectedType.DISCONNECTED;
         }
         BetterProxy.getInstance().getPlayerManager().removePlayer(this);
     }
@@ -165,6 +172,6 @@ public class Player {
     }
 
     public boolean isConnected() {
-        return remoteSession != null && connected;
+        return remoteSession != null && connectedType == ConnectedType.CONNECTED;
     }
 }

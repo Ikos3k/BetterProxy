@@ -1,5 +1,10 @@
 package me.ANONIMUS.proxy.enums;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum TimeType {
     DAY(0, 6000),
     NIGHT(0, 18000),
@@ -7,17 +12,4 @@ public enum TimeType {
 
     private final int age;
     private final int time;
-
-    TimeType(int age, int time) {
-        this.age = age;
-        this.time = time;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public int getTime() {
-        return time;
-    }
 }

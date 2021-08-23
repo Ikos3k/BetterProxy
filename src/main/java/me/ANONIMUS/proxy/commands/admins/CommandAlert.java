@@ -25,6 +25,6 @@ public class CommandAlert extends Command {
         }
 
         String finalOut = out;
-        BetterProxy.getInstance().getPlayerManager().getPlayers().forEach(player -> PacketUtil.sendTitle(player, "&8[&4ALERT&8]", "&n" + finalOut, 13, 18, 13));
+        BetterProxy.getInstance().getPlayerManager().elements.forEach(player -> PacketUtil.sendTitle(player, "&8[&4ALERT&8]", "&n" + finalOut, 13, 18, 13));
     }
 }

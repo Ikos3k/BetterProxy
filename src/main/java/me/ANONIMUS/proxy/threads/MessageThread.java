@@ -7,6 +7,6 @@ import java.util.TimerTask;
 
 public class MessageThread extends TimerTask {
     public void run() {
-        BetterProxy.getInstance().getPlayerManager().getPlayers().forEach(p -> ChatUtil.sendChatMessage(p.getThemeType().getColor(1) + ">> &8You are on a proxy by " + p.getThemeType().getColor(1) + "ANONIMUS&8!", p, false));
+        BetterProxy.getInstance().getPlayerManager().elements.forEach(p -> ChatUtil.sendChatMessage(p.getThemeType().getColor(1) + ">> &8You are on a proxy created by " + p.getThemeType().getColor(1) + "Ikos3k&8!", p, false));
     }
 }

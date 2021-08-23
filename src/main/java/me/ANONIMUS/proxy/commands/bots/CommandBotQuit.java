@@ -23,19 +23,17 @@ public class CommandBotQuit extends Command {
             ChatUtil.sendChatMessage("&7Successfully kicked out &4" + sender.getBots().size() + " &7bots", sender, true);
             sender.getBots().clear();
         } else {
-            Bot b = null;
-            for (Bot bot : sender.getBots()) {
-                if (bot.getUsername().equals(args[1])) {
-                    b = bot;
-                }
-            }
+            Bot b = sender.getBots().stream().filter(bot -> bot.getUsername().equals(args[1])).findFirst().orElse(null);
+
             if (b == null) {
                 ChatUtil.sendChatMessage("&cThe bot with a nickname &4" + args[1] + " &cdoes not exist", sender, true);
                 return;
             }
+
             b.getSession().getChannel().close();
             b.setSession(null);
             sender.getBots().remove(b);
+
             ChatUtil.sendChatMessage("&7A bot with a nickname &4" + args[1] + " &7was successfully thrown out", sender, true);
         }
     }

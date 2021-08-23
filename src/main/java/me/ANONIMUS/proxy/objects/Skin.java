@@ -16,8 +16,4 @@ public class Skin {
         GameProfile.Property property = gameProfile.getProperty("textures");
         return property.getSignature();
     }
-
-    public static Skin fromProfile(GameProfile gameProfile) {
-        return new Skin(gameProfile);
-    }
 }

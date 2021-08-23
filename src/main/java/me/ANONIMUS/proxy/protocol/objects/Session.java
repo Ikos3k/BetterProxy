@@ -15,9 +15,13 @@ public class Session {
     private String username;
 
     public void sendPacket(Packet p) {
-        if (channel.isOpen()) {
+        if (isChannelOpen()) {
             channel.writeAndFlush(p);
         }
+    }
+
+    public boolean isChannelOpen() {
+        return this.channel != null && this.channel.isOpen();
     }
 
     public void setConnectionState(ConnectionState state) {

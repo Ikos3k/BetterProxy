@@ -1,7 +1,12 @@
 package me.ANONIMUS.proxy.protocol.data.playerlist;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.Arrays;
 
+@Getter
+@AllArgsConstructor
 public enum PlayerListEntryAction {
     ADD_PLAYER(0),
     UPDATE_GAMEMODE(1),
@@ -11,15 +16,7 @@ public enum PlayerListEntryAction {
 
     private final int id;
 
-    PlayerListEntryAction(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
     public static PlayerListEntryAction getById(int id) {
-        return Arrays.stream(values()).filter(gt -> gt.id == id).findFirst().orElse(null);
+        return Arrays.stream(values()).filter(v -> v.id == id).findFirst().orElse(null);
     }
 }

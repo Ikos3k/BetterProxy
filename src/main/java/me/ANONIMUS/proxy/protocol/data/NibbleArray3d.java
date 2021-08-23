@@ -1,14 +1,13 @@
 package me.ANONIMUS.proxy.protocol.data;
 
+import lombok.Data;
+
+@Data
 public class NibbleArray3d {
     private final byte[] data;
 
     public NibbleArray3d(final int size) {
         this.data = new byte[size >> 1];
-    }
-
-    public NibbleArray3d(final byte[] array) {
-        this.data = array;
     }
 
     public byte[] getData() {

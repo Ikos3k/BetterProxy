@@ -1,62 +1,39 @@
 package me.ANONIMUS.proxy.protocol.data;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 
 import java.util.List;
 
+@Data
+@AllArgsConstructor
 public class ItemStack {
     private final int id;
     private final int amount;
     private final int data;
     private NBTTagCompound nbt;
 
-    public ItemStack(final int id) {
+    public ItemStack(int id) {
         this.id = id;
         this.amount = 1;
         this.data = 0;
     }
 
-    public ItemStack(final int id, final int amount) {
+    public ItemStack(int id, int amount) {
         this(id, amount, 0, null);
     }
 
-    public ItemStack(final int id, final String name) {
+    public ItemStack(int id, String name) {
         this(id);
 
         setStackDisplayName(name);
     }
 
-    public ItemStack(final int id, final int amount, final int data) {
+    public ItemStack(int id, int amount, int data) {
         this(id, amount, data, null);
-    }
-
-    public ItemStack(final int id, final int amount, final int data, final NBTTagCompound nbt) {
-        this.id = id;
-        this.amount = amount;
-        this.data = data;
-        this.nbt = nbt;
-    }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public int getAmount() {
-        return this.amount;
-    }
-
-    public int getData() {
-        return this.data;
-    }
-
-    public NBTTagCompound getNBT() {
-        return this.nbt;
-    }
-
-    public void setNbt(NBTTagCompound nbt) {
-        this.nbt = nbt;
     }
 
     public ItemStack setStackDisplayName(String displayName) {

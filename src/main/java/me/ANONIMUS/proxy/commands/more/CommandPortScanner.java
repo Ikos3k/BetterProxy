@@ -41,8 +41,5 @@ public class CommandPortScanner extends Command {
             ChatUtil.sendChatMessage("&7Open ports: " + sender.getThemeType().getColor(1) + ports, sender, true);
             ports.clear();
         });
-        ChatUtil.sendChatMessage("&7Scanning is complete &8(" + sender.getThemeType().getColor(2) + ports.size() + "&8)", sender, true);
-        ChatUtil.sendChatMessage("&7Open ports: " + sender.getThemeType().getColor(1) + ports, sender, true);
-        ports.clear();
     }
 }

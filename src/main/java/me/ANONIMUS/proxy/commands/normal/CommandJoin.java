@@ -21,6 +21,7 @@ public class CommandJoin extends Command {
     public void onCommand(Player sender, String[] args) {
         String ip = args[1];
         int port = 25565;
+
         if (ip.contains(":")) {
             final String[] sp = ip.split(":", 2);
             ip = sp[0];
@@ -45,6 +46,7 @@ public class CommandJoin extends Command {
         if (Boolean.parseBoolean(args[4])) {
             new ServerPinger(sender, true).connect(ip, port, Proxy.NO_PROXY);
         }
+
         new PlayerConnection(sender, args[2]).connect(ip, port, Proxy.NO_PROXY);
     }
 }

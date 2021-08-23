@@ -2,6 +2,7 @@ package me.ANONIMUS.proxy.managers;
 
 import lombok.Getter;
 import me.ANONIMUS.proxy.objects.Config;
+import me.ANONIMUS.proxy.protocol.data.DebugType;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -33,26 +34,29 @@ public class ConfigManager {
     public void write() {
         JSONObject jsonObj = new JSONObject();
 
-        jsonObj.put("port", 1337);
+        jsonObj.put("port", config.port);
 
         JSONObject motdObj = new JSONObject();
-        motdObj.put("versionInfo", "&4BetterProxy");
-        motdObj.put("line1", "     &f✖ &l&m\\-\\-\\-\\-&r&f&l>> &6BetterProxy &f&l<<&m-/-/-/-/&r&f ✖&r");
-        motdObj.put("line2", "        &c----&e/ &6✯ &eProxy by ANONIMUS &6✯ &e\\&c----");
+        motdObj.put("versionInfo", config.versionInfo);
+        motdObj.put("line1", config.line1);
+        motdObj.put("line2", config.line2);
 
         JSONArray playersArray = new JSONArray();
-        playersArray.add("&f---------------------------------------------------");
-        playersArray.add("                     &8Supported versions:");
-        playersArray.add(" &e%supported_versions%");
-        playersArray.add("&f---------------------------------------------------");
+        playersArray.addAll(config.playerList);
+
         motdObj.put("playerList", playersArray);
 
-        motdObj.put("icon", "icon.png");
-        motdObj.put("protocol", 0);
+        motdObj.put("icon", config.icon);
+        motdObj.put("protocol", config.protocol);
 
         jsonObj.put("motd", motdObj);
 
-        jsonObj.put("packet_debugger", false);
+        JSONObject debug = new JSONObject();
+        debug.put("debugType", config.debugType.name());
+        debug.put("showCustomPackets", config.showCustomPackets);
+        debug.put("debugger", config.debugger);
+
+        jsonObj.put("debug", debug);
 
         try (FileWriter fileWriter = new FileWriter(file)) {
             fileWriter.write(new ObjectMapper().defaultPrettyPrintingWriter().writeValueAsString(jsonObj));
@@ -78,7 +82,10 @@ public class ConfigManager {
             config.icon = (String) motd.get("icon");
             config.protocol = ((Long) motd.get("protocol")).intValue();
 
-            config.debug = (boolean) jsonObj.get("packet_debugger");
+            JSONObject debug = (JSONObject) jsonObj.get("debug");
+            config.debugType = DebugType.valueOf(((String) debug.get("debugType")).toUpperCase());
+            config.showCustomPackets = (boolean) debug.get("showCustomPackets");
+            config.debugger = (boolean) debug.get("debugger");
         } catch (ParseException | IOException e) {
             e.printStackTrace();
         }

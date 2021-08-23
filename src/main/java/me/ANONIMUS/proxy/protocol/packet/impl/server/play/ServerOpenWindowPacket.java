@@ -28,7 +28,7 @@ public class ServerOpenWindowPacket extends Packet {
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
         out.writeByte(this.windowId);
-        out.writeString(type.getId());
+        out.writeString(this.type.getValue());
         out.writeString(this.name);
         out.writeByte(this.slots);
         if (this.type == WindowType.HORSE) {

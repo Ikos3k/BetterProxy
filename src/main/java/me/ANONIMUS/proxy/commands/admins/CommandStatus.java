@@ -23,18 +23,15 @@ public class CommandStatus extends Command {
         long maxMemory = Runtime.getRuntime().maxMemory();
         long inUseMemory = totalMemory - freeMemory;
         int inUse = (int) (inUseMemory * 100L / maxMemory);
-        double cpu = 0.0;
-        try {
-            cpu = getProcessCpuLoad();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        double cpu = getProcessCpuLoad();
         ChatUtil.sendChatMessage("", sender, false);
         ChatUtil.sendChatMessage("----------------------------------", sender, false);
         ChatUtil.sendChatMessage("Available memory: " + sender.getThemeType().getColor(2) + humanReadableByteCount(totalMemory), sender, true);
         ChatUtil.sendChatMessage("Assigned memory: &a" + humanReadableByteCount(maxMemory), sender, true);
         ChatUtil.sendChatMessage("Used Memory: &4" + humanReadableByteCount(inUseMemory) + " &8(" + "&f" + inUse + "%&8)", sender, true);
         ChatUtil.sendChatMessage("Used CPU: " + sender.getThemeType().getColor(1) + cpu + "%", sender, true);
+        ChatUtil.sendChatMessage("", sender, true);
+        ChatUtil.sendChatMessage(sender.getPrefixCMD() + "free - clean memory", sender, true);
         ChatUtil.sendChatMessage("----------------------------------", sender, false);
     }
 

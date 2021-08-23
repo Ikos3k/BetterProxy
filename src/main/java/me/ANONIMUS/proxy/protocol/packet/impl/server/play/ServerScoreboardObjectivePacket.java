@@ -37,7 +37,7 @@ public class ServerScoreboardObjectivePacket extends Packet {
         this.objectiveMode = ObjectiveMode.getById(in.readByte());
         if (this.objectiveMode.getId() == 0 || this.objectiveMode.getId() == 2) {
             this.objectiveValue = in.readString(32767);
-            this.objectiveType = ObjectiveType.getByValue(in.readString(32));
+            this.objectiveType = ObjectiveType.getById(in.readString(32));
         }
     }
 

@@ -1,14 +1,11 @@
 package me.ANONIMUS.proxy.protocol.data.status;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Data
+@Getter
+@AllArgsConstructor
 public class VersionInfo {
-    private String versionName;
-    private int protocolVersion;
-
-    public VersionInfo(final String versionName, final int protocolVersion) {
-        this.versionName = versionName;
-        this.protocolVersion = protocolVersion;
-    }
+    private final String versionName;
+    private final int protocolVersion;
 }

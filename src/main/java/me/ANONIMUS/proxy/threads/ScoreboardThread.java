@@ -7,6 +7,6 @@ import java.util.TimerTask;
 
 public class ScoreboardThread extends TimerTask {
     public void run() {
-        BetterProxy.getInstance().getPlayerManager().getPlayers().forEach(ScoreboardUtil::updateScoreboard);
+        BetterProxy.getInstance().getPlayerManager().elements.forEach(ScoreboardUtil::updateScoreboard);
     }
 }

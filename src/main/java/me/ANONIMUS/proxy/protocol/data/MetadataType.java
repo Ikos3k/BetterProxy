@@ -1,7 +1,12 @@
 package me.ANONIMUS.proxy.protocol.data;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.Arrays;
 
+@Getter
+@AllArgsConstructor
 public enum MetadataType {
     BYTE(0),
     SHORT(1),
@@ -15,16 +20,8 @@ public enum MetadataType {
 
     private final int id;
 
-    MetadataType(final int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public static MetadataType getActionById(final int id) {
-        return Arrays.stream(values()).filter(a -> a.getId() == id).findFirst().orElse(null);
+    public static MetadataType getById(int id) {
+        return Arrays.stream(values()).filter(v -> v.id == id).findFirst().orElse(null);
     }
 }
 

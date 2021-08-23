@@ -34,16 +34,17 @@ public class ServerStatusHandler extends ServerHandler {
         if (packet instanceof ClientStatusRequestPacket) {
             System.out.println("> Ping packet received from: " + player.getSession().getChannel().localAddress());
 
-            final VersionInfo versionInfo = new VersionInfo(ChatUtil.fixColor(BetterProxy.getInstance().getConfigManager().getConfig().versionInfo), BetterProxy.getInstance().getConfigManager().getConfig().protocol);
+            String protocols = Arrays.stream(ProtocolType.values()).filter(protocolType -> protocolType != ProtocolType.PROTOCOL_UNKNOWN).map(ProtocolType::getPrefix).collect(Collectors.joining(ChatUtil.fixColor("&8, &e")));
+            VersionInfo versionInfo = new VersionInfo(ChatUtil.fixColor(BetterProxy.getInstance().getConfigManager().getConfig().versionInfo), BetterProxy.getInstance().getConfigManager().getConfig().protocol);
             int i = 0;
             GameProfile[] gp = new GameProfile[BetterProxy.getInstance().getConfigManager().getConfig().playerList.size()];
             for (String s : BetterProxy.getInstance().getConfigManager().getConfig().playerList) {
-                s = s.replace("%supported_versions%", "&e" + Arrays.stream(ProtocolType.values()).filter(protocolType -> protocolType != ProtocolType.PROTOCOL_UNKNOWN).map(ProtocolType::getPrefix).collect(Collectors.joining(ChatUtil.fixColor("&8, &e"))));
+                s = s.replace("%supported_versions%", "&e" + protocols);
                 gp[i] = new GameProfile(ChatUtil.fixColor(s), UUID.randomUUID());
                 ++i;
             }
-            final PlayerInfo playerInfo = new PlayerInfo(0, 0, gp);
-            final BaseComponent[] desc = new ComponentBuilder(ChatUtil.fixColor(BetterProxy.getInstance().getConfigManager().getConfig().line1 + "&r\n" + BetterProxy.getInstance().getConfigManager().getConfig().line2)).create();
+            PlayerInfo playerInfo = new PlayerInfo(0, 0, gp);
+            BaseComponent[] desc = new ComponentBuilder(ChatUtil.fixColor(BetterProxy.getInstance().getConfigManager().getConfig().line1 + "&r\n" + BetterProxy.getInstance().getConfigManager().getConfig().line2)).create();
 
             player.getSession().sendPacket(new ServerStatusResponsePacket(new ServerStatusInfo(versionInfo, playerInfo, desc, BetterProxy.getInstance().getServer().getIcon())));
             player.getSession().sendPacket(new ServerStatusPongPacket(0));

@@ -18,6 +18,7 @@ public class CommandLogin extends Command {
             ChatUtil.sendChatMessage("&4You are already logged!", sender, true);
             return;
         }
+
         if (sender.getAccount().getPassword().equals(args[1])) {
             ChatUtil.clearChat(1, sender);
             PacketUtil.clearBossBar(sender);
@@ -27,6 +28,7 @@ public class CommandLogin extends Command {
             WorldUtil.lobby(sender, false);
             return;
         }
+
         ChatUtil.sendChatMessage("&cThe given password is not correct!", sender, true);
     }
 }

@@ -8,6 +8,7 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import io.netty.util.ByteProcessor;
+import lombok.AllArgsConstructor;
 import me.ANONIMUS.proxy.protocol.data.ItemStack;
 import me.ANONIMUS.proxy.protocol.data.Position;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -27,12 +28,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
+@AllArgsConstructor
 public class PacketBuffer extends ByteBuf {
     private final ByteBuf byteBuf;
-
-    public PacketBuffer(final ByteBuf byteBuf) {
-        this.byteBuf = byteBuf;
-    }
 
     public void writeNBTTagCompoundToBuffer(NBTTagCompound nbt) {
         if (nbt == null) {
@@ -65,7 +63,7 @@ public class PacketBuffer extends ByteBuf {
             this.writeShort(stack.getId());
             this.writeByte(stack.getAmount());
             this.writeShort(stack.getData());
-            this.writeNBTTagCompoundToBuffer(stack.getNBT());
+            this.writeNBTTagCompoundToBuffer(stack.getNbt());
         }
     }
 

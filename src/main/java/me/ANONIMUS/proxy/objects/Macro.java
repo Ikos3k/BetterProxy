@@ -9,5 +9,5 @@ import java.util.List;
 @Data
 public class Macro {
     private final int id;
-    private List<Packet> packets = new ArrayList<>();
+    private final List<Packet> packets = new ArrayList<>();
 }

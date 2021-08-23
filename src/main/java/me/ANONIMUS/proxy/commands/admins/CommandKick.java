@@ -30,7 +30,7 @@ public class CommandKick extends Command {
             return;
         }
 
-        if (player.getAccount().getGroup().getPermissionLevel() >= sender.getAccount().getGroup().getPermissionLevel()) {
+        if (player.getAccount().getGroup().getPermission() >= sender.getAccount().getGroup().getPermission()) {
             ChatUtil.sendChatMessage("&cYou cannot kick this player!", sender, true);
             return;
         }
