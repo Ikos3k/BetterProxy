@@ -29,7 +29,6 @@ import java.util.concurrent.TimeUnit;
 public class ServerPinger {
     private final Player owner;
     private final boolean showResult;
-
     private Session session;
 
     private final EventLoopGroup group = new NioEventLoopGroup();
@@ -43,7 +42,7 @@ public class ServerPinger {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) {
-                        ChannelPipeline pipeline = socketChannel.pipeline();
+                        final ChannelPipeline pipeline = socketChannel.pipeline();
                         if (proxy != Proxy.NO_PROXY) {
                             pipeline.addFirst(new Socks4ProxyHandler(proxy.address()));
                         }

@@ -2,9 +2,6 @@ package me.ANONIMUS.proxy.protocol;
 
 import lombok.Data;
 
-import java.util.Collections;
-import java.util.List;
-
 @Data
 public class Protocol {
     private final int id;
@@ -22,9 +19,5 @@ public class Protocol {
         for (int i = 0; i < this.protocols.length; i++) {
             this.protocols[i] = protocolTypes[i].getProtocol();
         }
-    }
-
-    public static List<Protocol> getAllSameProtocols(int id) {
-        return Collections.singletonList(new Protocol(id, ProtocolType.values()));
     }
 }

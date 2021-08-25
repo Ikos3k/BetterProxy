@@ -82,7 +82,7 @@ public class JsonUtil {
                                 break;
                             }
 
-                            f.set(object, jsonObj.get(f.getName()));
+                            f.set(object, value);
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();
                         }
@@ -101,24 +101,16 @@ public class JsonUtil {
         for (Field field : object.getClass().getDeclaredFields()) {
             if (field.isAnnotationPresent(JsonInfo.class)) {
                 int x = i + 1;
+                List<Field> fieldList = new ArrayList<>(Collections.singletonList(field));
+                Field f;
+                while (object.getClass().getDeclaredFields().length != x
+                        && !(f = object.getClass().getDeclaredFields()[x]).isAnnotationPresent(JsonInfo.class)) {
+                    fieldList.add(f);
+                    x++;
+                }
                 if(!field.getAnnotation(JsonInfo.class).object().isEmpty()) {
-                    String fieldAnnotion = field.getAnnotation(JsonInfo.class).object();
-                    List<Field> fieldList = new ArrayList<>(Collections.singletonList(field));
-                    Field f;
-                    while (object.getClass().getDeclaredFields().length != x
-                            && !(f = object.getClass().getDeclaredFields()[x]).isAnnotationPresent(JsonInfo.class)) {
-                        fieldList.add(f);
-                        x++;
-                    }
-                    fields.put(fieldList, fieldAnnotion);
+                    fields.put(fieldList, field.getAnnotation(JsonInfo.class).object());
                 } else {
-                    List<Field> fieldList = new ArrayList<>(Collections.singletonList(field));
-                    Field f;
-                    while (object.getClass().getDeclaredFields().length != x
-                            && !(f = object.getClass().getDeclaredFields()[x]).isAnnotationPresent(JsonInfo.class)) {
-                        fieldList.add(f);
-                        x++;
-                    }
                     fields.put(fieldList, null);
                 }
             }

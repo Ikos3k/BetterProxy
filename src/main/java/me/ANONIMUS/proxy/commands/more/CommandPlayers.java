@@ -7,7 +7,10 @@ import me.ANONIMUS.proxy.protocol.packet.impl.client.play.ClientTabCompletePacke
 import me.ANONIMUS.proxy.utils.ChatUtil;
 import net.md_5.bungee.api.ChatColor;
 
-import javax.json.*;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -54,9 +57,7 @@ public class CommandPlayers extends Command {
             final JsonObject object = reader.readObject();
             reader.close();
             JsonArray players = object.getJsonObject("players").getJsonArray("list");
-            for (JsonValue p : players) {
-                sender.getPlayers().add(p.toString());
-            }
+            players.forEach(jsonValue -> sender.getPlayers().add(players.toString()));
             String out = sender.getPlayers().toString();
             if (out.equals("[]")) {
                 ChatUtil.sendChatMessage("&cNo players found!", sender, true);

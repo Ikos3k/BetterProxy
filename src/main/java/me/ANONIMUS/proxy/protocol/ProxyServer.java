@@ -23,7 +23,6 @@ import me.ANONIMUS.proxy.protocol.packet.impl.client.HandshakePacket;
 @Data
 public class ProxyServer {
     private final EventLoopGroup worker = new NioEventLoopGroup();
-
     private final String icon;
 
     public void bind(PlayerManager playerManager) {

@@ -46,6 +46,7 @@ public class CommandManager extends Manager<Command> {
             ChatUtil.sendChatMessage("&cYou are not permitted to this command!", sender, true);
             return;
         }
+
         if (command.getConnected() == ConnectedType.CONNECTED && !sender.isConnected()) {
             ChatUtil.sendChatMessage("&4You must be connected to the server!", sender, true);
             return;

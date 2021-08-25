@@ -58,7 +58,7 @@ public class PlayerConnection {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) {
-                        ChannelPipeline pipeline = socketChannel.pipeline();
+                        final ChannelPipeline pipeline = socketChannel.pipeline();
                         if (proxy != Proxy.NO_PROXY) {
                             pipeline.addFirst(new Socks4ProxyHandler(proxy.address()));
                         }
@@ -81,7 +81,7 @@ public class PlayerConnection {
 
                             @Override
                             public void channelInactive(ChannelHandlerContext ctx) {
-                                disconnect(null);
+                                disconnect(ctx.name());
                             }
 
                             @Override
@@ -119,20 +119,20 @@ public class PlayerConnection {
 
                                     if (packet instanceof ServerTabCompletePacket) {
                                         if (owner.isPlayersState()) {
+                                            owner.setPlayersState(false);
                                             for (String m : ((ServerTabCompletePacket) packet).getMatches()) {
                                                 owner.getPlayers().add(m);
                                             }
                                             String out = owner.getPlayers().toString();
                                             if (out.equals("[]")) {
                                                 ChatUtil.sendChatMessage("&cNo players found!", owner, true);
-                                                owner.setPlayersState(false);
                                                 return;
                                             }
                                             ChatUtil.sendChatMessage("&f" + out.replace("[", "").replace("]", "") + " &8[&f" + owner.getPlayers().size() + "&8]", owner, true);
-                                            owner.setPlayersState(false);
                                         }
 
                                         if (owner.isPluginsState()) {
+                                            owner.setPluginsState(false);
                                             List<String> matches = new ArrayList<>();
                                             for (String m : ((ServerTabCompletePacket) packet).getMatches()) {
                                                 if (m.contains(":")) {
@@ -146,11 +146,9 @@ public class PlayerConnection {
                                             String out = matches.toString();
                                             if (out.equals("[]")) {
                                                 ChatUtil.sendChatMessage("&cNo players found!", owner, true);
-                                                owner.setPluginsState(false);
                                                 return;
                                             }
                                             ChatUtil.sendChatMessage("&f" + out.replace("[", "").replace("]", ""), owner, true);
-                                            owner.setPluginsState(false);
                                         }
                                     }
 
@@ -164,11 +162,9 @@ public class PlayerConnection {
                                         }
                                     }
 
-                                    if (packet instanceof ServerTimeUpdatePacket) {
-                                        if (owner.getTimeType() != TimeType.DEFAULT) {
-                                            owner.getSession().sendPacket(new ServerTimeUpdatePacket(owner.getTimeType().getAge(), owner.getTimeType().getTime()));
-                                            return;
-                                        }
+                                    if (packet instanceof ServerTimeUpdatePacket && owner.getTimeType() != TimeType.DEFAULT) {
+                                        owner.getSession().sendPacket(new ServerTimeUpdatePacket(owner.getTimeType().getAge(), owner.getTimeType().getTime()));
+                                        return;
                                     }
 
                                     if (packet instanceof ServerPlayerListHeaderFooter && !owner.getOptionsManager().getOptionByName("server tablist").isEnabled()) {
@@ -188,11 +184,10 @@ public class PlayerConnection {
     }
 
     private void disconnect(String cause) {
-
-
         owner.getSession().sendPacket(new ServerChatPacket(new TextComponent(ChatUtil.fixColor(owner.getThemeType().getColor(1) + ">> &8Connection to the server was lost: " + owner.getThemeType().getColor(1) + owner.getServerData().getHost() + (cause != null ? " &8cause: " + owner.getThemeType().getColor(1) + ChatColor.stripColor(cause) : "")))
             .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(owner.getThemeType().getColor(1) + "click to reconnect &8[" + owner.getThemeType().getColor(2) + owner.getServerData().getHost() + (!owner.getServerData().getHost().contains(owner.getServerData().getIp()) ? "(" + owner.getServerData().getIp() + ")&8]" : "")))))
             .setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, owner.getPrefixCMD() + "join " + owner.getServerData().getHost() + " " + username + " false false"))));
+
         owner.getRemoteSession().getChannel().close();
         owner.setConnectedType(ConnectedType.DISCONNECTED);
         owner.setServerData(null);

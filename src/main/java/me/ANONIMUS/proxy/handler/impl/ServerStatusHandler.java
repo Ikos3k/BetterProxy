@@ -40,6 +40,8 @@ public class ServerStatusHandler extends ServerHandler {
             GameProfile[] gp = new GameProfile[BetterProxy.getInstance().getConfigManager().getConfig().playerList.size()];
             for (String s : BetterProxy.getInstance().getConfigManager().getConfig().playerList) {
                 s = s.replace("%supported_versions%", "&e" + protocols);
+                s = s.replace("%online_players%", "&e" + BetterProxy.getInstance().getPlayerManager().elements.size());
+                s = s.replace("%logged_players%", "&e" + BetterProxy.getInstance().getPlayerManager().elements.stream().filter(Player::isLogged).count());
                 gp[i] = new GameProfile(ChatUtil.fixColor(s), UUID.randomUUID());
                 ++i;
             }

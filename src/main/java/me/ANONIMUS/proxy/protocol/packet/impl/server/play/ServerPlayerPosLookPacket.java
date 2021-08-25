@@ -35,30 +35,6 @@ public class ServerPlayerPosLookPacket extends Packet {
         this(x, y, z, yaw, pitch, 0);
     }
 
-    public double getX() {
-        return this.x;
-    }
-
-    public double getY() {
-        return this.y;
-    }
-
-    public double getZ() {
-        return this.z;
-    }
-
-    public float getYaw() {
-        return this.yaw;
-    }
-
-    public float getPitch() {
-        return this.pitch;
-    }
-
-    public int getTeleport() {
-        return teleport;
-    }
-
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
         out.writeDouble(this.x);
