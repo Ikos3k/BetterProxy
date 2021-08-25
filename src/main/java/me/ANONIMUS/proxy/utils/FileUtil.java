@@ -31,12 +31,9 @@ public class FileUtil {
             for(String d : directories) { new File(BetterProxy.getInstance().getDirFolder() + "/" + d).mkdir(); }
 
             if(!accountsFile.exists()) {
-                try (FileWriter fileWriter = new FileWriter(accountsFile)) {
-                    fileWriter.write("Ikos3k:password:ROOT");
-                    fileWriter.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                FileWriter fileWriter = new FileWriter(accountsFile);
+                fileWriter.write("Ikos3k:password:ROOT");
+                fileWriter.flush();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -106,7 +103,6 @@ public class FileUtil {
                 if(jsonObj.get("compressed") == null) {
                     if(ArrayUtil.getCompressSizeDifference(data) > 0) {
                         addExploit(name, id, ArrayUtil.toList(ArrayUtil.compress(data)), true);
-//                        System.out.println("[DEBUG] exploit compressed " + name + " [" + ArrayCompressor.getSizeDifference(data) + "]");
                     } else {
                         addExploit(name, id, s, false);
                     }

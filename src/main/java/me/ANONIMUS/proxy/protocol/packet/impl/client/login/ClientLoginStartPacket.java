@@ -24,7 +24,7 @@ public class ClientLoginStartPacket extends Packet {
 
     @Override
     public void read(PacketBuffer in, int protocol) throws Exception {
-        this.username = in.readString();
+        this.username = in.readString(32);
     }
 
     @Override

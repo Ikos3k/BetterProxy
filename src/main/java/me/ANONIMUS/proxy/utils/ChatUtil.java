@@ -19,9 +19,8 @@ public class ChatUtil {
     }
 
     public static void sendHoverMessage(Player player, String s1, String s2) {
-        TextComponent msg = new TextComponent(fixColor(s1));
-        msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(fixColor(s2))));
-        player.getSession().sendPacket(new ServerChatPacket(msg));
+        player.getSession().sendPacket(new ServerChatPacket(new TextComponent(fixColor(s1))
+            .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(fixColor(s2))))));
     }
 
     public static void sendChatMessage(String message, Player player, boolean prefix) {

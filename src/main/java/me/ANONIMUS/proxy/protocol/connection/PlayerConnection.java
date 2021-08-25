@@ -105,13 +105,13 @@ public class PlayerConnection {
                                 } else if (packet instanceof ServerKeepAlivePacket) {
                                     owner.getRemoteSession().sendPacket(new ClientKeepAlivePacket(((ServerKeepAlivePacket) packet).getKeepaliveId()));
                                 } else if (packet instanceof ServerCustomPayloadPacket) {
-                                    if (((ServerCustomPayloadPacket) packet).getChannel().equals("MC|Brand")) {
+                                    if (((ServerCustomPayloadPacket) packet).getData() != null && ((ServerCustomPayloadPacket) packet).getChannel().equals("MC|Brand")) {
                                         ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Engine: " + owner.getThemeType().getColor(1) + ((ServerCustomPayloadPacket) packet).getData().readString().split(" ")[0], owner, false);
                                     }
                                 } else if (owner.isConnected() && owner.getRemoteSession().getConnectionState() == ConnectionState.PLAY) {
                                     if (owner.isListenChunks() && packet instanceof CustomPacket) {
                                         if ((((owner).getSession().getProtocolID() == 47 && ((CustomPacket) packet).getCustomPacketID() == 0x26) ||
-                                            ((owner).getSession().getProtocolID() != 47 && ((CustomPacket) packet).getCustomPacketID() == 0x20))) {
+                                                ((owner).getSession().getProtocolID() != 47 && ((CustomPacket) packet).getCustomPacketID() == 0x20))) {
                                             owner.getListenedChunks().add(packet);
                                             PacketUtil.sendTitle(owner, "[CHUNKS]", "listening... (" + owner.getListenedChunks().size() + ")");
                                         }
@@ -171,7 +171,7 @@ public class PlayerConnection {
                                         }
                                     }
 
-                                    if(packet instanceof ServerPlayerListHeaderFooter && !owner.getOptionsManager().getOptionByName("server tablist").isEnabled()) {
+                                    if (packet instanceof ServerPlayerListHeaderFooter && !owner.getOptionsManager().getOptionByName("server tablist").isEnabled()) {
                                         return;
                                     }
 
@@ -188,11 +188,11 @@ public class PlayerConnection {
     }
 
     private void disconnect(String cause) {
-        TextComponent msg = new TextComponent(ChatUtil.fixColor(owner.getThemeType().getColor(1) + ">> &8Connection to the server was lost: " + owner.getThemeType().getColor(1) + owner.getServerData().getHost() + (cause != null ? " &8cause: " + owner.getThemeType().getColor(1) + ChatColor.stripColor(cause) : "")));
-        msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(owner.getThemeType().getColor(1)  + "click to reconnect &8[" + owner.getThemeType().getColor(2) + owner.getServerData().getHost() + (!owner.getServerData().getHost().contains(owner.getServerData().getIp()) ? "(" + owner.getServerData().getIp() + ")&8]" : "")))));
-        msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, owner.getPrefixCMD() + "join " + owner.getServerData().getHost() + " " + username + " false false"));
-        owner.getSession().sendPacket(new ServerChatPacket(msg));
 
+
+        owner.getSession().sendPacket(new ServerChatPacket(new TextComponent(ChatUtil.fixColor(owner.getThemeType().getColor(1) + ">> &8Connection to the server was lost: " + owner.getThemeType().getColor(1) + owner.getServerData().getHost() + (cause != null ? " &8cause: " + owner.getThemeType().getColor(1) + ChatColor.stripColor(cause) : "")))
+            .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(owner.getThemeType().getColor(1) + "click to reconnect &8[" + owner.getThemeType().getColor(2) + owner.getServerData().getHost() + (!owner.getServerData().getHost().contains(owner.getServerData().getIp()) ? "(" + owner.getServerData().getIp() + ")&8]" : "")))))
+            .setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, owner.getPrefixCMD() + "join " + owner.getServerData().getHost() + " " + username + " false false"))));
         owner.getRemoteSession().getChannel().close();
         owner.setConnectedType(ConnectedType.DISCONNECTED);
         owner.setServerData(null);

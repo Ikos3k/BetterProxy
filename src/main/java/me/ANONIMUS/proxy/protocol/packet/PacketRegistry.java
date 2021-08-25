@@ -32,9 +32,7 @@ public class PacketRegistry {
                 throw new IllegalAccessException("Packet " + constructor.getName() + " has a non public default constructor.");
             }
 
-            if (!constructor.isAccessible()) {
-                constructor.setAccessible(true);
-            }
+            constructor.setAccessible(true);
 
             return constructor.newInstance();
         } catch (Exception e) {

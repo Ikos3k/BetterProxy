@@ -778,7 +778,11 @@ public class PacketBuffer extends ByteBuf {
     }
 
     public ByteBuf readBytes(int p_readBytes_1_) {
-        return byteBuf.readBytes(p_readBytes_1_);
+        try {
+            return byteBuf.readBytes(p_readBytes_1_);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public ByteBuf readSlice(int p_readSlice_1_) {

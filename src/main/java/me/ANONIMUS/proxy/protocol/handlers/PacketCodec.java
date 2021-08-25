@@ -95,9 +95,8 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
 
                         return field.getName() + ": " + (showObjectType ? "(" + name + "): " : "") +  value;
                     } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+                        return null;
                     }
-                    return null;
                 }).collect(Collectors.toList()));
             }
 

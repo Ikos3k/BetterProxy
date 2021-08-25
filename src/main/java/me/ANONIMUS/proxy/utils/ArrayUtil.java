@@ -9,9 +9,6 @@ import java.util.List;
 
 public class ArrayUtil {
     public static int[] compress(byte[] byteArray) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(baos);
-
         List<Integer> numbersList = new ArrayList<>();
         int currentNumber = byteArray[0];
         int numbers = 1;
@@ -22,16 +19,11 @@ public class ArrayUtil {
             } else {
                 numbersList.add(numbers);
                 numbersList.add(currentNumber);
-                dos.writeInt(numbers);
-                dos.writeInt(currentNumber);
 
                 currentNumber = byteArray[i];
                 numbers = 1;
             }
         }
-
-        dos.writeInt(numbers);
-        dos.writeInt(currentNumber);
 
         numbersList.add(numbers);
         numbersList.add(currentNumber);
@@ -85,6 +77,6 @@ public class ArrayUtil {
     }
 
     public static boolean isArray(Object object) {
-        return object.getClass().getSimpleName().endsWith("[]");
+        return object.getClass().isArray();
     }
 }

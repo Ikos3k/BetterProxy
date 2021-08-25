@@ -573,4 +573,14 @@ public abstract class BaseComponent
             builder.append( ChatColor.MAGIC );
         }
     }
+
+    public BaseComponent setHoverEvent(HoverEvent hoverEvent) {
+        this.hoverEvent = hoverEvent;
+        return this;
+    }
+
+    public BaseComponent setClickEvent(ClickEvent clickEvent) {
+        this.clickEvent = clickEvent;
+        return this;
+    }
 }

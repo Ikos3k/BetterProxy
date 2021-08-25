@@ -6,14 +6,10 @@ import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.enums.LanguageType;
 import me.ANONIMUS.proxy.enums.ThemeType;
 import me.ANONIMUS.proxy.enums.TimeType;
-import me.ANONIMUS.proxy.handler.impl.ServerLoginHandler;
-import me.ANONIMUS.proxy.handler.impl.ServerStatusHandler;
 import me.ANONIMUS.proxy.managers.OptionsManager;
 import me.ANONIMUS.proxy.objects.*;
-import me.ANONIMUS.proxy.protocol.data.ConnectionState;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntry;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
-import me.ANONIMUS.proxy.protocol.packet.impl.client.HandshakePacket;
 import me.ANONIMUS.proxy.utils.SkinUtil;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONObject;
@@ -52,28 +48,6 @@ public class Player {
     private boolean mother;
     private boolean logged;
     private Skin skin;
-
-    public void packetReceived(final Packet packet) {
-        if (packet instanceof HandshakePacket) {
-            final HandshakePacket handshake = (HandshakePacket) packet;
-            session.setProtocolID(handshake.getProtocolId());
-            switch (handshake.getNextState()) {
-                case 1:
-                    session.setConnectionState(ConnectionState.STATUS);
-                    session.setPacketHandler(new ServerStatusHandler(this));
-                    break;
-                case 2:
-                    session.setConnectionState(ConnectionState.LOGIN);
-                    session.setPacketHandler(new ServerLoginHandler(this));
-                    break;
-            }
-            if (session.getConnectionState() == ConnectionState.HANDSHAKE) {
-                session.getChannel().close();
-            }
-        } else {
-            session.getPacketHandler().handlePacket(packet);
-        }
-    }
 
     public void createOptionsFile() {
         try {

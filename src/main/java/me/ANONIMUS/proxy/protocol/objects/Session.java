@@ -3,6 +3,7 @@ package me.ANONIMUS.proxy.protocol.objects;
 import io.netty.channel.Channel;
 import lombok.Data;
 import me.ANONIMUS.proxy.handler.ServerHandler;
+import me.ANONIMUS.proxy.protocol.ProtocolType;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
 import me.ANONIMUS.proxy.protocol.handlers.CompressionCodec;
 import me.ANONIMUS.proxy.protocol.handlers.PacketCodec;
@@ -33,6 +34,9 @@ public class Session {
     }
 
     public int getProtocolID() {
+        if(getPacketCodec() == null) {
+            return ProtocolType.PROTOCOL_UNKNOWN.getProtocol();
+        }
         return getPacketCodec().getProtocol();
     }
 

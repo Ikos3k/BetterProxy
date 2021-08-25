@@ -127,10 +127,6 @@ public class ServerPlayHandler extends ServerHandler {
             }
         }
 
-        forwardPacket(packet);
-    }
-
-    private void forwardPacket(final Packet packet) {
         if (player.isConnected()) {
             if (player.isMother()) {
                 if (player.getMotherDelay() == 0) {
@@ -158,8 +154,8 @@ public class ServerPlayHandler extends ServerHandler {
                     thread0.start();
                 }
             }
-            if (!(packet instanceof ClientKeepAlivePacket))
-                player.getRemoteSession().sendPacket(packet);
+
+            player.getRemoteSession().sendPacket(packet);
         }
     }
 }

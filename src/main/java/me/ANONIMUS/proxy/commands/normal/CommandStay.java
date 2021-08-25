@@ -58,7 +58,6 @@ public class CommandStay extends Command {
                 } else if (packet instanceof ServerDisconnectPacket) {
                     ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &fcause: &c" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerDisconnectPacket) packet).getReason())), bot.getOwner(), true);
                     disconnect(bot, sender);
-
                 } else if (packet instanceof ServerLoginDisconnectPacket) {
                     ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &fause: &c" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerLoginDisconnectPacket) packet).getReason())), bot.getOwner(), true);
                     disconnect(bot, sender);

@@ -33,10 +33,6 @@ public class ServerCustomPayloadPacket extends Packet {
         }
     }
 
-    public byte[] getByteData() {
-        return this.data.readByteArray();
-    }
-
     @Override
     public List<Protocol> getProtocolList() {
         return Arrays.asList(new Protocol(0x3F, 47, 110), new Protocol(0x18, 340));

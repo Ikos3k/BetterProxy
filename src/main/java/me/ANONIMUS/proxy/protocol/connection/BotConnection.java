@@ -24,12 +24,15 @@ import me.ANONIMUS.proxy.protocol.packet.impl.client.play.ClientSettingsPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginDisconnectPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSetCompressionPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSuccessPacket;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerChatPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerDisconnectPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerJoinGamePacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerKeepAlivePacket;
 import me.ANONIMUS.proxy.utils.ChatUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 import java.net.Proxy;
 import java.util.concurrent.TimeUnit;
@@ -64,8 +67,7 @@ public class BotConnection {
 
                             @Override
                             public void channelInactive(ChannelHandlerContext ctx) {
-                                ChatUtil.sendChatMessage(bot.getOwner().getThemeType().getColor(1) + ">> &8Bot &c" + username + " &8disconnected from the server &c" + host + ":" + port + " &fcause: &c" + ctx.getClass(), bot.getOwner(), true);
-                                disconnect(bot, bot.getOwner());
+                                disconnect(ctx.name(), host, port, bot, bot.getOwner());
                             }
 
                             @Override
@@ -82,11 +84,9 @@ public class BotConnection {
                                     bot.getSession().sendPacket(new ClientCustomPayloadPacket("MC|Brand", "vanilla".getBytes()));
                                     bot.getSession().sendPacket(new ClientSettingsPacket("pl_PL", (byte) 32, (byte) 0, false, (byte) 1));
                                 } else if (packet instanceof ServerDisconnectPacket) {
-                                    ChatUtil.sendChatMessage(bot.getOwner().getThemeType().getColor(1) + ">> &8Bot &c" + username + " &8disconnected from the server &c" + host + ":" + port + " &fcause: &c" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerDisconnectPacket) packet).getReason())), bot.getOwner(), true);
-                                    disconnect(bot, bot.getOwner());
+                                    disconnect(ChatColor.stripColor(BaseComponent.toLegacyText(((ServerDisconnectPacket) packet).getReason())), host, port, bot, bot.getOwner());
                                 } else if (packet instanceof ServerLoginDisconnectPacket) {
-                                    ChatUtil.sendChatMessage(bot.getOwner().getThemeType().getColor(1) + ">> &8Bot &c" + username + " &8disconnected from the server &c" + host + ":" + port + " &cause: &c" + ChatColor.stripColor(BaseComponent.toLegacyText(((ServerLoginDisconnectPacket) packet).getReason())), bot.getOwner(), true);
-                                    disconnect(bot, bot.getOwner());
+                                    disconnect(ChatColor.stripColor(BaseComponent.toLegacyText(((ServerLoginDisconnectPacket) packet).getReason())), host, port, bot, bot.getOwner());
                                 }
                             }
                         });
@@ -98,7 +98,10 @@ public class BotConnection {
         bot.getSession().setUsername(username);
     }
 
-    private void disconnect(Bot bot, Player owner) {
+    private void disconnect(String cause, String host, int port, Bot bot, Player owner) {
+        owner.getSession().sendPacket(new ServerChatPacket(new TextComponent(ChatUtil.fixColor(bot.getOwner().getThemeType().getColor(1) + ">> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &c" + host + ":" + port))
+            .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(" &fcause: &c" + cause))))));
+
         bot.getSession().getChannel().close();
         bot.setSession(null);
         owner.getBots().remove(bot);
