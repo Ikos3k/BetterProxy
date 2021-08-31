@@ -21,7 +21,7 @@ import java.util.UUID;
 
 public class WorldUtil {
     public static void dimSwitch(Player player, ServerJoinGamePacket packet) {
-        if(packet == null) {
+        if (packet == null) {
             packet = new ServerJoinGamePacket(0, Gamemode.SURVIVAL, Dimension.OVERWORLD, Difficulty.PEACEFULL, 1, "default_1_1", false);
         }
 
@@ -33,7 +33,6 @@ public class WorldUtil {
     public static void emptyWorld(Player player) {
         dimSwitch(player, null);
 
-        player.getSession().sendPacket(new ServerSpawnPositionPacket(new Position(0, 1, 0)));
         player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, true, false, false, 0f, 0f));
         player.getSession().sendPacket(new ServerPlayerPosLookPacket(0, 70, 0, 180, 90));
     }
@@ -55,7 +54,8 @@ public class WorldUtil {
                     player.getSession().sendPacket(new CustomPacket(player.getSession().getProtocolID() == 47 ? 0x26 : 0x20, data));
                     i++;
                 }
-            } catch (IOException ignored) { }
+            } catch (IOException ignored) {
+            }
         }
 
         player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, false, false, false, 0f, 0f));

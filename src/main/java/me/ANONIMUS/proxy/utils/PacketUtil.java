@@ -41,6 +41,22 @@ public class PacketUtil {
         player.getTabList().clear();
     }
 
+    public static void changeGameMode(Player player, Gamemode gamemode) {
+        switch (gamemode) {
+            case SURVIVAL:
+            case ADVENTURE:
+                player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, false, false, false, 0, 0));
+                break;
+            case CREATIVE:
+                player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(true, true, true, true, 0.1f, 0.1f));
+                break;
+            case SPECTATOR:
+                player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(true, false, false, false, 0.1f, 0.1f));
+                break;
+        }
+        player.getSession().sendPacket(new ServerChangeGameStatePacket(new Effect(3, gamemode.getId())));
+    }
+
     public static void sendBroadcastPacket(Packet packet) {
         BetterProxy.getInstance().getPlayerManager().elements.forEach(p -> p.getSession().sendPacket(packet));
     }

@@ -10,6 +10,7 @@ import me.ANONIMUS.proxy.protocol.ProxyServer;
 import me.ANONIMUS.proxy.protocol.packet.PacketRegistry;
 import me.ANONIMUS.proxy.threads.*;
 import me.ANONIMUS.proxy.utils.FileUtil;
+import me.ANONIMUS.proxy.utils.UpdateUtils;
 
 import java.io.File;
 import java.util.HashMap;
@@ -47,6 +48,11 @@ public class BetterProxy {
         System.out.println("| https://github.com/Ikos3k/BetterProxy |");
         System.out.println("[ ------------------------------------- ]");
         System.out.println();
+        System.out.println("> Checking for updates...");
+        if(!UpdateUtils.checkForUpdates(configManager.getConfig().proxyVersion)) {
+            System.err.println("> Your proxy is not up to date!");
+            return;
+        }
         System.out.println("> Creating files...");
         FileUtil.createMissing();
         System.out.println("> Loading packets...");

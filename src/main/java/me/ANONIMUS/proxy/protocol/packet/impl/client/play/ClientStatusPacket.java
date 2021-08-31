@@ -18,7 +18,7 @@ public class ClientStatusPacket extends Packet {
 
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
-        out.writeVarInt(actionId);
+        out.writeVarInt(this.actionId);
     }
 
     @Override

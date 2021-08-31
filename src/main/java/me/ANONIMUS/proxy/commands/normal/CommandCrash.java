@@ -17,7 +17,7 @@ public class CommandCrash extends Command {
     @Override
     public void onCommand(Player sender, String[] args) {
         if (args[1].equals("list") && args.length == 2) {
-            ChatUtil.sendChatMessage("&8>> " + sender.getThemeType().getColor(1) + BetterProxy.getInstance().getExploitManager().elements.stream().map(exploit -> exploit.getName() +  (exploit.isCompressed() ? sender.getThemeType().getColor(2) + "(compressed)" + sender.getThemeType().getColor(1) : "")).collect(Collectors.joining(", ")), sender, false);
+            ChatUtil.sendChatMessage("&8>> " + sender.getThemeType().getColor(1) + BetterProxy.getInstance().getExploitManager().elements.stream().map(exploit -> exploit.getName() + (exploit.isCompressed() ? sender.getThemeType().getColor(2) + "(compressed)" + sender.getThemeType().getColor(1) : "")).collect(Collectors.joining(", ")), sender, false);
             return;
         }
 

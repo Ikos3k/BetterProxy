@@ -85,11 +85,11 @@ public class ServerTitlePacket extends Packet {
         this.titleAction = TitleAction.getById(in.readVarInt(), protocol);
 
         if (titleAction == TitleAction.TITLE) {
-            this.title = ComponentSerializer.parse(in.readString(32767));
+            this.title = ComponentSerializer.parse(in.readString());
         } else if (titleAction == TitleAction.SUBTITLE) {
-            this.subTitle = ComponentSerializer.parse(in.readString(32767));
+            this.subTitle = ComponentSerializer.parse(in.readString());
         } else if (titleAction == TitleAction.ACTIONBAR) {
-            this.actionBar = ComponentSerializer.parse(in.readString(32767));
+            this.actionBar = ComponentSerializer.parse(in.readString());
         } else if (titleAction == TitleAction.TIMES) {
             this.fadeIn = in.readInt();
             this.stay = in.readInt();

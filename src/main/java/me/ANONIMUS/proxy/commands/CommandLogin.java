@@ -19,16 +19,16 @@ public class CommandLogin extends Command {
             return;
         }
 
-        if (sender.getAccount().getPassword().equals(args[1])) {
-            ChatUtil.clearChat(1, sender);
-            PacketUtil.clearBossBar(sender);
-            ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Your account is valid until: " + sender.getThemeType().getColor(1) + "02-01-2069, 00:00:00&8!", sender, false);
-            ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8You will find the available functions under the command: " + sender.getThemeType().getColor(1) + sender.getPrefixCMD() + "help&8!", sender, false);
-            sender.setLogged(true);
-            WorldUtil.lobby(sender, false);
+        if (!sender.getAccount().getPassword().equals(args[1])) {
+            ChatUtil.sendChatMessage("&cThe given password is not correct!", sender, true);
             return;
         }
 
-        ChatUtil.sendChatMessage("&cThe given password is not correct!", sender, true);
+        ChatUtil.clearChat(1, sender);
+        PacketUtil.clearBossBar(sender);
+        ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Your account is valid until: " + sender.getThemeType().getColor(1) + "02-01-2069, 00:00:00&8!", sender, false);
+        ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8You will find the available functions under the command: " + sender.getThemeType().getColor(1) + sender.getPrefixCMD() + "help&8!", sender, false);
+        sender.setLogged(true);
+        WorldUtil.lobby(sender, false);
     }
 }

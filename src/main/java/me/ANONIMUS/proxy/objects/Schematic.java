@@ -1,36 +1,30 @@
 package me.ANONIMUS.proxy.objects;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import me.ANONIMUS.proxy.protocol.data.NibbleArray3d;
 import me.ANONIMUS.proxy.protocol.data.ShortArray3d;
 import me.ANONIMUS.proxy.protocol.data.chunk.Chunk;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerChunkDataPacket;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NbtUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
 @Data
+@AllArgsConstructor
 public class Schematic {
     private final NBTTagCompound nbt;
+    private final int posX, posZ;
 
-    public Schematic(NBTTagCompound nbt) {
-        this.nbt = nbt;
+    public Schematic(File f, int posX, int posZ) throws IOException {
+        this(NbtUtil.fromFile(f), posX, posZ);
     }
 
-    public Schematic(File f, boolean compressed) throws IOException {
-        if(compressed) {
-            this.nbt = CompressedStreamTools.readCompressed(new FileInputStream(f));
-        } else {
-            this.nbt = CompressedStreamTools.read(f);
-        }
-    }
-
-    public void load(Player player, int posX, int posZ) {
+    public void load(Player player) {
         int width = nbt.getShort("Width");
         int height = nbt.getShort("Height");
         int length = nbt.getShort("Length");
@@ -56,6 +50,7 @@ public class Schematic {
                 }
             }
         }
+
         chunks[0] = new Chunk(blocks, blockLight, skylight);
         player.getSession().sendPacket(new ServerChunkDataPacket(posX, posZ, chunks, biomes));
     }

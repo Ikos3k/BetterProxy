@@ -2,6 +2,7 @@ package me.ANONIMUS.proxy.handler.impl;
 
 import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.handler.ServerHandler;
+import me.ANONIMUS.proxy.objects.Config;
 import me.ANONIMUS.proxy.protocol.ProtocolType;
 import me.ANONIMUS.proxy.protocol.data.status.PlayerInfo;
 import me.ANONIMUS.proxy.protocol.data.status.ServerStatusInfo;
@@ -27,17 +28,19 @@ public class ServerStatusHandler extends ServerHandler {
     }
 
     @Override
-    public void disconnect() { }
+    public void disconnect() {}
 
     @Override
     public void handlePacket(Packet packet) {
         if (packet instanceof ClientStatusRequestPacket) {
             System.out.println("> Ping packet received from: " + player.getSession().getChannel().localAddress());
 
+            Config config = BetterProxy.getInstance().getConfigManager().getConfig();
+
             String protocols = Arrays.stream(ProtocolType.values()).filter(protocolType -> protocolType != ProtocolType.PROTOCOL_UNKNOWN).map(ProtocolType::getPrefix).collect(Collectors.joining(ChatUtil.fixColor("&8, &e")));
-            VersionInfo versionInfo = new VersionInfo(ChatUtil.fixColor(BetterProxy.getInstance().getConfigManager().getConfig().versionInfo), BetterProxy.getInstance().getConfigManager().getConfig().protocol);
+            VersionInfo versionInfo = new VersionInfo(ChatUtil.fixColor(config.versionInfo + " &7(&8" + config.proxyVersion + "&7)"), config.protocol);
             int i = 0;
-            GameProfile[] gp = new GameProfile[BetterProxy.getInstance().getConfigManager().getConfig().playerList.size()];
+            GameProfile[] gp = new GameProfile[config.playerList.size()];
             for (String s : BetterProxy.getInstance().getConfigManager().getConfig().playerList) {
                 s = s.replace("%supported_versions%", "&e" + protocols);
                 s = s.replace("%online_players%", "&e" + BetterProxy.getInstance().getPlayerManager().elements.size());
@@ -46,7 +49,7 @@ public class ServerStatusHandler extends ServerHandler {
                 ++i;
             }
             PlayerInfo playerInfo = new PlayerInfo(0, 0, gp);
-            BaseComponent[] desc = new ComponentBuilder(ChatUtil.fixColor(BetterProxy.getInstance().getConfigManager().getConfig().line1 + "&r\n" + BetterProxy.getInstance().getConfigManager().getConfig().line2)).create();
+            BaseComponent[] desc = new ComponentBuilder(ChatUtil.fixColor(config.line1 + "&r\n" + config.line2)).create();
 
             player.getSession().sendPacket(new ServerStatusResponsePacket(new ServerStatusInfo(versionInfo, playerInfo, desc, BetterProxy.getInstance().getServer().getIcon())));
             player.getSession().sendPacket(new ServerStatusPongPacket(0));

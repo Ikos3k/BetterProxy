@@ -1,7 +1,6 @@
 package me.ANONIMUS.proxy.utils.json;
 
 import lombok.SneakyThrows;
-import me.ANONIMUS.proxy.objects.Config;
 import me.ANONIMUS.proxy.utils.NumberUtil;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONObject;
@@ -13,7 +12,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 public class JsonUtil {
-    public static String toJson(Object object, boolean format) throws IOException {
+    public static String toJsonString(Object object, boolean format) throws IOException {
         JSONObject jsonObject = new JSONObject();
 
         getFieldsWithAnnotion(object).forEach((fields, annotionString) -> {
@@ -31,25 +30,25 @@ public class JsonUtil {
                     e.printStackTrace();
                 }
 
-                if(annotion) {
+                if (annotion) {
                     annotionObject.put(fieldName, fieldValue);
-                }  else {
+                } else {
                     jsonObject.put(fieldName, fieldValue);
                 }
             }
-            if(annotion) {
+            if (annotion) {
                 jsonObject.put(annotionString, annotionObject);
             }
         });
 
-        if(format) {
-            return new ObjectMapper().defaultPrettyPrintingWriter().writeValueAsString(jsonObject);
+        if (format) {
+            return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(jsonObject);
         }
         return jsonObject.toJSONString();
     }
 
     @SneakyThrows
-    public static Config fromJson(Reader reader, Object object) {
+    public static <T> T fromJson(Reader reader, T c) {
         StringBuilder json = new StringBuilder();
         int charValue;
         while ((charValue = reader.read()) != -1) {
@@ -59,30 +58,30 @@ public class JsonUtil {
 
         Object obj = new JSONParser().parse(json.toString());
 
-        getFieldsWithAnnotion(object).forEach((fields, annotionString) -> {
+        getFieldsWithAnnotion(c).forEach((fields, annotion) -> {
             JSONObject jsonObj = (JSONObject) obj;
 
-            if(annotionString != null && !annotionString.isEmpty()) {
-                jsonObj = (JSONObject) jsonObj.get(annotionString);
+            if (annotion != null && !annotion.isEmpty()) {
+                jsonObj = (JSONObject) jsonObj.get(annotion);
             }
 
-            for (Field f : object.getClass().getDeclaredFields()) {
+            for (Field f : c.getClass().getDeclaredFields()) {
                 for (Field field : fields) {
-                    if(f.getName().equals(field.getName())) {
+                    if (f.getName().equals(field.getName())) {
                         f.setAccessible(true);
                         try {
                             Object value = jsonObj.get(f.getName());
-                            if(value instanceof Number) {
-                                f.set(object, NumberUtil.getNumber(f.get(object), value));
+                            if (value instanceof Number) {
+                                f.set(c, NumberUtil.getNumber(f.get(c), value));
                                 break;
                             }
 
-                            if(value instanceof String && f.getType().isEnum()) {
-                                f.set(object, Enum.valueOf((Class<Enum>) f.getType(), (String) value));
+                            if (value instanceof String && f.getType().isEnum()) {
+                                f.set(c, Enum.valueOf((Class<Enum>) f.getType(), (String) value));
                                 break;
                             }
 
-                            f.set(object, value);
+                            f.set(c, value);
                         } catch (IllegalAccessException e) {
                             e.printStackTrace();
                         }
@@ -91,7 +90,7 @@ public class JsonUtil {
             }
         });
 
-        return (Config) object;
+        return c;
     }
 
     private static Map<List<Field>, String> getFieldsWithAnnotion(Object object) {
@@ -108,7 +107,7 @@ public class JsonUtil {
                     fieldList.add(f);
                     x++;
                 }
-                if(!field.getAnnotation(JsonInfo.class).object().isEmpty()) {
+                if (!field.getAnnotation(JsonInfo.class).object().isEmpty()) {
                     fields.put(fieldList, field.getAnnotation(JsonInfo.class).object());
                 } else {
                     fields.put(fieldList, null);

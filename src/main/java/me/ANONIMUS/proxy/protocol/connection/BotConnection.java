@@ -99,8 +99,8 @@ public class BotConnection {
     }
 
     private void disconnect(String cause, String host, int port, Bot bot, Player owner) {
-        owner.getSession().sendPacket(new ServerChatPacket(new TextComponent(ChatUtil.fixColor(bot.getOwner().getThemeType().getColor(1) + ">> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &c" + host + ":" + port))
-            .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(" &fcause: &c" + cause))))));
+        owner.getSession().sendPacket(new ServerChatPacket(new TextComponent(ChatUtil.fixColor(owner.getThemeType().getColor(1) + ">> &8Bot &c" + bot.getUsername() + " &8disconnected from the server &c" + host + ":" + port))
+                .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(" &fcause: &c" + cause))))));
 
         bot.getSession().getChannel().close();
         bot.setSession(null);

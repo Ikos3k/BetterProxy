@@ -1,0 +1,11 @@
+{
+  "options" : {
+    "titlelag" : true,
+    "prefixCMD" : "#",
+    "server tablist" : false,
+    "lastpacket" : true,
+    "theme" : "DEFAULT",
+    "language" : "ENGLISH",
+    "scoreboard" : true
+  }
+}

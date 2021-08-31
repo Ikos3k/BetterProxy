@@ -26,11 +26,7 @@ public class ServerCustomPayloadPacket extends Packet {
     @Override
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.channel = in.readString();
-        int i = in.readableBytes();
-
-        if (i >= 0 && i <= 1048576) {
-            this.data = new PacketBuffer(in.readBytes(i));
-        }
+        this.data = new PacketBuffer(in.readBytes());
     }
 
     @Override

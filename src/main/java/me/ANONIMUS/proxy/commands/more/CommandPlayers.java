@@ -49,8 +49,7 @@ public class CommandPlayers extends Command {
         } else if (args[1].equalsIgnoreCase("api")) {
             sender.getPlayers().clear();
             ChatUtil.sendChatMessage("&7Try to get players! &7(&4API&7)", sender, true);
-            String url = "https://api.mcsrvstat.us/2/" + sender.getServerData().getHost();
-            final URL website = new URL(url);
+            final URL website = new URL("https://api.mcsrvstat.us/2/" + sender.getServerData().getHost());
             final URLConnection connection = website.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             final JsonReader reader = Json.createReader(in);

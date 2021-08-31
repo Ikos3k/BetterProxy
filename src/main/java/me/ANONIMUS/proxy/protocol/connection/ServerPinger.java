@@ -69,7 +69,7 @@ public class ServerPinger {
 
                             @Override
                             protected void channelRead0(ChannelHandlerContext channelHandlerContext, Packet packet) {
-                                if (packet instanceof ServerStatusResponsePacket) {
+                                if (packet instanceof ServerStatusResponsePacket && showResult) {
                                     final ServerStatusInfo info = ((ServerStatusResponsePacket) packet).getInfo();
                                     ChatUtil.sendChatMessage("&7Max players: " + owner.getThemeType().getColor(1) + info.getPlayerInfo().getMaxPlayers(), owner, false);
                                     ChatUtil.sendChatMessage("&7Online players: " + owner.getThemeType().getColor(1) + info.getPlayerInfo().getOnlinePlayers(), owner, false);

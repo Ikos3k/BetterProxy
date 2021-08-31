@@ -6,12 +6,15 @@ import me.ANONIMUS.proxy.handler.ServerHandler;
 import me.ANONIMUS.proxy.objects.Account;
 import me.ANONIMUS.proxy.protocol.ProtocolType;
 import me.ANONIMUS.proxy.protocol.data.ConnectionState;
+import me.ANONIMUS.proxy.protocol.data.ItemStack;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.impl.client.login.ClientLoginStartPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginDisconnectPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSetCompressionPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.login.ServerLoginSuccessPacket;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerHeldItemChangePacket;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerSetSlotPacket;
 import me.ANONIMUS.proxy.utils.*;
 import me.kbrewster.mojangapi.MojangAPI;
 
@@ -46,7 +49,7 @@ public class ServerLoginHandler extends ServerHandler {
                 }
             }
 
-            for(Map.Entry<String, Account> account : BetterProxy.getInstance().getAccounts().entrySet()) {
+            for (Map.Entry<String, Account> account : BetterProxy.getInstance().getAccounts().entrySet()) {
                 if (account.getKey().equals(playerName)) {
                     UUID uuid;
                     try {
@@ -75,11 +78,14 @@ public class ServerLoginHandler extends ServerHandler {
                         PacketUtil.sendTitle(player, ";D", player.getThemeType().getColor(1) + Objects.requireNonNull(CalendarUtil.getHoliday()).getWishes() + "!");
                     }
 
+                    player.getSession().sendPacket(new ServerHeldItemChangePacket(4));
+                    player.getSession().sendPacket(new ServerSetSlotPacket(0, 40, new ItemStack(358).setStackDisplayName(ChatUtil.fixColor("&8Welcome to " + player.getThemeType().getColor(1) + "BetterProxy"))));
+
                     ChatUtil.sendBroadcastMessage(player.getThemeType().getColor(1) + ">> &8Player " + player.getThemeType().getColor(1) + playerName + " &8has connected to the " + player.getThemeType().getColor(1) + "BetterProxy &8(" + player.getThemeType().getColor(2) + ProtocolType.getByProtocolID(player.getSession().getProtocolID()).getPrefix() + "&8)", false);
 
                     ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Welcome to " + player.getThemeType().getColor(1) + "BetterProxy &8by &4ANONIMUS", player, false);
                     ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Supported versions: " + player.getThemeType().getColor(2) + Arrays.stream(ProtocolType.values()).filter(protocolType ->
-                            protocolType != ProtocolType.PROTOCOL_UNKNOWN)
+                                    protocolType != ProtocolType.PROTOCOL_UNKNOWN)
                             .map(ProtocolType::getPrefix).collect(Collectors.joining(ChatUtil.fixColor("&8, " + player.getThemeType().getColor(2)))), player, false);
                     ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Log in using the command: " + player.getThemeType().getColor(1) + player.getPrefixCMD() + "login [password]", player, false);
 

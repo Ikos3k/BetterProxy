@@ -15,10 +15,10 @@ public class Config {
     public String line1 = "     &f✖ &l&m\\-\\-\\-\\-&r&f&l>> &6BetterProxy &f&l<<&m-/-/-/-/&r&f ✖&r";
     public String line2 = "        &c----&e/ &6✯ &eProxy by ANONIMUS &6✯ &e\\&c----";
     public List<String> playerList = Arrays.asList(
-        "&f---------------------------------------------------",
-        "                     &8Supported versions:",
-        " &e%supported_versions%",
-        "&f---------------------------------------------------");
+            "&f---------------------------------------------------",
+            "                     &8Supported versions:",
+            " &e%supported_versions%",
+            "&f---------------------------------------------------");
 
     public String icon = "icon.png";
     public int protocol = 0;
@@ -27,4 +27,7 @@ public class Config {
     public DebugType debugType = DebugType.LEGIBLE;
     public boolean showCustomPackets = true;
     public boolean debugger = true;
+
+    @JsonInfo()
+    public String proxyVersion = "3.0";
 }

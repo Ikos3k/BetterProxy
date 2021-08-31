@@ -1,4 +1,4 @@
-package me.ANONIMUS.proxy.protocol.packet.impl.client.login;
+package me.ANONIMUS.proxy.protocol.packet.impl.server.play;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,24 +13,21 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClientEncryptionResponsePacket extends Packet {
-    private byte[] sharedSecret;
-    private byte[] verifyToken;
+public class ServerHeldItemChangePacket extends Packet {
+    private int slot;
 
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
-        out.writeArray(sharedSecret);
-        out.writeArray(verifyToken);
+        out.writeByte(this.slot);
     }
 
     @Override
     public void read(PacketBuffer in, int protocol) throws Exception {
-        sharedSecret = in.readArray(128);
-        verifyToken = in.readArray(128);
+        this.slot = in.readByte();
     }
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Collections.singletonList(new Protocol(0x01, 47));
+        return Collections.singletonList(new Protocol(0x09, 47));
     }
 }

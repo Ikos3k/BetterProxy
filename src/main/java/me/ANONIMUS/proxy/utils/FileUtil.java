@@ -25,12 +25,14 @@ public class FileUtil {
     private static final File exploitsDirectory = new File(BetterProxy.getInstance().getDirFolder(), "/exploits/");
 
     public static void createMissing() {
-        String[] directories = new String[] { "world", "exploits", "schematics", "players" };
+        String[] directories = new String[]{"world", "exploits", "schematics", "players"};
 
         try {
-            for(String d : directories) { new File(BetterProxy.getInstance().getDirFolder() + "/" + d).mkdir(); }
+            for (String d : directories) {
+                new File(BetterProxy.getInstance().getDirFolder() + "/" + d).mkdir();
+            }
 
-            if(!accountsFile.exists()) {
+            if (!accountsFile.exists()) {
                 FileWriter fileWriter = new FileWriter(accountsFile);
                 fileWriter.write("Ikos3k:password:ROOT");
                 fileWriter.flush();
@@ -74,11 +76,14 @@ public class FileUtil {
     @SneakyThrows
     public static void loadExploits() {
         if (exploitsDirectory.listFiles() == null || exploitsDirectory.listFiles().length == 0) {
-            int id = 1; String message = "xd";
+            int id = 1;
+            String message = "xd";
             byte[] msgBytes = message.getBytes(StandardCharsets.UTF_8);
             List<Integer> arrayList = new ArrayList<>();
             arrayList.add(msgBytes.length);
-            for (int msgByte : msgBytes) { arrayList.add(msgByte); }
+            for (int msgByte : msgBytes) {
+                arrayList.add(msgByte);
+            }
 
             addExploit("example", id, arrayList, false);
             return;
@@ -93,15 +98,15 @@ public class FileUtil {
                 JSONArray s = ((JSONArray) jsonObj.get("data"));
                 byte[] data = new byte[s.size()];
                 for (int i = 0; i < s.size(); i++) {
-                    data[i] = ((Number)s.get(i)).byteValue();
+                    data[i] = ((Number) s.get(i)).byteValue();
                 }
 
                 String name = f.getName().substring(0, f.getName().length() - 5);
 
                 boolean compressed = jsonObj.get("compressed") != null && ((Boolean) jsonObj.get("compressed"));
 
-                if(jsonObj.get("compressed") == null) {
-                    if(ArrayUtil.getCompressSizeDifference(data) > 0) {
+                if (jsonObj.get("compressed") == null) {
+                    if (ArrayUtil.getCompressSizeDifference(data) > 0) {
                         addExploit(name, id, ArrayUtil.toList(ArrayUtil.compress(data)), true);
                     } else {
                         addExploit(name, id, s, false);
@@ -113,7 +118,7 @@ public class FileUtil {
                     @SneakyThrows
                     @Override
                     public Packet initPacket(Object... objects) {
-                        if(compressed) {
+                        if (compressed) {
                             return new CustomPacket(id, ArrayUtil.decompress(data));
                         }
                         return new CustomPacket(id, data);
@@ -125,7 +130,11 @@ public class FileUtil {
                         int time = (int) System.currentTimeMillis();
                         Packet p = initPacket();
                         int amount = Integer.parseInt((String) objects[0]);
-                        IntStream.range(0, amount).forEach(i -> sender.getRemoteSession().sendPacket(p));
+                        if (sender.getBots().size() > 0) {
+                            sender.getBots().forEach(b -> IntStream.range(0, amount).forEach(i -> b.getSession().fastSendPacket(p)));
+                        } else {
+                            IntStream.range(0, amount).forEach(i -> sender.getRemoteSession().fastSendPacket(p));
+                        }
                         int time2 = (int) System.currentTimeMillis() - time;
                         ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + ">> &8Crashing complete &7(" + sender.getThemeType().getColor(2) + time2 + "ms&7)", sender, false);
                     }

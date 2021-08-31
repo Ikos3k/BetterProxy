@@ -39,7 +39,7 @@ public class ScoreboardUtil {
     public static void updateScoreboard(Player player) {
         sendEmptyScoreboard(player);
 
-        if(player.getOptionsManager() != null && player.getOptionsManager().getOptionByName("scoreboard").isEnabled()) {
+        if (player.getOptionsManager() != null && player.getOptionsManager().getOptionByName("scoreboard").isEnabled()) {
             sendScoreboard(player);
         }
     }

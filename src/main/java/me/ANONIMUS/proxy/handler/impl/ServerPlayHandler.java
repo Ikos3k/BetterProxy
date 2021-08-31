@@ -6,6 +6,7 @@ import me.ANONIMUS.proxy.handler.ServerHandler;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.ProtocolType;
 import me.ANONIMUS.proxy.protocol.data.ItemStack;
+import me.ANONIMUS.proxy.protocol.data.Position;
 import me.ANONIMUS.proxy.protocol.data.WindowAction;
 import me.ANONIMUS.proxy.protocol.data.WindowType;
 import me.ANONIMUS.proxy.protocol.objects.Player;
@@ -23,7 +24,6 @@ import net.md_5.bungee.api.ChatColor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 public class ServerPlayHandler extends ServerHandler {
     public ServerPlayHandler(Player player) {
@@ -53,14 +53,12 @@ public class ServerPlayHandler extends ServerHandler {
                             player.getSession().sendPacket(new ServerWindowItemsPacket(234, items));
                             return;
                         }
-                        if(ItemUtil.changeSkinMenu(player).getName().equals(block.getHeld().getName())) {
+                        if (ItemUtil.changeSkinMenu(player).getName().equals(block.getHeld().getName())) {
                             List<ItemStack> items = new ArrayList<>();
 
-                            String[] nicknames = new String[] {
-                                "Kola13567", "Szumir", "Nyatix"
-                            };
+                            String[] nicknames = new String[]{"Kola13567", "Szumir", "Nyatix"};
 
-                            for(String nick : nicknames) {
+                            for (String nick : nicknames) {
                                 items.add(ItemUtil.skull(SkinUtil.getSkin(nick)));
                             }
 
@@ -100,7 +98,7 @@ public class ServerPlayHandler extends ServerHandler {
         if (packet instanceof ClientTabCompletePacket) {
             ClientTabCompletePacket tabCompletePacket = (ClientTabCompletePacket) packet;
 
-            if(tabCompletePacket.getText().startsWith(player.getPrefixCMD())) {
+            if (tabCompletePacket.getText().startsWith(player.getPrefixCMD())) {
                 Optional<Command> optionalCommand = BetterProxy.getInstance().getCommandManager().elements.stream().filter(cmd -> (player.getPrefixCMD() + cmd.getPrefix()).startsWith(tabCompletePacket.getText())).findFirst();
                 if (!optionalCommand.isPresent()) {
                     optionalCommand = BetterProxy.getInstance().getCommandManager().elements.stream().filter(cmd -> cmd.getAlias() != null && (player.getPrefixCMD() + cmd.getAlias()).startsWith(tabCompletePacket.getText())).findFirst();
@@ -110,9 +108,14 @@ public class ServerPlayHandler extends ServerHandler {
                 }
             }
         }
-        if (!player.isConnected() && packet instanceof ClientPlayerPositionPacket) {
-            if (((ClientPlayerPositionPacket) packet).getY() < 65) {
-                PacketUtil.lobbyPosTeleport(player);
+
+        if (packet instanceof ClientPlayerPositionPacket) {
+            if (!player.isConnected()) {
+                if (((ClientPlayerPositionPacket) packet).getY() < 65) {
+                    PacketUtil.lobbyPosTeleport(player);
+                }
+            } else if (player.isConnected() && !player.isFreecam()) {
+                player.setPos(new Position(((ClientPlayerPositionPacket) packet).getX(), ((ClientPlayerPositionPacket) packet).getY(), ((ClientPlayerPositionPacket) packet).getZ()));
             }
         }
 
@@ -127,35 +130,15 @@ public class ServerPlayHandler extends ServerHandler {
             }
         }
 
-        if (player.isConnected()) {
+        if (player.isConnected() && !player.isFreecam()) {
             if (player.isMother()) {
-                if (player.getMotherDelay() == 0) {
-                    player.getBots().forEach(bot ->
-                            bot.getSession().sendPacket(packet)
-                    );
-                } else {
-                    int delay = player.getMotherDelay();
-                    Thread thread0 = new Thread(() -> player.getBots().forEach(bot -> {
-                        Thread thread1 = new Thread(() -> {
-                            try {
-                                TimeUnit.MILLISECONDS.sleep(delay);
-                                bot.getSession().sendPacket(packet);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        });
-                        thread1.start();
-                        try {
-                            TimeUnit.MILLISECONDS.sleep(delay);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }));
-                    thread0.start();
-                }
+                int delay = player.getMotherDelay();
+                player.getBots().forEach(bot -> bot.getSession().fastSendPacket(packet));
             }
 
-            player.getRemoteSession().sendPacket(packet);
+            if (!(packet instanceof ClientKeepAlivePacket)) {
+                player.getRemoteSession().sendPacket(packet);
+            }
         }
     }
 }

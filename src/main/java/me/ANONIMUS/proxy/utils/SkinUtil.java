@@ -19,18 +19,18 @@ import java.util.UUID;
 
 public class SkinUtil {
     public static PlayerListEntry showSkin(Session session, UUID uuid, Skin skin) {
-        if(skin == null) {
+        if (skin == null) {
             return null;
         }
 
         GameProfile gameProfile = skin.getGameProfile();
-        if(uuid != null) {
+        if (uuid != null) {
             gameProfile.setId(uuid);
         }
 
         PlayerListEntry playerListEntry = new PlayerListEntry(gameProfile, Gamemode.ADVENTURE, 0, null);
 
-        session.sendPacket(new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, new PlayerListEntry[] { playerListEntry }));
+        session.sendPacket(new ServerPlayerListEntryPacket(PlayerListEntryAction.ADD_PLAYER, new PlayerListEntry[]{playerListEntry}));
 
         return playerListEntry;
     }

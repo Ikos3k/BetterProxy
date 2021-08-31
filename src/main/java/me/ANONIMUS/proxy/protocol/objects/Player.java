@@ -8,6 +8,7 @@ import me.ANONIMUS.proxy.enums.ThemeType;
 import me.ANONIMUS.proxy.enums.TimeType;
 import me.ANONIMUS.proxy.managers.OptionsManager;
 import me.ANONIMUS.proxy.objects.*;
+import me.ANONIMUS.proxy.protocol.data.Position;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntry;
 import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.utils.SkinUtil;
@@ -42,7 +43,9 @@ public class Player {
     private String prefixCMD = "#";
     private ServerData serverData;
     private boolean pluginsState;
+    private Position pos;
     private boolean playersState;
+    private boolean freecam;
     private int motherDelay = 25;
     private Account account;
     private boolean mother;
@@ -52,7 +55,7 @@ public class Player {
     public void createOptionsFile() {
         try {
             File file = new File(BetterProxy.getInstance().getDirFolder() + "/players", getUsername() + ".json");
-            if(file.exists()) {
+            if (file.exists()) {
                 file.delete();
             }
 
@@ -61,7 +64,7 @@ public class Player {
             JSONObject jsonObj = new JSONObject();
 
             JSONObject optionsObj = new JSONObject();
-            for(Option option : optionsManager.elements) {
+            for (Option option : optionsManager.elements) {
                 optionsObj.put(option.getName(), option.isEnabled());
             }
 
@@ -73,11 +76,11 @@ public class Player {
 
             JSONObject skinObj = new JSONObject();
 
-            if(skin == null) {
+            if (skin == null) {
                 this.skin = SkinUtil.getSkin(getUsername());
             }
 
-            if(skin != null) {
+            if (skin != null) {
                 skinObj.put("value", skin.getValue());
                 skinObj.put("signature", skin.getSignature());
                 jsonObj.put("skin", skinObj);
@@ -94,7 +97,7 @@ public class Player {
 
     public void loadOptions() {
         File file = new File(BetterProxy.getInstance().getDirFolder() + "/players", getUsername() + ".json");
-        if(!file.exists()) {
+        if (!file.exists()) {
             createOptionsFile();
         }
 
@@ -104,7 +107,7 @@ public class Player {
             JSONObject jsonObj = (JSONObject) obj;
 
             JSONObject optionsObj = (JSONObject) jsonObj.get("options");
-            for(Option option : this.optionsManager.elements) {
+            for (Option option : this.optionsManager.elements) {
                 option.setEnabled((Boolean) optionsObj.get(option.getName()));
             }
             this.prefixCMD = (String) optionsObj.get("prefixCMD");
@@ -112,7 +115,7 @@ public class Player {
             this.languageType = LanguageType.valueOf((String) optionsObj.get("language"));
 
             JSONObject skinObj = (JSONObject) jsonObj.get("skin");
-            if(skinObj != null) {
+            if (skinObj != null) {
                 GameProfile gameProfile = new GameProfile(UUID.randomUUID(), getUsername());
                 gameProfile.getProperties().add(new GameProfile.Property("textures", (String) skinObj.get("value"), (String) skinObj.get("signature")));
 
@@ -129,12 +132,12 @@ public class Player {
         if (this.session != null) {
             if (this.session.getPacketHandler() != null) {
                 this.session.getPacketHandler().disconnect();
-                if(this.account != null) {
+                if (this.account != null) {
                     createOptionsFile();
                 }
             }
         }
-        if(this.remoteSession != null) {
+        if (this.remoteSession != null) {
             this.remoteSession.getChannel().close();
             this.connectedType = ConnectedType.DISCONNECTED;
         }

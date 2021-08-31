@@ -9,8 +9,9 @@
   },
   "debug" : {
     "debugType" : "LEGIBLE",
-    "debugger" : true,
-    "showCustomPackets" : false
+    "debugger" : false,
+    "showCustomPackets" : true
   },
-  "port" : 1337
+  "port" : 1337,
+  "proxyVersion" : "3.0"
 }

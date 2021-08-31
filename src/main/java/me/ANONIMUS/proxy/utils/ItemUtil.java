@@ -26,7 +26,7 @@ public class ItemUtil {
     }
 
     public static ItemStack skull(Skin skin) {
-        if(skin == null) {
+        if (skin == null) {
             return new ItemStack(397, 1, 3);
         }
 

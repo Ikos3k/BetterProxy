@@ -29,7 +29,7 @@ public class ArrayUtil {
         numbersList.add(currentNumber);
 
         int[] test = new int[numbersList.size()];
-        for(int i = 0; i < numbersList.size(); i++) {
+        for (int i = 0; i < numbersList.size(); i++) {
             test[i] = numbersList.get(i);
         }
 
@@ -41,7 +41,7 @@ public class ArrayUtil {
         DataOutputStream dos = new DataOutputStream(baos);
 
         for (int i = 0; i < bytesArray.length; i += 2) {
-            for(int d = 0; d < bytesArray[i]; d++) {
+            for (int d = 0; d < bytesArray[i]; d++) {
                 dos.writeInt(bytesArray[i + 1]);
             }
         }
@@ -51,7 +51,9 @@ public class ArrayUtil {
 
     public static List<Integer> toList(int[] bytes) {
         List<Integer> list = new ArrayList<>();
-        for(int b : bytes) { list.add(b); }
+        for (int b : bytes) {
+            list.add(b);
+        }
 
         return list;
     }
@@ -66,13 +68,26 @@ public class ArrayUtil {
 
     public static Object getValue(Object array) {
         switch (array.getClass().getSimpleName()) {
-            case "byte[]": { return Arrays.toString((byte[]) array); }
-            case "long[]": { return Arrays.toString((long[]) array); }
-            case "float[]": { return Arrays.toString((float[]) array); }
-            case "short[]": { return Arrays.toString((short[]) array); }
-            case "double[]": { return Arrays.toString((double[]) array) ; }
-            case "int[]": { return Arrays.toString((int[]) array); }
-            default: return Arrays.toString((Object[]) array);
+            case "byte[]": {
+                return Arrays.toString((byte[]) array);
+            }
+            case "long[]": {
+                return Arrays.toString((long[]) array);
+            }
+            case "float[]": {
+                return Arrays.toString((float[]) array);
+            }
+            case "short[]": {
+                return Arrays.toString((short[]) array);
+            }
+            case "double[]": {
+                return Arrays.toString((double[]) array);
+            }
+            case "int[]": {
+                return Arrays.toString((int[]) array);
+            }
+            default:
+                return Arrays.toString((Object[]) array);
         }
     }
 

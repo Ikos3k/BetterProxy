@@ -35,12 +35,13 @@ public class PacketBuffer extends ByteBuf {
     public void writeNBTTagCompoundToBuffer(NBTTagCompound nbt) {
         if (nbt == null) {
             this.writeByte(0);
-        } else {
-            try {
-                CompressedStreamTools.write(nbt, new ByteBufOutputStream(this));
-            } catch (IOException var3) {
-                throw new EncoderException(var3);
-            }
+            return;
+        }
+
+        try {
+            CompressedStreamTools.write(nbt, new ByteBufOutputStream(this));
+        } catch (IOException var3) {
+            throw new EncoderException(var3);
         }
     }
 
@@ -50,21 +51,22 @@ public class PacketBuffer extends ByteBuf {
 
         if (var2 == 0) {
             return null;
-        } else {
-            this.readerIndex(var1);
-            return CompressedStreamTools.func_152456_a(new ByteBufInputStream(this), new NBTSizeTracker(2097152L));
         }
+
+        this.readerIndex(var1);
+        return CompressedStreamTools.func_152456_a(new ByteBufInputStream(this), new NBTSizeTracker(2097152L));
     }
 
     public void writeItemStackToBuffer(ItemStack stack) {
         if (stack == null) {
             this.writeShort(-1);
-        } else {
-            this.writeShort(stack.getId());
-            this.writeByte(stack.getAmount());
-            this.writeShort(stack.getData());
-            this.writeNBTTagCompoundToBuffer(stack.getNbt());
+            return;
         }
+
+        this.writeShort(stack.getId());
+        this.writeByte(stack.getAmount());
+        this.writeShort(stack.getData());
+        this.writeNBTTagCompoundToBuffer(stack.getNbt());
     }
 
     public ItemStack readItemStackFromBuffer() throws IOException {
@@ -103,62 +105,30 @@ public class PacketBuffer extends ByteBuf {
         this.writeLong(((long) location.getX() & 0x3FFFFFF) << 38 | ((long) location.getY() & 0xFFF) << 26 | (long) location.getZ() & 0x3FFFFFF);
     }
 
-    public PacketBuffer writeByteArray(byte[] array) {
+    public void writeByteArray(byte[] array) {
         this.writeVarInt(array.length);
         this.writeBytes(array);
-        return this;
     }
 
-    public PacketBuffer writeArray(byte[] b) {
+    public void writeArray(byte[] b) {
         if (b.length > Short.MAX_VALUE) {
             throw new EncoderException(String.format("Cannot send byte array longer than Short.MAX_VALUE (got %s bytes)", b.length));
         }
         this.writeVarInt(b.length);
         this.writeBytes(b);
-        return this;
     }
 
-    public byte[] readArray() {
-        return readArray(this.readableBytes());
-    }
-
-    public byte[] readArray(int limit) {
-        int len = this.readVarInt();
-        if (len > limit) {
-            throw new EncoderException(String.format("Cannot receive byte array longer than %s (got %s bytes)", limit, len));
-        }
-        byte[] ret = new byte[len];
-        this.readBytes(ret);
-        return ret;
-    }
 
     public void writeBytes(byte[] b, int length) {
         this.writeBytes(b, 0, length);
     }
 
-    public byte[] readByteArray() {
-        return this.readByteArray(this.readableBytes());
-    }
-
-    public byte[] readByteArray(int maxLength) {
-        final int i = this.readVarInt();
-        if (i > maxLength) {
-            throw new DecoderException("ByteArray with size " + i + " is bigger than allowed " + maxLength);
-        }
-
-        final byte[] abyte = new byte[i];
-        this.readBytes(abyte);
-        return abyte;
-    }
-
-    public PacketBuffer writeVarIntArray(int[] array) {
+    public void writeVarIntArray(int[] array) {
         this.writeVarInt(array.length);
 
         for (int i : array) {
             this.writeVarInt(i);
         }
-
-        return this;
     }
 
     public int[] readVarIntArray() {
@@ -180,14 +150,12 @@ public class PacketBuffer extends ByteBuf {
         return aint;
     }
 
-    public PacketBuffer writeLongArray(long[] array) {
+    public void writeLongArray(long[] array) {
         this.writeVarInt(array.length);
 
         for (long i : array) {
             this.writeLong(i);
         }
-
-        return this;
     }
 
     public long[] readLongArray(long[] array) {
@@ -217,8 +185,8 @@ public class PacketBuffer extends ByteBuf {
         return enumClass.getEnumConstants()[this.readVarInt()];
     }
 
-    public PacketBuffer writeEnumValue(Enum<?> value) {
-        return this.writeVarInt(value.ordinal());
+    public void writeEnumValue(Enum<?> value) {
+        this.writeVarInt(value.ordinal());
     }
 
     public int readVarInt() {
@@ -261,35 +229,44 @@ public class PacketBuffer extends ByteBuf {
         return i;
     }
 
-    public PacketBuffer writeUuid(UUID uuid) {
+    public void writeUuid(UUID uuid) {
         this.writeLong(uuid.getMostSignificantBits());
         this.writeLong(uuid.getLeastSignificantBits());
-        return this;
     }
 
     public UUID readUuid() {
         return new UUID(this.readLong(), this.readLong());
     }
 
-    public PacketBuffer writeVarInt(int input) {
+    public void writeVarInt(int input) {
         while ((input & -128) != 0) {
             this.writeByte(input & 127 | 128);
             input >>>= 7;
         }
 
         this.writeByte(input);
-        return this;
     }
 
-    public PacketBuffer writeVarLong(long value) {
+    public void writeVarLong(long value) {
         while ((value & -128L) != 0L) {
             this.writeByte((int) (value & 127L) | 128);
             value >>>= 7;
         }
 
         this.writeByte((int) value);
-        return this;
     }
+
+    public byte[] readByteArray() {
+        return this.readByteArray(this.readableBytes());
+    }
+
+    public byte[] readByteArray(int maxLength) {
+        byte[] bytes = new byte[maxLength];
+        readBytes(bytes);
+
+        return bytes;
+    }
+
 
     public String readString(int maxLength) {
         final int i = this.readVarInt();
@@ -322,7 +299,7 @@ public class PacketBuffer extends ByteBuf {
         return new String(b, Charsets.UTF_8);
     }
 
-    public PacketBuffer writeString(String string) {
+    public void writeString(String string) {
         final byte[] abyte = string.getBytes(StandardCharsets.UTF_8);
 
         if (abyte.length > 32767) {
@@ -331,7 +308,6 @@ public class PacketBuffer extends ByteBuf {
 
         this.writeVarInt(abyte.length);
         this.writeBytes(abyte);
-        return this;
     }
 
     @Override
@@ -777,12 +753,12 @@ public class PacketBuffer extends ByteBuf {
         return byteBuf.readDouble();
     }
 
+    public ByteBuf readBytes() {
+        return byteBuf.readBytes(readableBytes());
+    }
+
     public ByteBuf readBytes(int p_readBytes_1_) {
-        try {
-            return byteBuf.readBytes(p_readBytes_1_);
-        } catch (Exception e) {
-            return null;
-        }
+        return byteBuf.readBytes(p_readBytes_1_);
     }
 
     public ByteBuf readSlice(int p_readSlice_1_) {

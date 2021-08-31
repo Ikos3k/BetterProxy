@@ -19,16 +19,16 @@ public class ConfigManager {
         this.config = new Config();
         this.file = file;
 
-        if(!file.exists()) {
+        try {
+            read();
+        } catch (Exception e) {
             write();
         }
-
-        read();
     }
 
     public void write() {
         try (FileWriter fileWriter = new FileWriter(file)) {
-            fileWriter.write(JsonUtil.toJson(config, true));
+            fileWriter.write(JsonUtil.toJsonString(config, true));
             fileWriter.flush();
         } catch (IOException e) {
             e.printStackTrace();

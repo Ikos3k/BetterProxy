@@ -19,15 +19,14 @@ public class ClientCustomPayloadPacket extends Packet {
 
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
-        out.writeString(channel);
-        out.writeBytes(data);
+        out.writeString(this.channel);
+        out.writeBytes(this.data);
     }
 
     @Override
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.channel = in.readString(20);
-        data = new byte[in.readableBytes()];
-        in.readBytes(data);
+        this.data = in.readByteArray();
     }
 
     @Override

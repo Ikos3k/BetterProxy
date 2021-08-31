@@ -44,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 
 @Data
 public class PlayerConnection {
-    private final Player owner;
+    private final Player player;
     private final String username;
 
     private final EventLoopGroup group = new NioEventLoopGroup();
@@ -68,15 +68,16 @@ public class PlayerConnection {
                         pipeline.addLast("handler", new SimpleChannelInboundHandler<Packet>() {
                             @Override
                             public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                                PacketUtil.clearTabList(owner);
-                                ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Connecting to server &7[" + owner.getThemeType().getColor(1) + ip + "&7]", owner, false);
+                                PacketUtil.clearTabList(player);
+                                ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Connecting to server &7[" + player.getThemeType().getColor(1) + ip + "&7]", player, false);
                                 if (proxy != Proxy.NO_PROXY) {
-                                    ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Used proxy: " + owner.getThemeType().getColor(2) + proxy.address().toString(), owner, false);
+                                    ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Used proxy: " + player.getThemeType().getColor(2) + proxy.address().toString(), player, false);
                                 }
+
                                 TimeUnit.MILLISECONDS.sleep(150);
-                                owner.getRemoteSession().sendPacket(new HandshakePacket(owner.getSession().getProtocolID(), ip, port, 2));
-                                owner.getRemoteSession().sendPacket(new ClientLoginStartPacket(username));
-                                owner.setServerData(new ServerData(ip, port));
+                                player.getRemoteSession().sendPacket(new HandshakePacket(player.getSession().getProtocolID(), ip, port, 2));
+                                player.getRemoteSession().sendPacket(new ClientLoginStartPacket(username));
+                                player.setServerData(new ServerData(ip, port));
                             }
 
                             @Override
@@ -86,53 +87,53 @@ public class PlayerConnection {
 
                             @Override
                             protected void channelRead0(ChannelHandlerContext channelHandlerContext, Packet packet) {
-                                owner.getLastPacket().setReceived(System.currentTimeMillis());
-                                owner.getLastPacket().setLastReceivedPacket(packet);
+                                player.getLastPacket().setReceived(System.currentTimeMillis());
+                                player.getLastPacket().setLastReceivedPacket(packet);
                                 if (packet instanceof ServerLoginSetCompressionPacket) {
-                                    owner.getRemoteSession().setCompressionThreshold(((ServerLoginSetCompressionPacket) packet).getThreshold());
+                                    player.getRemoteSession().setCompressionThreshold(((ServerLoginSetCompressionPacket) packet).getThreshold());
                                 } else if (packet instanceof ServerLoginSuccessPacket) {
-                                    owner.getRemoteSession().setConnectionState(ConnectionState.PLAY);
-                                    ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Successfully " + owner.getThemeType().getColor(1) + "logged!", owner, false);
+                                    player.getRemoteSession().setConnectionState(ConnectionState.PLAY);
+                                    ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Successfully " + player.getThemeType().getColor(1) + "logged!", player, false);
                                 } else if (packet instanceof ServerJoinGamePacket) {
-                                    ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Downloading terrain!", owner, false);
-                                    WorldUtil.dimSwitch(owner, (ServerJoinGamePacket) packet);
-                                    owner.setConnectedType(ConnectedType.CONNECTED);
-                                    ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> Connected successfully&8!", owner, false);
+                                    ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Downloading terrain!", player, false);
+                                    WorldUtil.dimSwitch(player, (ServerJoinGamePacket) packet);
+                                    player.setConnectedType(ConnectedType.CONNECTED);
+                                    ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> Connected successfully&8!", player, false);
                                 } else if (packet instanceof ServerDisconnectPacket) {
                                     disconnect(BaseComponent.toLegacyText(((ServerDisconnectPacket) packet).getReason()));
                                 } else if (packet instanceof ServerLoginDisconnectPacket) {
                                     disconnect(BaseComponent.toLegacyText(((ServerLoginDisconnectPacket) packet).getReason()));
                                 } else if (packet instanceof ServerKeepAlivePacket) {
-                                    owner.getRemoteSession().sendPacket(new ClientKeepAlivePacket(((ServerKeepAlivePacket) packet).getKeepaliveId()));
+                                    player.getRemoteSession().sendPacket(new ClientKeepAlivePacket(((ServerKeepAlivePacket) packet).getKeepaliveId()));
                                 } else if (packet instanceof ServerCustomPayloadPacket) {
                                     if (((ServerCustomPayloadPacket) packet).getData() != null && ((ServerCustomPayloadPacket) packet).getChannel().equals("MC|Brand")) {
-                                        ChatUtil.sendChatMessage(owner.getThemeType().getColor(1) + ">> &8Engine: " + owner.getThemeType().getColor(1) + ((ServerCustomPayloadPacket) packet).getData().readString().split(" ")[0], owner, false);
+                                        ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Engine: " + player.getThemeType().getColor(1) + ((ServerCustomPayloadPacket) packet).getData().readString().split(" ")[0], player, false);
                                     }
-                                } else if (owner.isConnected() && owner.getRemoteSession().getConnectionState() == ConnectionState.PLAY) {
-                                    if (owner.isListenChunks() && packet instanceof CustomPacket) {
-                                        if ((((owner).getSession().getProtocolID() == 47 && ((CustomPacket) packet).getCustomPacketID() == 0x26) ||
-                                                ((owner).getSession().getProtocolID() != 47 && ((CustomPacket) packet).getCustomPacketID() == 0x20))) {
-                                            owner.getListenedChunks().add(packet);
-                                            PacketUtil.sendTitle(owner, "[CHUNKS]", "listening... (" + owner.getListenedChunks().size() + ")");
+                                } else if (player.isConnected() && player.getRemoteSession().getConnectionState() == ConnectionState.PLAY) {
+                                    if (player.isListenChunks() && packet instanceof CustomPacket) {
+                                        if ((((player).getSession().getProtocolID() == 47 && ((CustomPacket) packet).getCustomPacketID() == 0x26) ||
+                                                ((player).getSession().getProtocolID() != 47 && ((CustomPacket) packet).getCustomPacketID() == 0x20))) {
+                                            player.getListenedChunks().add(packet);
+                                            PacketUtil.sendTitle(player, "[CHUNKS]", "listening... (" + player.getListenedChunks().size() + ")");
                                         }
                                     }
 
                                     if (packet instanceof ServerTabCompletePacket) {
-                                        if (owner.isPlayersState()) {
-                                            owner.setPlayersState(false);
+                                        if (player.isPlayersState()) {
+                                            player.setPlayersState(false);
                                             for (String m : ((ServerTabCompletePacket) packet).getMatches()) {
-                                                owner.getPlayers().add(m);
+                                                player.getPlayers().add(m);
                                             }
-                                            String out = owner.getPlayers().toString();
+                                            String out = player.getPlayers().toString();
                                             if (out.equals("[]")) {
-                                                ChatUtil.sendChatMessage("&cNo players found!", owner, true);
+                                                ChatUtil.sendChatMessage("&cNo players found!", player, true);
                                                 return;
                                             }
-                                            ChatUtil.sendChatMessage("&f" + out.replace("[", "").replace("]", "") + " &8[&f" + owner.getPlayers().size() + "&8]", owner, true);
+                                            ChatUtil.sendChatMessage("&f" + out.replace("[", "").replace("]", "") + " &8[&f" + player.getPlayers().size() + "&8]", player, true);
                                         }
 
-                                        if (owner.isPluginsState()) {
-                                            owner.setPluginsState(false);
+                                        if (player.isPluginsState()) {
+                                            player.setPluginsState(false);
                                             List<String> matches = new ArrayList<>();
                                             for (String m : ((ServerTabCompletePacket) packet).getMatches()) {
                                                 if (m.contains(":")) {
@@ -145,53 +146,55 @@ public class PlayerConnection {
                                             }
                                             String out = matches.toString();
                                             if (out.equals("[]")) {
-                                                ChatUtil.sendChatMessage("&cNo players found!", owner, true);
+                                                ChatUtil.sendChatMessage("&cNo players found!", player, true);
                                                 return;
                                             }
-                                            ChatUtil.sendChatMessage("&f" + out.replace("[", "").replace("]", ""), owner, true);
+                                            ChatUtil.sendChatMessage("&f" + out.replace("[", "").replace("]", ""), player, true);
                                         }
                                     }
 
                                     if (packet instanceof ServerPlayerListEntryPacket) {
                                         for (PlayerListEntry playerListEntry : ((ServerPlayerListEntryPacket) packet).getEntries()) {
                                             if (((ServerPlayerListEntryPacket) packet).getAction() == PlayerListEntryAction.ADD_PLAYER) {
-                                                owner.getTabList().add(playerListEntry);
+                                                player.getTabList().add(playerListEntry);
                                             } else if (((ServerPlayerListEntryPacket) packet).getAction() == PlayerListEntryAction.REMOVE_PLAYER) {
-                                                owner.getTabList().remove(playerListEntry);
+                                                player.getTabList().remove(playerListEntry);
                                             }
                                         }
                                     }
 
-                                    if (packet instanceof ServerTimeUpdatePacket && owner.getTimeType() != TimeType.DEFAULT) {
-                                        owner.getSession().sendPacket(new ServerTimeUpdatePacket(owner.getTimeType().getAge(), owner.getTimeType().getTime()));
+                                    if (packet instanceof ServerTimeUpdatePacket && player.getTimeType() != TimeType.DEFAULT) {
+                                        player.getSession().sendPacket(new ServerTimeUpdatePacket(player.getTimeType().getAge(), player.getTimeType().getTime()));
                                         return;
                                     }
 
-                                    if (packet instanceof ServerPlayerListHeaderFooter && !owner.getOptionsManager().getOptionByName("server tablist").isEnabled()) {
+                                    if (packet instanceof ServerPlayerListHeaderFooter && !player.getOptionsManager().getOptionByName("server tablist").isEnabled()) {
                                         return;
                                     }
 
-                                    owner.getSession().sendPacket(packet);
+                                    player.getSession().sendPacket(packet);
                                 }
                             }
                         });
                     }
                 });
-        owner.setRemoteSession(new Session(bootstrap.connect(ip, port).syncUninterruptibly().channel()));
-        owner.getRemoteSession().setProtocolID(owner.getSession().getProtocolID());
-        owner.getRemoteSession().setConnectionState(ConnectionState.LOGIN);
-        owner.getRemoteSession().setUsername(username);
+        player.setRemoteSession(new Session(bootstrap.connect(ip, port).syncUninterruptibly().channel()));
+        player.getRemoteSession().setProtocolID(player.getSession().getProtocolID());
+        player.getRemoteSession().setConnectionState(ConnectionState.LOGIN);
+        player.getRemoteSession().setUsername(username);
     }
 
     private void disconnect(String cause) {
-        owner.getSession().sendPacket(new ServerChatPacket(new TextComponent(ChatUtil.fixColor(owner.getThemeType().getColor(1) + ">> &8Connection to the server was lost: " + owner.getThemeType().getColor(1) + owner.getServerData().getHost() + (cause != null ? " &8cause: " + owner.getThemeType().getColor(1) + ChatColor.stripColor(cause) : "")))
-            .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(owner.getThemeType().getColor(1) + "click to reconnect &8[" + owner.getThemeType().getColor(2) + owner.getServerData().getHost() + (!owner.getServerData().getHost().contains(owner.getServerData().getIp()) ? "(" + owner.getServerData().getIp() + ")&8]" : "")))))
-            .setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, owner.getPrefixCMD() + "join " + owner.getServerData().getHost() + " " + username + " false false"))));
+        if(player.getSession() != null) {
+            player.getSession().sendPacket(new ServerChatPacket(new TextComponent(ChatUtil.fixColor(player.getThemeType().getColor(1) + ">> &8Connection to the server was lost: " + player.getThemeType().getColor(1) + player.getServerData().getHost() + (cause != null ? " &8cause: " + player.getThemeType().getColor(1) + ChatColor.stripColor(cause) : "")))
+                    .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(player.getThemeType().getColor(1) + "click to reconnect &8[" + player.getThemeType().getColor(2) + player.getServerData().getHost() + (!player.getServerData().getHost().contains(player.getServerData().getIp()) ? "(" + player.getServerData().getIp() + ")&8]" : "")))))
+                    .setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, player.getPrefixCMD() + "join " + player.getServerData().getHost() + " " + username + " false false"))));
+        }
 
-        owner.getRemoteSession().getChannel().close();
-        owner.setConnectedType(ConnectedType.DISCONNECTED);
-        owner.setServerData(null);
+        player.getRemoteSession().getChannel().close();
+        player.setConnectedType(ConnectedType.DISCONNECTED);
+        player.setServerData(null);
         group.shutdownGracefully();
-        WorldUtil.lobby(owner, true);
+        WorldUtil.lobby(player, true);
     }
 }

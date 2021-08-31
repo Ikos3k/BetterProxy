@@ -78,7 +78,7 @@ public class ServerChunkDataPacket extends Packet {
         this.z = in.readInt();
         boolean fullChunk = in.readBoolean();
         int chunkMask = in.readUnsignedShort();
-        byte[] data = in.readByteArray(Integer.MAX_VALUE);
+        byte[] data = in.readByteArray();
         if (data.length > 0) {
             ParsedChunkData chunkData = NetUtil.dataToChunks(new NetworkChunkData(chunkMask, fullChunk, false, data), true);
             this.chunks = chunkData.getChunks();
