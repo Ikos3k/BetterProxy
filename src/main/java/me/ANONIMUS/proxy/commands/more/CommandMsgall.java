@@ -17,18 +17,18 @@ public class CommandMsgall extends Command {
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {
         int delay = Integer.parseInt(args[1]);
-        String text = "";
+
+        StringBuilder text = new StringBuilder(args[1]);
         for (int i = 2; i < args.length; ++i) {
-            text = (i != 2 ? text + " " : "") + args[i];
+            text.append(" ").append(args[i]);
         }
 
-        final String out = sender.getPlayers().toString();
-        if (out.equals("[]")) {
+        if(sender.getPlayers().isEmpty()) {
             ChatUtil.sendChatMessage("&cYou need to download players first " + sender.getThemeType().getColor(1) + sender.getPrefixCMD() + "players", sender, true);
             return;
         }
 
-        sendMSG(sender, delay, text);
+        sendMSG(sender, delay, text.toString());
     }
 
     private void sendMSG(final Player player, final int delay, final String text) {

@@ -15,13 +15,7 @@ public class CommandManager extends Manager<Command> {
     private final HashMap<String, Long> cooldown = new HashMap<>();
 
     public void init() {
-        ReflectionUtil.getClasses("me.ANONIMUS.proxy.commands", Command.class).forEach(cmd -> {
-            try {
-                elements.add(cmd.newInstance());
-            } catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        });
+        elements.addAll(ReflectionUtil.getClasses("me.ANONIMUS.proxy.commands", Command.class));
     }
 
     public void onCommand(final String message, final Player sender) {

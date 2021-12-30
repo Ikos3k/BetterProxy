@@ -47,6 +47,7 @@ public class Player {
     private boolean playersState;
     private boolean freecam;
     private int motherDelay = 25;
+    private int entityId = 0;
     private Account account;
     private boolean mother;
     private boolean logged;
@@ -64,9 +65,8 @@ public class Player {
             JSONObject jsonObj = new JSONObject();
 
             JSONObject optionsObj = new JSONObject();
-            for (Option option : optionsManager.elements) {
-                optionsObj.put(option.getName(), option.isEnabled());
-            }
+
+            optionsManager.elements.forEach(option -> optionsObj.put(option.getName(), option.isEnabled()));
 
             optionsObj.put("prefixCMD", prefixCMD);
             optionsObj.put("theme", themeType.name());

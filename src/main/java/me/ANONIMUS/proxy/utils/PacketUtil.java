@@ -1,13 +1,11 @@
 package me.ANONIMUS.proxy.utils;
 
-import me.ANONIMUS.proxy.BetterProxy;
 import me.ANONIMUS.proxy.protocol.ProtocolType;
 import me.ANONIMUS.proxy.protocol.data.*;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntry;
 import me.ANONIMUS.proxy.protocol.data.playerlist.PlayerListEntryAction;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.protocol.objects.Session;
-import me.ANONIMUS.proxy.protocol.packet.Packet;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.*;
 
 import java.util.UUID;
@@ -55,10 +53,6 @@ public class PacketUtil {
                 break;
         }
         player.getSession().sendPacket(new ServerChangeGameStatePacket(new Effect(3, gamemode.getId())));
-    }
-
-    public static void sendBroadcastPacket(Packet packet) {
-        BetterProxy.getInstance().getPlayerManager().elements.forEach(p -> p.getSession().sendPacket(packet));
     }
 
     public static void sendTitle(Player player, String header, String footer) {

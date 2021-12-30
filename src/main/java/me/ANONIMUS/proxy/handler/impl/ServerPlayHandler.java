@@ -39,8 +39,8 @@ public class ServerPlayHandler extends ServerHandler {
     @SneakyThrows
     @Override
     public void handlePacket(Packet packet) {
-        player.getLastPacket().setSent(System.currentTimeMillis());
-        player.getLastPacket().setLastSentPacket(packet);
+        player.getLastPacket().setSentValue(packet);
+
         if (player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol()) {
             if (packet instanceof ClientPlayerPlaceBlockPacket) {
                 final ClientPlayerPlaceBlockPacket block = (ClientPlayerPlaceBlockPacket) packet;
@@ -132,7 +132,6 @@ public class ServerPlayHandler extends ServerHandler {
 
         if (player.isConnected() && !player.isFreecam()) {
             if (player.isMother()) {
-                int delay = player.getMotherDelay();
                 player.getBots().forEach(bot -> bot.getSession().fastSendPacket(packet));
             }
 

@@ -18,7 +18,12 @@ public class CommandBroadcast extends Command {
             return;
         }
 
-        sender.getBots().forEach(bot -> bot.getSession().sendPacket(new ClientChatPacket(args[1])));
+        StringBuilder text = new StringBuilder(args[1]);
+        for (int i = 2; i < args.length; ++i) {
+            text.append(" ").append(args[i]);
+        }
+
+        sender.getBots().forEach(bot -> bot.getSession().sendPacket(new ClientChatPacket(text.toString())));
         ChatUtil.sendChatMessage("&7Successfully sent message !", sender, true);
     }
 }

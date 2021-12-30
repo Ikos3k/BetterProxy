@@ -1,10 +1,10 @@
 package me.ANONIMUS.proxy.objects;
 
-import lombok.Data;
+import lombok.Getter;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 import me.ANONIMUS.proxy.utils.ChatUtil;
 
-@Data
+@Getter
 public class Option {
     private final Player player;
     private final String name;

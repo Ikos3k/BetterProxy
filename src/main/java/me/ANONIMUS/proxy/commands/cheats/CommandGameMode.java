@@ -9,9 +9,7 @@ import me.ANONIMUS.proxy.utils.PacketUtil;
 
 public class CommandGameMode extends Command {
     public CommandGameMode() {
-        super("gamemode", "gm", null,
-                "[survival|0/" + "creative|1/" + "adventure|2/" + "spectator|3]",
-                ConnectedType.NONE);
+        super("gamemode", "gm", null, "[survival|0/" + "creative|1/" + "adventure|2/" + "spectator|3]", ConnectedType.NONE);
     }
 
     @Override

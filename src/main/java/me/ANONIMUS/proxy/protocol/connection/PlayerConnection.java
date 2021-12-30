@@ -95,6 +95,7 @@ public class PlayerConnection {
                                     player.getRemoteSession().setConnectionState(ConnectionState.PLAY);
                                     ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Successfully " + player.getThemeType().getColor(1) + "logged!", player, false);
                                 } else if (packet instanceof ServerJoinGamePacket) {
+                                    player.setEntityId(((ServerJoinGamePacket) packet).getEntityId());
                                     ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Downloading terrain!", player, false);
                                     WorldUtil.dimSwitch(player, (ServerJoinGamePacket) packet);
                                     player.setConnectedType(ConnectedType.CONNECTED);
@@ -185,6 +186,10 @@ public class PlayerConnection {
     }
 
     private void disconnect(String cause) {
+        if(player.isFreecam()) {
+            return;
+        }
+
         if(player.getSession() != null) {
             player.getSession().sendPacket(new ServerChatPacket(new TextComponent(ChatUtil.fixColor(player.getThemeType().getColor(1) + ">> &8Connection to the server was lost: " + player.getThemeType().getColor(1) + player.getServerData().getHost() + (cause != null ? " &8cause: " + player.getThemeType().getColor(1) + ChatColor.stripColor(cause) : "")))
                     .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(player.getThemeType().getColor(1) + "click to reconnect &8[" + player.getThemeType().getColor(2) + player.getServerData().getHost() + (!player.getServerData().getHost().contains(player.getServerData().getIp()) ? "(" + player.getServerData().getIp() + ")&8]" : "")))))

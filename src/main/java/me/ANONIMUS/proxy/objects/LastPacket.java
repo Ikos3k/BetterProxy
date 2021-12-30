@@ -10,11 +10,13 @@ public class LastPacket {
     private Packet lastReceivedPacket;
     private long received;
 
+    public void setSentValue(Packet packet) {
+        this.lastSentPacket = packet;
+        this.sent = System.currentTimeMillis();
+    }
+
     public int getLastMs() {
         int ms = (int) (received - sent);
-        if (ms < 0) {
-            ms = -ms;
-        }
-        return ms;
+        return (ms < 0 ? -ms : ms);
     }
 }

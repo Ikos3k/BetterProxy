@@ -1,19 +1,19 @@
 package me.ANONIMUS.proxy.objects;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import me.ANONIMUS.proxy.protocol.objects.GameProfile;
 
-@Data
+@Getter
+@RequiredArgsConstructor
 public class Skin {
     private final GameProfile gameProfile;
 
     public String getValue() {
-        GameProfile.Property property = gameProfile.getProperty("textures");
-        return property.getValue();
+        return gameProfile.getProperty("textures").getValue();
     }
 
     public String getSignature() {
-        GameProfile.Property property = gameProfile.getProperty("textures");
-        return property.getSignature();
+        return gameProfile.getProperty("textures").getSignature();
     }
 }

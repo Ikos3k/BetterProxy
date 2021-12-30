@@ -14,18 +14,24 @@ import java.util.Arrays;
 public class PacketRegistry {
     @SneakyThrows
     public void init() {
-        Arrays.asList(PacketDirection.values()).forEach(direction -> Arrays.stream(ConnectionState.values()).filter(connectionState -> connectionState != ConnectionState.HANDSHAKE).forEach(state -> ReflectionUtil.getClasses("me.ANONIMUS.proxy.protocol.packet.impl." + direction.packetsPackageName + "." + state.name().toLowerCase(), Packet.class).forEach(p -> {
-            try {
-                Packet packet = p.newInstance();
-                if (!Modifier.isPublic(packet.getClass().getModifiers())) {
-                    throw new IllegalAccessException("Packet " + packet.getClass().getSimpleName() + " has a non public default constructor.");
-                }
+        Arrays.asList(PacketDirection.values())
+            .forEach(direction -> Arrays.stream(ConnectionState.values())
+                .filter(connectionState -> connectionState != ConnectionState.HANDSHAKE)
+                .forEach(state -> ReflectionUtil.getClasses("me.ANONIMUS.proxy.protocol.packet.impl." + (direction == PacketDirection.SERVERBOUND ? "client" : "server") + "." + state.name().toLowerCase(), Packet.class)
+                    .forEach(packet -> {
+                        try {
+                            if (!Modifier.isPublic(packet.getClass().getModifiers())) {
+                                throw new IllegalAccessException("Packet " + packet.getClass().getSimpleName() + " has a non public default constructor.");
+                            }
 
-                state.getPacketsByDirection(direction).add(packet);
-            } catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        })));
+                            state.getPacketsByDirection(direction).add(packet);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                )
+            )
+        );
     }
 
     public Packet createPacket(ConnectionState connectionState, PacketDirection direction, int id, int protocol) {

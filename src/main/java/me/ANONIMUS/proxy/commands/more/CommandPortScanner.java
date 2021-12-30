@@ -34,8 +34,7 @@ public class CommandPortScanner extends Command {
                     socket.connect(new InetSocketAddress(finalHost, i), 500);
                     ports.add(i);
                     ChatUtil.sendChatMessage("&7A working port has been found &a" + i, sender, true);
-                } catch (Exception ignored) {
-                }
+                } catch (Exception ignored) {}
             }
             ChatUtil.sendChatMessage("&7Scanning is complete &8(" + sender.getThemeType().getColor(2) + ports.size() + "&8)", sender, true);
             ChatUtil.sendChatMessage("&7Open ports: " + sender.getThemeType().getColor(1) + ports, sender, true);

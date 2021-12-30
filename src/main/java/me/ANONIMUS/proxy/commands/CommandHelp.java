@@ -54,7 +54,7 @@ public class CommandHelp extends Command {
         TextComponent msg = new TextComponent(ChatUtil.fixColor(((i != 1) ? "&c" : "&7") + "[PREVIOUS]"));
         if (i != 1) {
             msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(sender.getThemeType().getColor(2) + "Click to go to the previous page!"))));
-            msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, sender.getPrefixCMD() + "help " + (i - 1)));
+            msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, sender.getPrefixCMD() + "help " + k));
         }
 
         TextComponent msg2 = new TextComponent(ChatUtil.fixColor((i != f ? "&a" : "&7") + "[NEXT]"));

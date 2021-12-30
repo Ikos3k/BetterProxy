@@ -4,9 +4,9 @@ import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.objects.Command;
 import me.ANONIMUS.proxy.protocol.data.Gamemode;
 import me.ANONIMUS.proxy.protocol.objects.Player;
+import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerDestroyEntitiesPacket;
 import me.ANONIMUS.proxy.protocol.packet.impl.server.play.ServerPlayerPosLookPacket;
 import me.ANONIMUS.proxy.utils.PacketUtil;
-
 
 public class CommandFreecam extends Command {
     public CommandFreecam() {
@@ -19,9 +19,10 @@ public class CommandFreecam extends Command {
 
         if (sender.isFreecam()) {
             PacketUtil.changeGameMode(sender, Gamemode.SPECTATOR);
+            sender.getSession().sendPacket(new ServerDestroyEntitiesPacket(sender.getEntityId()));
         } else {
             sender.getSession().sendPacket(new ServerPlayerPosLookPacket(
-                    sender.getPos().getX(), sender.getPos().getY(), sender.getPos().getZ(), 180, 90)
+                sender.getPos().getX(), sender.getPos().getY(), sender.getPos().getZ(), 180, 90)
             );
             PacketUtil.changeGameMode(sender, Gamemode.SURVIVAL);
         }

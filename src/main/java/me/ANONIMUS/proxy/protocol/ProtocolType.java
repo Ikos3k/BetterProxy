@@ -25,6 +25,8 @@ public enum ProtocolType {
     private final String prefix;
 
     public static ProtocolType getByProtocolID(int protocol) {
-        return Arrays.stream(values()).filter(p -> p.protocol == protocol).findFirst().orElse(PROTOCOL_UNKNOWN);
+        return Arrays.stream(values())
+                .filter(p -> p.protocol == protocol)
+                .findFirst().orElse(PROTOCOL_UNKNOWN);
     }
 }

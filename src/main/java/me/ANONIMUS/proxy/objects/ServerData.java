@@ -1,8 +1,8 @@
 package me.ANONIMUS.proxy.objects;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class ServerData {
     private final String ip;
     private final String host;

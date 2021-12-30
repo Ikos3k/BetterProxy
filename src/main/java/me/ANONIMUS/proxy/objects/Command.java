@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import me.ANONIMUS.proxy.enums.ConnectedType;
 import me.ANONIMUS.proxy.protocol.objects.Player;
 
-@RequiredArgsConstructor
 @Getter
+@RequiredArgsConstructor
 public abstract class Command {
     private final String prefix;
     private final String alias;

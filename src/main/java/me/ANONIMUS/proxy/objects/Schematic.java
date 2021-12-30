@@ -1,7 +1,7 @@
 package me.ANONIMUS.proxy.objects;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import me.ANONIMUS.proxy.protocol.data.NibbleArray3d;
 import me.ANONIMUS.proxy.protocol.data.ShortArray3d;
 import me.ANONIMUS.proxy.protocol.data.chunk.Chunk;
@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-@Data
+@Getter
 @AllArgsConstructor
 public class Schematic {
     private final NBTTagCompound nbt;

@@ -29,12 +29,11 @@ public class CommandPlayers extends Command {
             sender.getPlayers().clear();
             sender.setPlayersState(false);
             sender.setPlayers(sender.getTabList().stream().map(p -> ChatColor.stripColor(p.getProfile().getName())).filter(n -> !n.isEmpty() && Pattern.compile("^[a-zA-Z0-9_]{3,16}$").matcher(n).matches()).collect(Collectors.toList()));
-            String out = sender.getPlayers().toString();
-            if (out.equals("[]")) {
+            if(sender.getPlayers().isEmpty()) {
                 ChatUtil.sendChatMessage("&cNo players found!", sender, true);
                 return;
             }
-            out = out.replace("[", "").replace("]", "");
+            String out = sender.getPlayers().toString().replace("[", "").replace("]", "");
             ChatUtil.sendChatMessage("&f" + out + " &7[&f" + sender.getPlayers().size() + "&7]", sender, true);
         } else if (args[1].equalsIgnoreCase("tabcomplete")) {
             sender.getPlayers().clear();
@@ -56,13 +55,12 @@ public class CommandPlayers extends Command {
             final JsonObject object = reader.readObject();
             reader.close();
             JsonArray players = object.getJsonObject("players").getJsonArray("list");
-            players.forEach(jsonValue -> sender.getPlayers().add(players.toString()));
-            String out = sender.getPlayers().toString();
-            if (out.equals("[]")) {
+            if(sender.getPlayers().isEmpty()) {
                 ChatUtil.sendChatMessage("&cNo players found!", sender, true);
                 return;
             }
-            out = out.replace("[", "").replace("]", "");
+            players.forEach(jsonValue -> sender.getPlayers().add(players.toString()));
+            String out = sender.getPlayers().toString().replace("[", "").replace("]", "");
             ChatUtil.sendChatMessage("&f" + out + " &7[&f" + sender.getPlayers().size() + "&7]", sender, true);
         } else if (args[1].equalsIgnoreCase("clear")) {
             if (sender.getPlayers().isEmpty()) {

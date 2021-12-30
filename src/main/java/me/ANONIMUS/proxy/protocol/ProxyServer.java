@@ -61,6 +61,7 @@ public class ProxyServer {
                                 if (packet instanceof HandshakePacket) {
                                     final HandshakePacket handshake = (HandshakePacket) packet;
                                     session.setProtocolID(handshake.getProtocolId());
+
                                     switch (handshake.getNextState()) {
                                         case 1:
                                             session.setConnectionState(ConnectionState.STATUS);
@@ -85,6 +86,9 @@ public class ProxyServer {
                         worker.shutdownGracefully();
                     }
                 });
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> playerManager.elements.stream().filter(p -> p.getSession().getConnectionState() == ConnectionState.PLAY).forEach(p -> p.getSession().sendPacket(new ServerKeepAlivePacket(System.currentTimeMillis()))), 3, 3, TimeUnit.SECONDS);
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> playerManager.elements.stream()
+            .filter(p -> p.getSession().getConnectionState() == ConnectionState.PLAY)
+            .forEach(p -> p.getSession().sendPacket(new ServerKeepAlivePacket(System.currentTimeMillis()))),
+3, 3, TimeUnit.SECONDS);
     }
 }

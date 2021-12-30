@@ -14,17 +14,16 @@ public class CommandAlert extends Command {
 
     @Override
     public void onCommand(Player sender, String[] args) {
-        String out = "";
-        for (int i = 1; i < args.length; ++i) {
-            out = (!out.equals("") ? out + " " : "") + args[i];
+        StringBuilder out = new StringBuilder(args[1]);
+        for (int i = 2; i < args.length; ++i) {
+            out.append(" ").append(args[i]);
         }
 
-        if (out.equals("")) {
+        if (out.toString().equals("")) {
             ChatUtil.sendChatMessage("&cYou cannot send an empty message!", sender, true);
             return;
         }
 
-        String finalOut = out;
-        BetterProxy.getInstance().getPlayerManager().elements.forEach(player -> PacketUtil.sendTitle(player, "&8[&4ALERT&8]", "&n" + finalOut, 13, 18, 13));
+        BetterProxy.getInstance().getPlayerManager().elements.forEach(player -> PacketUtil.sendTitle(player, "&8[&4ALERT&8]", "&n" + out, 13, 18, 13));
     }
 }
