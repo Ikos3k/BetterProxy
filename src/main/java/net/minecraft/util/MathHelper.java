@@ -1,6 +1,6 @@
 package net.minecraft.util;
 
-import me.ANONIMUS.proxy.protocol.data.Position;
+import me.Ikos3k.proxy.protocol.data.Position;
 
 import java.util.Random;
 import java.util.UUID;
@@ -279,7 +279,7 @@ public class MathHelper {
     }
 
     public static long func_180187_c(int x, int y, int z) {
-        long var3 = (long) (x * 3129871) ^ (long) z * 116129781L ^ (long) y;
+        long var3 = (x * 3129871L) ^ (long) z * 116129781L ^ (long) y;
         var3 = var3 * var3 * 42317861L + var3 * 11L;
         return var3;
     }

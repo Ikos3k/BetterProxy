@@ -13,5 +13,5 @@
     "showCustomPackets" : true
   },
   "port" : 1337,
-  "proxyVersion" : "3.0"
+  "proxyVersion" : "3.1"
 }
