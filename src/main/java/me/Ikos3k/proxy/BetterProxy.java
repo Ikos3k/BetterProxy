@@ -49,10 +49,10 @@ public class BetterProxy {
         System.out.println("[ ------------------------------------- ]");
         System.out.println();
         System.out.println("> Checking for updates...");
-//        if(!UpdateUtils.checkForUpdates(configManager.getConfig().proxyVersion)) {
-//            System.err.println("> Your proxy is not up to date!");
-//            return;
-//        }
+        if(!UpdateUtils.checkForUpdates(configManager.getConfig().proxyVersion)) {
+            System.err.println("> Your proxy is not up to date!");
+            return;
+        }
         System.out.println("> Creating files...");
         FileUtil.createMissing();
         System.out.println("> Loading packets...");
