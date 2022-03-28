@@ -11,6 +11,7 @@ import me.Ikos3k.proxy.objects.*;
 import me.Ikos3k.proxy.protocol.data.Position;
 import me.Ikos3k.proxy.protocol.data.playerlist.PlayerListEntry;
 import me.Ikos3k.proxy.protocol.packet.Packet;
+import me.Ikos3k.proxy.utils.ChatUtil;
 import me.Ikos3k.proxy.utils.SkinUtil;
 import me.Ikos3k.proxy.utils.inventory.Inventory;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -156,5 +157,16 @@ public class Player {
 
     public boolean isConnected() {
         return remoteSession != null && connectedType == ConnectedType.CONNECTED;
+    }
+
+    public void updateSkin(Skin skin) {
+        if (skin == null) {
+            ChatUtil.sendChatMessage("&7The player does not have a premium account", this, true);
+            return;
+        }
+
+        this.skin = skin;
+        ChatUtil.sendChatMessage("&7You have successfully set skin to " + themeType.getColor(1) + skin.getGameProfile().getName(), this, true);
+        ChatUtil.sendChatMessage("&cYou need to reconnect to the proxy!", this, true);
     }
 }

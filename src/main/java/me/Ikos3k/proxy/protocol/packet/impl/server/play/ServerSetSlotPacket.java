@@ -23,14 +23,14 @@ public class ServerSetSlotPacket extends Packet {
     public void write(PacketBuffer out, int protocol) throws Exception {
         out.writeByte(this.windowId);
         out.writeShort(this.slot);
-        out.writeItemStackToBuffer(this.item);
+        out.writeItemStack(this.item);
     }
 
     @Override
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.windowId = in.readByte();
         this.slot = in.readShort();
-        this.item = in.readItemStackFromBuffer();
+        this.item = in.readItemStack();
     }
 
     @Override

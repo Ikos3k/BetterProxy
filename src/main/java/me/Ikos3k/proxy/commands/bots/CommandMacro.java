@@ -27,6 +27,10 @@ public class CommandMacro extends Command {
             ChatUtil.sendChatMessage("playing macro " + args[2], sender, false);
             int macroID = Integer.parseInt(args[2]);
 
+            if(macroID <= 0) {
+                ChatUtil.sendChatMessage("unknown macro id!", sender, false);
+            }
+
             Macro macro = sender.getMacros().get(macroID - 1);
             new Thread(() -> {
                 for (Bot bot : sender.getBots()) {
@@ -38,12 +42,20 @@ public class CommandMacro extends Command {
         } else if (args[1].equalsIgnoreCase("trace")) {
             int macroID = Integer.parseInt(args[2]);
 
-            if(sender.getTraceMacro() == -1) {
-                sender.setTraceMacro(macroID);
-            } else {
-                sender.setTraceMacro(-1);
+            if(macroID == 0 || macroID < -1 || macroID > sender.getMacros().size()) {
+                ChatUtil.sendChatMessage("&cunknown macro id!", sender, false);
+                return;
             }
-            System.out.println("trace: " + macroID);
+
+            if(macroID == -1 || sender.getTraceMacro() == macroID) {
+                if(sender.getTraceMacro() != -1) {
+                    ChatUtil.sendChatMessage("disabled", sender, false);
+                    sender.setTraceMacro(-1);
+                }
+            } else {
+                sender.setTraceMacro(macroID);
+                ChatUtil.sendChatMessage("enabled " + macroID, sender, false);
+            }
         }
     }
 }

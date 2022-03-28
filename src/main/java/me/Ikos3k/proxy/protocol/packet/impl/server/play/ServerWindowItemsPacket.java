@@ -41,7 +41,7 @@ public class ServerWindowItemsPacket extends Packet {
         out.writeShort(this.itemStacks.length);
 
         for (ItemStack itemstack : this.itemStacks) {
-            out.writeItemStackToBuffer(itemstack);
+            out.writeItemStack(itemstack);
         }
     }
 
@@ -52,7 +52,7 @@ public class ServerWindowItemsPacket extends Packet {
         this.itemStacks = new ItemStack[i];
 
         for (int j = 0; j < i; ++j) {
-            this.itemStacks[j] = in.readItemStackFromBuffer();
+            this.itemStacks[j] = in.readItemStack();
         }
     }
 

@@ -8,12 +8,17 @@ import io.netty.handler.codec.CorruptedFrameException;
 import me.Ikos3k.proxy.protocol.packet.PacketBuffer;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class VarInt21FrameCodec extends ByteToMessageCodec<ByteBuf> {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, ByteBuf byteBuf2) {
         final int size = byteBuf.readableBytes();
-        final int j = PacketBuffer.getVarIntSize(size);
+        final int j = IntStream.range(1, 5)
+                .filter(i -> (size & -1 << i * 7) == 0)
+                .findFirst()
+                .orElse(5);
+
         if (j > 3) {
             throw new IllegalArgumentException("unable to fit " + size + " into 3");
         }

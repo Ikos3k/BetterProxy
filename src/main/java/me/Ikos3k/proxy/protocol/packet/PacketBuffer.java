@@ -26,13 +26,12 @@ import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
-import java.util.stream.IntStream;
 
 @AllArgsConstructor
 public class PacketBuffer extends ByteBuf {
     private final ByteBuf byteBuf;
 
-    public void writeNBTTagCompoundToBuffer(NBTTagCompound nbt) {
+    public void writeNBTTagCompound(NBTTagCompound nbt) {
         if (nbt == null) {
             this.writeByte(0);
             return;
@@ -45,7 +44,7 @@ public class PacketBuffer extends ByteBuf {
         }
     }
 
-    public NBTTagCompound readNBTTagCompoundFromBuffer() throws IOException {
+    public NBTTagCompound readNBTTagCompound() throws IOException {
         int var1 = this.readerIndex();
         byte var2 = this.readByte();
 
@@ -57,7 +56,7 @@ public class PacketBuffer extends ByteBuf {
         return CompressedStreamTools.func_152456_a(new ByteBufInputStream(this), new NBTSizeTracker(2097152L));
     }
 
-    public void writeItemStackToBuffer(ItemStack stack) {
+    public void writeItemStack(ItemStack stack) {
         if (stack == null) {
             this.writeShort(-1);
             return;
@@ -66,27 +65,20 @@ public class PacketBuffer extends ByteBuf {
         this.writeShort(stack.getId());
         this.writeByte(stack.getAmount());
         this.writeShort(stack.getData());
-        this.writeNBTTagCompoundToBuffer(stack.getNbt());
+        this.writeNBTTagCompound(stack.getNbt());
     }
 
-    public ItemStack readItemStackFromBuffer() throws IOException {
+    public ItemStack readItemStack() throws IOException {
         ItemStack var1 = null;
         final short id = this.readShort();
 
         if (id >= 0) {
             final byte amount = this.readByte();
             final short data = this.readShort();
-            var1 = new ItemStack(id, amount, data, this.readNBTTagCompoundFromBuffer());
+            var1 = new ItemStack(id, amount, data, this.readNBTTagCompound());
         }
 
         return var1;
-    }
-
-    public static int getVarIntSize(int input) {
-        return IntStream.range(1, 5)
-                .filter(i -> (input & -1 << i * 7) == 0)
-                .findFirst()
-                .orElse(5);
     }
 
     public Position readPosition() {

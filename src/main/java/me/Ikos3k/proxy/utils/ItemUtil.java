@@ -5,6 +5,7 @@ import me.Ikos3k.proxy.objects.Skin;
 import me.Ikos3k.proxy.protocol.data.ItemStack;
 import me.Ikos3k.proxy.protocol.objects.Player;
 import me.Ikos3k.proxy.protocol.packet.impl.server.play.ServerSetSlotPacket;
+import net.md_5.bungee.api.ChatColor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
@@ -22,7 +23,7 @@ public class ItemUtil {
             lores.add("");
         }
         lores.add(ChatUtil.fixColor("&fClick to " + (option.isEnabled() ? "&cdisable" : "&aenable")));
-        return new ItemStack(160, 1, option.isEnabled() ? 5 : 14).setStackDisplayName(ChatUtil.fixColor("&l" + option.getName().toUpperCase())).setLoreName(lores);
+        return new ItemStack(160, 1, option.isEnabled() ? 5 : 14).setName(ChatUtil.fixColor("&l" + option.getName().toUpperCase())).setLoreName(lores);
     }
 
     public static ItemStack skull(Skin skin) {
@@ -61,7 +62,20 @@ public class ItemUtil {
     }
 
     public static ItemStack changeSkinMenu(Player player) {
-        return skull(player.getSkin()).setStackDisplayName(ChatUtil.fixColor("&6Skins"));
+        return skull(player.getSkin()).setName(ChatUtil.fixColor("&6Skins"));
+    }
+
+    public static ItemStack[] playerSkulls(String... nicknames) {
+        ItemStack[] itemStacks = new ItemStack[nicknames.length];
+
+        int i = 0;
+        for (String nick : nicknames) {
+            itemStacks[i] = skull(SkinUtil.getSkin(ChatColor.stripColor(nick))).setName(ChatUtil.fixColor(nick));
+//            itemStacks[i] = skull(SkinUtil.getSkin(ChatColor.stripColor(nick)));
+            i++;
+        }
+
+        return itemStacks;
     }
 
     public static void loadStartItems(Player player) {

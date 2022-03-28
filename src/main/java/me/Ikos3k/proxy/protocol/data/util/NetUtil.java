@@ -44,7 +44,7 @@ public class NetUtil {
                     break;
                 }
                 case ITEM: {
-                    value = in.readItemStackFromBuffer();
+                    value = in.readItemStack();
                     break;
                 }
                 case BOOLEAN: {
@@ -94,7 +94,7 @@ public class NetUtil {
                     break;
                 }
                 case ITEM: {
-                    out.writeItemStackToBuffer((ItemStack) meta.getValue());
+                    out.writeItemStack((ItemStack) meta.getValue());
                     break;
                 }
                 case BOOLEAN: {

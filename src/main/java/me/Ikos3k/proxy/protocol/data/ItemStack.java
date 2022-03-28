@@ -29,14 +29,14 @@ public class ItemStack {
     public ItemStack(int id, String name) {
         this(id);
 
-        setStackDisplayName(name);
+        setName(name);
     }
 
     public ItemStack(int id, int amount, int data) {
         this(id, amount, data, null);
     }
 
-    public ItemStack setStackDisplayName(String displayName) {
+    public ItemStack setName(String displayName) {
         if (this.nbt == null) {
             this.nbt = new NBTTagCompound();
         }

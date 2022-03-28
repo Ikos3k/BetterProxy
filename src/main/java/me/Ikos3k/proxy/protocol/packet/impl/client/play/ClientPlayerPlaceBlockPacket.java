@@ -60,7 +60,7 @@ public class ClientPlayerPlaceBlockPacket extends Packet {
             }
         } else {
             out.writeByte(this.face.getId());
-            out.writeItemStackToBuffer(held);
+            out.writeItemStack(held);
             out.writeByte((int) (this.cursorX * 16.0F));
             out.writeByte((int) (this.cursorY * 16.0F));
             out.writeByte((int) (this.cursorZ * 16.0F));
@@ -84,7 +84,7 @@ public class ClientPlayerPlaceBlockPacket extends Packet {
             }
         } else {
             this.face = Face.getById(in.readUnsignedByte());
-            this.held = in.readItemStackFromBuffer();
+            this.held = in.readItemStack();
             this.cursorX = (float) in.readByte() / 16.0F;
             this.cursorY = (float) in.readByte() / 16.0F;
             this.cursorZ = (float) in.readByte() / 16.0F;

@@ -14,8 +14,8 @@ public class InventoryUtil {
         player.getSession().sendPacket(new ServerOpenWindowPacket(inventory.getWindowID(), inventory.getType(), inventory.getName(), inventory.getSlots()));
         player.getSession().sendPacket(new ServerWindowItemsPacket(inventory.getWindowID(), inventory.getItems()));
 
-        player.setCurrentInventory(inventory);
         inventory.onOpen();
+        player.setCurrentInventory(inventory);
     }
 
     public static void closeInventory(Player player) {

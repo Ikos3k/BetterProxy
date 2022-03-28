@@ -5,6 +5,7 @@ import me.Ikos3k.proxy.BetterProxy;
 import me.Ikos3k.proxy.handler.ServerHandler;
 import me.Ikos3k.proxy.objects.Command;
 import me.Ikos3k.proxy.objects.Macro;
+import me.Ikos3k.proxy.objects.Skin;
 import me.Ikos3k.proxy.protocol.ProtocolType;
 import me.Ikos3k.proxy.protocol.data.ItemStack;
 import me.Ikos3k.proxy.protocol.data.Position;
@@ -23,10 +24,12 @@ import me.Ikos3k.proxy.utils.ChatUtil;
 import me.Ikos3k.proxy.utils.ItemUtil;
 import me.Ikos3k.proxy.utils.PacketUtil;
 import me.Ikos3k.proxy.utils.SkinUtil;
+import me.Ikos3k.proxy.utils.inventory.Inventory;
 import me.Ikos3k.proxy.utils.inventory.InventoryUtil;
 import net.md_5.bungee.api.ChatColor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,16 +73,38 @@ public class ServerPlayHandler extends ServerHandler {
                             return;
                         }
                         if (ItemUtil.changeSkinMenu(player).getName().equals(block.getHeld().getName())) {
-                            List<ItemStack> items = new ArrayList<>();
+                            InventoryUtil.openInventory(new Inventory(ChatUtil.fixColor("&6SKINS"), true) {
+                                @Override
+                                public void init() {
+                                    this.items.addAll(Arrays.asList(ItemUtil.playerSkulls("&4Kola13567", "&6Szumir", "&2Nyatix")));
 
-                            String[] nicknames = new String[]{"Kola13567", "Szumir", "Nyatix"};
+                                    this.setItem(ItemUtil.skull(null).setName("DEFAULT"), getSlots());
+                                }
 
-                            for (String nick : nicknames) {
-                                items.add(ItemUtil.skull(SkinUtil.getSkin(nick)));
-                            }
+                                @Override
+                                public void onAction(WindowAction action, ItemStack itemStack, int slot, int button) {
+                                    if(itemStack != null) {
+                                        InventoryUtil.closeInventory(player);
+                                        Skin skin;
+                                        if(itemStack.getName().equalsIgnoreCase("DEFAULT")) {
+                                            skin = SkinUtil.getSkin(player.getUsername());
+                                        } else {
+                                            skin = SkinUtil.getSkin(ChatColor.stripColor(itemStack.getName()));
+                                        }
 
-                            player.getSession().sendPacket(new ServerOpenWindowPacket(235, WindowType.CHEST, "SKINS", 36));
-                            player.getSession().sendPacket(new ServerWindowItemsPacket(235, items));
+                                        player.updateSkin(skin);
+                                    }
+                                }
+
+                                @Override
+                                public int getSlots() {
+                                    if (this.items.size() % 9 == 0) {
+                                        return this.items.size();
+                                    } else {
+                                        return (this.items.size() / 9 + 1) * 9;
+                                    }
+                                }
+                            }, player);
                             return;
                         }
                     }
@@ -116,10 +141,6 @@ public class ServerPlayHandler extends ServerHandler {
                     }
                     player.getSession().sendPacket(new ServerOpenWindowPacket(234, WindowType.CHEST, "SETTINGS", 9));
                     player.getSession().sendPacket(new ServerWindowItemsPacket(234, items));
-                    return;
-                }
-                if (window.getWindowId() == -21) {
-                    //soon
                     return;
                 }
             }
@@ -162,7 +183,7 @@ public class ServerPlayHandler extends ServerHandler {
                 empty.writeBytes(((CustomPacket) packet).getCustomData());
 
                 int targetID = empty.readVarInt(); //target entity id
-                int type = empty.readVarInt(); //read action type
+                int type = empty.readVarInt(); //action type
 
                 if(type == 0) {
                     ChatUtil.sendChatMessage("hide " + targetID, player, false);
@@ -181,24 +202,20 @@ public class ServerPlayHandler extends ServerHandler {
             }
 
             if(player.getTraceMacro() > 0 && player.getMacros().size() > 0) {
-//                Macro macro = player.getMacros().get(player.getMacros().size() - 1);
+                int[] particles = new int[] { 21, 27, 31, 34, 4, 0, 18, 24 };
                 Macro macro = player.getMacros().get(player.getTraceMacro() - 1);
                 for (Packet packet1 : macro.getPackets()) {
                     if(packet1 instanceof ClientPlayerPositionPacket && player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol()) {
                         ClientPlayerPositionPacket posPacket = (ClientPlayerPositionPacket) packet1;
 
-                        boolean longDistance = false;
-
-                        int[] particles = new int[] {
-                            21, 27, 31, 34, 4, 0, 18, 24
-                        };
+                        boolean longDistance = true;
 
                         player.getSession().sendPacket(new PacketUtil.PacketBuilder()
                             .add(INT, particles[player.getTraceMacro() - 1])
                             .add(BOOLEAN, longDistance)
-                            .add(FLOAT, (float)posPacket.getX())
-                            .add(FLOAT, (float)posPacket.getY())
-                            .add(FLOAT, (float)posPacket.getZ())
+                            .add(FLOAT, (float) posPacket.getX())
+                            .add(FLOAT, (float) posPacket.getY())
+                            .add(FLOAT, (float) posPacket.getZ())
                             .add(FLOAT, 0F)
                             .add(FLOAT, 0F)
                             .add(FLOAT, 0F)

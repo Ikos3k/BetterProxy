@@ -26,6 +26,8 @@ public abstract class Inventory {
         this.windowID = 1;
         this.name = name;
         this.isClosable = isClosable;
+
+        init();
     }
 
     public int getSlots() {
@@ -33,20 +35,28 @@ public abstract class Inventory {
     }
 
     public void setItem(ItemStack item, int slot) {
-        this.items.set(slot, item);
+        if(slot > items.size() - 1) {
+            for (int i = items.size(); i < slot; i++) {
+                this.items.add(null);
+            }
+        }
+        
+        this.items.set(slot - 1, item);
     }
 
     public void addItem(ItemStack item) {
         this.items.add(item);
     }
 
-    public abstract void onAction(WindowAction action, ItemStack itemStack, int slot, int button);
+    public void init() { }
 
-    public abstract void onClickAnotherGui(WindowAction action, ItemStack itemStack, int slot, int button);
+    public void onAction(WindowAction action, ItemStack itemStack, int slot, int button) { }
 
-    public abstract void onClickOutsideGui(int button);
+    public void onClickAnotherGui(WindowAction action, ItemStack itemStack, int slot, int button) { }
 
-    public abstract void onOpen();
+    public void onClickOutsideGui(int button) { }
 
-    public abstract void onClose();
+    public void onOpen() { }
+
+    public void onClose() { }
 }

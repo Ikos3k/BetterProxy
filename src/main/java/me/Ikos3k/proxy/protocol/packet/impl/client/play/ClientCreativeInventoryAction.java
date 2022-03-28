@@ -21,13 +21,13 @@ public class ClientCreativeInventoryAction extends Packet {
     @Override
     public void write(PacketBuffer out, int protocol) throws Exception {
         out.writeShort(slot);
-        out.writeItemStackToBuffer(itemStack);
+        out.writeItemStack(itemStack);
     }
 
     @Override
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.slot = in.readShort();
-        this.itemStack = in.readItemStackFromBuffer();
+        this.itemStack = in.readItemStack();
     }
 
     @Override

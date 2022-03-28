@@ -18,8 +18,6 @@ public class CommandSendCustom2 extends Command {
 
     //EXAMPLE #sendcustom2 CLIENTBOUND 2 STRING siema BYTE 0
 
-
-    //#sendcustom2 CLIENTBOUND 2 BYTES 5, 115, 105, 101, 109, 97, 0
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {
         PacketDirection direction = PacketDirection.valueOf(args[1].toUpperCase());

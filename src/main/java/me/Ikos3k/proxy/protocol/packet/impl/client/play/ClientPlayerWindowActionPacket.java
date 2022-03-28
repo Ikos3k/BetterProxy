@@ -24,31 +24,31 @@ public class ClientPlayerWindowActionPacket extends Packet {
     private ItemStack item;
 
     @Override
-    public void write(PacketBuffer packetBuffer, int protocol) throws Exception {
-        packetBuffer.writeByte(this.windowId);
-        packetBuffer.writeShort(this.slot);
-        packetBuffer.writeByte(this.button);
-        packetBuffer.writeShort(this.action);
+    public void write(PacketBuffer out, int protocol) throws Exception {
+        out.writeByte(this.windowId);
+        out.writeShort(this.slot);
+        out.writeByte(this.button);
+        out.writeShort(this.action);
         if (protocol >= 110) {
-            packetBuffer.writeVarInt(this.mode.getId());
+            out.writeVarInt(this.mode.getId());
         } else {
-            packetBuffer.writeByte(this.mode.getId());
+            out.writeByte(this.mode.getId());
         }
-        packetBuffer.writeItemStackToBuffer(this.item);
+        out.writeItemStack(this.item);
     }
 
     @Override
-    public void read(PacketBuffer packetBuffer, int protocol) throws Exception {
-        this.windowId = packetBuffer.readByte();
-        this.slot = packetBuffer.readShort();
-        this.button = packetBuffer.readByte();
-        this.action = packetBuffer.readShort();
+    public void read(PacketBuffer in, int protocol) throws Exception {
+        this.windowId = in.readByte();
+        this.slot = in.readShort();
+        this.button = in.readByte();
+        this.action = in.readShort();
         if (protocol >= 110) {
-            this.mode = WindowAction.getById(packetBuffer.readVarInt());
+            this.mode = WindowAction.getById(in.readVarInt());
         } else {
-            this.mode = WindowAction.getById(packetBuffer.readByte());
+            this.mode = WindowAction.getById(in.readByte());
         }
-        this.item = packetBuffer.readItemStackFromBuffer();
+        this.item = in.readItemStack();
     }
 
     @Override

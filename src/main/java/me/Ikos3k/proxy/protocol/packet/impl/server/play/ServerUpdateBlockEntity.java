@@ -24,14 +24,14 @@ public class ServerUpdateBlockEntity extends Packet {
     public void write(PacketBuffer out, int protocol) throws Exception {
         out.writePosition(position);
         out.writeByte(action);
-        out.writeNBTTagCompoundToBuffer(nbt);
+        out.writeNBTTagCompound(nbt);
     }
 
     @Override
     public void read(PacketBuffer in, int protocol) throws Exception {
         this.position = in.readPosition();
         this.action = in.readByte();
-        this.nbt = in.readNBTTagCompoundFromBuffer();
+        this.nbt = in.readNBTTagCompound();
     }
 
     @Override

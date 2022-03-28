@@ -22,6 +22,16 @@ public class CommandInvTest extends Command {
     public void onCommand(Player sender, String[] args) throws Exception {
         Inventory inventory = new Inventory(ChatUtil.fixColor("&4E&2XDD&5AAA_TEST_INV")) {
             @Override
+            public void init() {
+                this.setItems(Arrays.asList(
+                    new ItemStack(2).setLoreName(Collections.singletonList(ChatUtil.fixColor("&4click to close gui!"))),
+                    new ItemStack(1).setName(ChatUtil.fixColor("&4HI")),
+                    null,
+                    new ItemStack(2)
+                ));
+            }
+
+            @Override
             public void onAction(WindowAction action, ItemStack item, int slot, int button) {
                 if(slot == 0) {
                     System.out.println("[DEBUG] CLOSE MANUAL!!!!!");
@@ -63,12 +73,7 @@ public class CommandInvTest extends Command {
             }
         };
 
-        inventory.setItems(Arrays.asList(
-            new ItemStack(2).setLoreName(Collections.singletonList(ChatUtil.fixColor("&4click to close gui!"))),
-            new ItemStack(1).setStackDisplayName(ChatUtil.fixColor("&4HI")),
-            null,
-            new ItemStack(2)
-        ));
+//        inventory.setItems();
 
         InventoryUtil.openInventory(inventory, sender);
     }
