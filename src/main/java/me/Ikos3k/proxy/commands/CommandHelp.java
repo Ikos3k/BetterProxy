@@ -30,7 +30,7 @@ public class CommandHelp extends Command {
         }
 
         int k = i - 1;
-        int l = Math.min((k + 1) * 10, list.size());
+        int l = Math.min(i * 10, list.size());
         int j = (list.size() - 1) / 10;
         int f = j + 1;
 

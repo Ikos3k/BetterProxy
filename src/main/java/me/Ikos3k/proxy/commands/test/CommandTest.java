@@ -3,9 +3,9 @@ package me.Ikos3k.proxy.commands.test;
 import me.Ikos3k.proxy.enums.ConnectedType;
 import me.Ikos3k.proxy.objects.Command;
 import me.Ikos3k.proxy.protocol.objects.Player;
-import me.Ikos3k.proxy.utils.PacketUtil;
+import me.Ikos3k.proxy.protocol.packet.Packet;
 
-import static me.Ikos3k.proxy.utils.PacketUtil.PacketBuilder.DataType.*;
+import static me.Ikos3k.proxy.protocol.packet.Packet.Builder.DataType.*;
 
 public class CommandTest extends Command {
     public CommandTest() {
@@ -18,22 +18,22 @@ public class CommandTest extends Command {
 
         switch (Integer.parseInt(args[1])) {
             case 0:
-                sender.getSession().sendPacket(new PacketUtil.PacketBuilder()
+                sender.getSession().sendPacket(new Packet.Builder()
                     .add(BYTES, new byte[] { 5, 115, 105, 101, 109, 97, 0 })
                 .build(2));
                 break;
             case 1:
-                sender.getSession().sendPacket(new PacketUtil.PacketBuilder()
+                sender.getSession().sendPacket(new Packet.Builder()
                     .add(VARINT, 0)
                     .add(STRING, "test")
                 .build(0x45));
 
-                sender.getSession().sendPacket(new PacketUtil.PacketBuilder()
+                sender.getSession().sendPacket(new Packet.Builder()
                     .add(VARINT, 1)
-                    .add(STRING, "rany")
+                    .add(STRING, "lol")
                 .build(0x45));
 
-                sender.getSession().sendPacket(new PacketUtil.PacketBuilder()
+                sender.getSession().sendPacket(new Packet.Builder()
                     .add(VARINT, 2)
                     .add(INT, 20)
                     .add(INT, 5)

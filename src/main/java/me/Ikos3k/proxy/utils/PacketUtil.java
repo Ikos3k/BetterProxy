@@ -1,22 +1,21 @@
 package me.Ikos3k.proxy.utils;
 
 import io.netty.buffer.Unpooled;
-import lombok.Data;
 import me.Ikos3k.proxy.protocol.ProtocolType;
 import me.Ikos3k.proxy.protocol.data.*;
 import me.Ikos3k.proxy.protocol.data.playerlist.PlayerListEntry;
 import me.Ikos3k.proxy.protocol.data.playerlist.PlayerListEntryAction;
 import me.Ikos3k.proxy.protocol.objects.Player;
 import me.Ikos3k.proxy.protocol.objects.Session;
+import me.Ikos3k.proxy.protocol.packet.Packet;
 import me.Ikos3k.proxy.protocol.packet.PacketBuffer;
 import me.Ikos3k.proxy.protocol.packet.impl.CustomPacket;
 import me.Ikos3k.proxy.protocol.packet.impl.server.play.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
+
+import static me.Ikos3k.proxy.protocol.packet.Packet.Builder.DataType.*;
 
 public class PacketUtil {
     private static final UUID bossBarUUID = UUID.randomUUID();
@@ -28,8 +27,8 @@ public class PacketUtil {
         return new PacketBuffer(Unpooled.buffer());
     }
 
-    public static CustomPacket createCustomPacket(int id, PacketBuilder.CustomData... data) {
-        return new PacketBuilder().init(data).build(id);
+    public static CustomPacket createCustomPacket(int id, Packet.Builder.CustomData... data) {
+        return new Packet.Builder().init(data).build(id);
     }
 
     public static void fly(Session session, boolean fly) {
@@ -132,71 +131,18 @@ public class PacketUtil {
         return spawnEntityID;
     }
 
-    @Data
-    public static class PacketBuilder {
-        private final List<CustomData> data = new ArrayList<>();
-
-        public PacketBuilder add(DataType type, Object value) {
-            data.add(new CustomData(type, value));
-
-            return this;
-        }
-
-        public PacketBuilder init(CustomData... data) {
-            this.data.addAll(Arrays.asList(data));
-
-            return this;
-        }
-
-        public CustomPacket build(int id) {
-            PacketBuffer buffer = createEmptyPacketBuffer();
-
-            for (CustomData customData : data) {
-                switch (customData.getType()) {
-                    case VARINT:
-                        buffer.writeVarInt((Integer) customData.getValue());
-                        break;
-                    case INT:
-                        buffer.writeInt((Integer) customData.getValue());
-                        break;
-                    case LONG:
-                        buffer.writeLong((Long) customData.getValue());
-                        break;
-                    case DOUBLE:
-                        buffer.writeDouble((Double) customData.getValue());
-                        break;
-                    case FLOAT:
-                        buffer.writeFloat((Float) customData.getValue());
-                        break;
-                    case BYTE:
-                        buffer.writeByte((Byte) customData.getValue());
-                        break;
-                    case SHORT:
-                        buffer.writeShort((Short) customData.getValue());
-                        break;
-                    case BOOLEAN:
-                        buffer.writeBoolean((Boolean) customData.getValue());
-                        break;
-                    case STRING:
-                        buffer.writeString((String) customData.getValue());
-                        break;
-                    case BYTES:
-                        buffer.writeBytes((byte[]) customData.getValue());
-                        break;
-                }
-            }
-
-            return new CustomPacket(id, buffer.readByteArray());
-        }
-
-        @Data
-        public static class CustomData {
-            private final DataType type;
-            private final Object value;
-        }
-
-        public enum DataType {
-            VARINT, INT, LONG, DOUBLE, FLOAT, BYTE, SHORT, BOOLEAN, STRING, BYTES
-        }
+    public static void spawnParticle(Session session, int particleID, boolean longDistance, Position pos, float offsetX, float offsetY, float offsetZ, float particleData, int particleCount) {
+        session.sendPacket(new Packet.Builder()
+            .add(INT, particleID)
+            .add(BOOLEAN, longDistance)
+            .add(FLOAT, (float) pos.getX())
+            .add(FLOAT, (float) pos.getY())
+            .add(FLOAT, (float) pos.getZ())
+            .add(FLOAT, offsetX)
+            .add(FLOAT, offsetY)
+            .add(FLOAT, offsetZ)
+            .add(FLOAT, particleData)
+            .add(INT, particleCount)
+        .build(0x2A));
     }
 }

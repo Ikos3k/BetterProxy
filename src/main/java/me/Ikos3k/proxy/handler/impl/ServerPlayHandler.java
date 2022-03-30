@@ -4,8 +4,6 @@ import lombok.SneakyThrows;
 import me.Ikos3k.proxy.BetterProxy;
 import me.Ikos3k.proxy.handler.ServerHandler;
 import me.Ikos3k.proxy.objects.Command;
-import me.Ikos3k.proxy.objects.Macro;
-import me.Ikos3k.proxy.objects.Skin;
 import me.Ikos3k.proxy.protocol.ProtocolType;
 import me.Ikos3k.proxy.protocol.data.ItemStack;
 import me.Ikos3k.proxy.protocol.data.Position;
@@ -32,8 +30,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static me.Ikos3k.proxy.utils.PacketUtil.PacketBuilder.DataType.*;
 
 public class ServerPlayHandler extends ServerHandler {
     public ServerPlayHandler(Player player) {
@@ -85,23 +81,11 @@ public class ServerPlayHandler extends ServerHandler {
                                 public void onAction(WindowAction action, ItemStack itemStack, int slot, int button) {
                                     if(itemStack != null) {
                                         InventoryUtil.closeInventory(player);
-                                        Skin skin;
                                         if(itemStack.getName().equalsIgnoreCase("DEFAULT")) {
-                                            skin = SkinUtil.getSkin(player.getUsername());
+                                            player.updateSkin(SkinUtil.getSkin(player.getUsername()));
                                         } else {
-                                            skin = SkinUtil.getSkin(ChatColor.stripColor(itemStack.getName()));
+                                            player.updateSkin(SkinUtil.getSkin(ChatColor.stripColor(itemStack.getName())));
                                         }
-
-                                        player.updateSkin(skin);
-                                    }
-                                }
-
-                                @Override
-                                public int getSlots() {
-                                    if (this.items.size() % 9 == 0) {
-                                        return this.items.size();
-                                    } else {
-                                        return (this.items.size() / 9 + 1) * 9;
                                     }
                                 }
                             }, player);
@@ -158,10 +142,8 @@ public class ServerPlayHandler extends ServerHandler {
                 }
             }
         } else if (packet instanceof ClientPlayerPositionPacket) {
-            if (!player.isConnected()) {
-                if (((ClientPlayerPositionPacket) packet).getY() < 65) {
-                    PacketUtil.lobbyPosTeleport(player);
-                }
+            if (!player.isConnected() && ((ClientPlayerPositionPacket) packet).getY() < 65) {
+                PacketUtil.lobbyPosTeleport(player);
             } else if (player.isConnected() && !player.isFreecam()) {
                 player.setPos(new Position(((ClientPlayerPositionPacket) packet).getX(), ((ClientPlayerPositionPacket) packet).getY(), ((ClientPlayerPositionPacket) packet).getZ()));
             }
@@ -177,15 +159,15 @@ public class ServerPlayHandler extends ServerHandler {
         }
 
         if (player.isConnected() && !player.isFreecam()) {
-            if (player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol() &&
+            if (player.isHidePlayers() && player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol() &&
                 packet instanceof CustomPacket && ((CustomPacket) packet).getCustomPacketID() == 0x02) {
                 PacketBuffer empty = PacketUtil.createEmptyPacketBuffer();
-                empty.writeBytes(((CustomPacket) packet).getCustomData());
+                empty.writeArray(((CustomPacket) packet).getCustomData());
 
                 int targetID = empty.readVarInt(); //target entity id
                 int type = empty.readVarInt(); //action type
 
-                if(type == 0) {
+                if (type == 0) {
                     ChatUtil.sendChatMessage("hide " + targetID, player, false);
                     player.getSession().sendPacket(new ServerDestroyEntitiesPacket(targetID));
                 }
@@ -197,32 +179,9 @@ public class ServerPlayHandler extends ServerHandler {
 
             if(player.isRecordingMacro()) {
                 if(player.getMacros().size() > 0) {
-                    player.getMacros().get(player.getMacros().size() - 1).getPackets().add(packet);
-                }
-            }
-
-            if(player.getTraceMacro() > 0 && player.getMacros().size() > 0) {
-                int[] particles = new int[] { 21, 27, 31, 34, 4, 0, 18, 24 };
-                Macro macro = player.getMacros().get(player.getTraceMacro() - 1);
-                for (Packet packet1 : macro.getPackets()) {
-                    if(packet1 instanceof ClientPlayerPositionPacket && player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol()) {
-                        ClientPlayerPositionPacket posPacket = (ClientPlayerPositionPacket) packet1;
-
-                        boolean longDistance = true;
-
-                        player.getSession().sendPacket(new PacketUtil.PacketBuilder()
-                            .add(INT, particles[player.getTraceMacro() - 1])
-                            .add(BOOLEAN, longDistance)
-                            .add(FLOAT, (float) posPacket.getX())
-                            .add(FLOAT, (float) posPacket.getY())
-                            .add(FLOAT, (float) posPacket.getZ())
-                            .add(FLOAT, 0F)
-                            .add(FLOAT, 0F)
-                            .add(FLOAT, 0F)
-                            .add(FLOAT, 0F)
-                            .add(INT, 10)
-                        .build(0x2A));
-                    }
+                    player.getMacros()
+                        .get(player.getMacros().size() - 1)
+                        .getPackets().add(packet);
                 }
             }
 

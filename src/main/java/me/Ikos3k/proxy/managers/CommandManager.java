@@ -7,6 +7,10 @@ import me.Ikos3k.proxy.objects.Manager;
 import me.Ikos3k.proxy.protocol.objects.Player;
 import me.Ikos3k.proxy.utils.ChatUtil;
 import me.Ikos3k.proxy.utils.ReflectionUtil;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -46,7 +50,11 @@ public class CommandManager extends Manager<Command> {
             return;
         }
         if (command.getConnected() == ConnectedType.DISCONNECTED && sender.isConnected()) {
-            ChatUtil.sendChatMessage("&4You cannot be connected to the server!", sender, true);
+            ChatUtil.sendChatMessage(new BaseComponent[] {
+                    new TextComponent(ChatUtil.fixColor("&4You cannot be connected to the server!"))
+
+                .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(sender.getThemeType().getColor(1) + " click to disconnect from server: " + sender.getServerData().getHost()))))
+                .setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, sender.getPrefixCMD() + "q")) }, sender, true);
             return;
         }
 

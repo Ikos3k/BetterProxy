@@ -259,7 +259,6 @@ public class PacketBuffer extends ByteBuf {
         return bytes;
     }
 
-
     public String readString(int maxLength) {
         final int i = this.readVarInt();
 

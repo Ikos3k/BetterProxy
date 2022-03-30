@@ -44,7 +44,7 @@ public class BetterProxy {
     public void run() {
         System.out.println("[ ------------------------------------- ]");
         System.out.println("|         Starting BetterProxy          |");
-        System.out.println("|       Proxy by ANONIMUS(Ikos3k)       |");
+        System.out.println("|            Proxy by Ikos3k            |");
         System.out.println("| https://github.com/Ikos3k/BetterProxy |");
         System.out.println("[ ------------------------------------- ]");
         System.out.println();

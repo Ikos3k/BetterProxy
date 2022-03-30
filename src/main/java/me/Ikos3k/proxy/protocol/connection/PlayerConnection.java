@@ -125,12 +125,11 @@ public class PlayerConnection {
                                             for (String m : ((ServerTabCompletePacket) packet).getMatches()) {
                                                 player.getPlayers().add(m);
                                             }
-                                            String out = player.getPlayers().toString();
-                                            if (out.equals("[]")) {
+                                            if (player.getPlayers().isEmpty()) {
                                                 ChatUtil.sendChatMessage("&cNo players found!", player, true);
                                                 return;
                                             }
-                                            ChatUtil.sendChatMessage("&f" + out.replace("[", "").replace("]", "") + " &8[&f" + player.getPlayers().size() + "&8]", player, true);
+                                            ChatUtil.sendChatMessage("&f" + player.getPlayers().toString().replace("[", "").replace("]", "") + " &8[&f" + player.getPlayers().size() + "&8]", player, true);
                                         }
 
                                         if (player.isPluginsState()) {
@@ -145,12 +144,11 @@ public class PlayerConnection {
                                                     }
                                                 }
                                             }
-                                            String out = matches.toString();
-                                            if (out.equals("[]")) {
+                                            if (matches.isEmpty()) {
                                                 ChatUtil.sendChatMessage("&cNo plugins found!", player, true);
                                                 return;
                                             }
-                                            ChatUtil.sendChatMessage("&f" + out.replace("[", "").replace("]", ""), player, true);
+                                            ChatUtil.sendChatMessage("&f" + matches.toString().replace("[", "").replace("]", ""), player, true);
                                         }
                                     }
 

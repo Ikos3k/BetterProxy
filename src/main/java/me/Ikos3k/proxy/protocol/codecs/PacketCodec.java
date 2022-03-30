@@ -29,10 +29,10 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
     private final Config config;
 
     public PacketCodec(ConnectionState connectionState, PacketDirection packetDirection) {
-        this.config = BetterProxy.getInstance().getConfigManager().getConfig();
-
         this.connectionState = connectionState;
         this.packetDirection = packetDirection;
+
+        this.config = BetterProxy.getInstance().getConfigManager().getConfig();
     }
 
     @Override
@@ -79,8 +79,8 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
 
         try {
             packet.read(packetBuffer, protocol);
-        } catch (final Exception ex) {
-            ex.printStackTrace();
+        } catch (final Exception e) {
+            e.printStackTrace();
         }
 
         if (config.debugger && config.debugType == DebugType.LEGIBLE && !(packet instanceof CustomPacket)) {

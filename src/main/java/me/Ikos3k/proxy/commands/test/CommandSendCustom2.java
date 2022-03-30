@@ -3,11 +3,11 @@ package me.Ikos3k.proxy.commands.test;
 import me.Ikos3k.proxy.enums.ConnectedType;
 import me.Ikos3k.proxy.objects.Command;
 import me.Ikos3k.proxy.protocol.objects.Player;
+import me.Ikos3k.proxy.protocol.packet.Packet.Builder.DataType;
 import me.Ikos3k.proxy.protocol.packet.PacketBuffer;
 import me.Ikos3k.proxy.protocol.packet.PacketDirection;
 import me.Ikos3k.proxy.protocol.packet.impl.CustomPacket;
 import me.Ikos3k.proxy.utils.PacketUtil;
-import me.Ikos3k.proxy.utils.PacketUtil.PacketBuilder.DataType;
 
 import java.util.Arrays;
 

@@ -33,10 +33,8 @@ public class ServerStatusHandler extends ServerHandler {
     @Override
     public void handlePacket(Packet packet) {
         if (packet instanceof ClientStatusRequestPacket) {
-            System.out.println("> Ping packet received from: " + player.getSession().getChannel().localAddress());
-
+//            System.out.println("> Ping packet received from: " + player.getSession().getChannel().localAddress());
             Config config = BetterProxy.getInstance().getConfigManager().getConfig();
-
             String protocols = Arrays.stream(ProtocolType.values()).filter(protocolType -> protocolType != ProtocolType.PROTOCOL_UNKNOWN).map(ProtocolType::getPrefix).collect(Collectors.joining(ChatUtil.fixColor("&8, &e")));
             VersionInfo versionInfo = new VersionInfo(ChatUtil.fixColor(config.versionInfo + " &7(&8" + config.proxyVersion + "&7)"), config.protocol);
             int i = 0;

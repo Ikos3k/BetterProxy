@@ -44,14 +44,14 @@ public class Player {
     private Inventory currentInventory;
     private List<Macro> macros = new ArrayList<>();
     private boolean recordingMacro;
-    private int traceMacro = -1;
+    private List<Integer> traceMacro = new ArrayList<>();
     private boolean hidePlayers;
     private Session remoteSession;
+    private boolean pluginsState;
+    private boolean playersState;
     private String prefixCMD = "#";
     private ServerData serverData;
-    private boolean pluginsState;
     private Position pos;
-    private boolean playersState;
     private boolean freecam;
     private int motherDelay = 25;
     private int entityId = 0;

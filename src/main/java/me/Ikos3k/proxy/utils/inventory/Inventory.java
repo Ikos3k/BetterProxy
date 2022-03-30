@@ -31,7 +31,11 @@ public abstract class Inventory {
     }
 
     public int getSlots() {
-        return items.size();
+        if (this.items.size() % 9 == 0) {
+            return this.items.size();
+        } else {
+            return (this.items.size() / 9 + 1) * 9;
+        }
     }
 
     public void setItem(ItemStack item, int slot) {

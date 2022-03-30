@@ -45,7 +45,7 @@ public class CommandInvTest extends Command {
 
             @Override
             public void onClickAnotherGui(WindowAction action, ItemStack itemStack, int slot, int button) {
-                System.out.println("[DEBUG] INNE GUI");
+                System.out.println("[DEBUG] ANOTHER GUI");
             }
 
             @Override
@@ -54,26 +54,10 @@ public class CommandInvTest extends Command {
             }
 
             @Override
-            public void onOpen() {
-
-            }
-
-            @Override
             public void onClose() {
                 System.out.println("[DEBUG] CLOSE AUTOMATIC!");
             }
-
-            @Override
-            public int getSlots() {
-                if (this.items.size() % 9 == 0) {
-                    return this.items.size();
-                } else {
-                    return (this.items.size() / 9 + 1) * 9;
-                }
-            }
         };
-
-//        inventory.setItems();
 
         InventoryUtil.openInventory(inventory, sender);
     }

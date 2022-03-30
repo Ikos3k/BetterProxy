@@ -1,11 +1,15 @@
 {
   "options" : {
     "titlelag" : true,
-    "prefixCMD" : "#",
+    "prefixCMD" : ",",
     "server tablist" : false,
     "lastpacket" : true,
-    "theme" : "DEFAULT",
+    "theme" : "TEST",
     "language" : "ENGLISH",
     "scoreboard" : true
+  },
+  "skin" : {
+    "signature" : "bSPEq4U72/DQs8WFFJ0hhDgM7KCrjeE3WqJLUHX9+ZdE0aDonZ16FmYUJ0ahyVNPZ8dmqMSznmcKA5cS9Bo2rqfUo8JyY01vrYpa3Ro9H8xVFjYppRSOLuplp08c7t1XMfqw2WGNUcLPuYbtCF2SdBpGW3Ibf1e2r87nTnD0LO7y57HC+iKtXZGZdl4rOabOd3dXR1bnlOAI/XNLKWX7mkQWTkIK+lxPz3kBqmIhBP/ZgGbptKmlRGjkoqlK780esjTUMX8PwcQw6AGedHcMPe3N/e/exuRDCwoLQaQbkY5U0WKtjzawqon64beb6I9Piss+vziPO4LHOnMXKHjy1nb8qX3tuj9kzg1JmJPHTJeaXifPk/wnPfd8tafaQdOLwYqTRlL+UroQGHJrEHGV8GwC4nyyl7r5gth24Q9hYmM9PZJW1TYDbPRrRhwP5w4b4oQpNnVB7hUEiaNC8Y1hjX1/kKCbGO/mvGfZHTiZP3iiE4/BrxFQ/Mgb1BR39hCzTeK9nFKeKbVF3LFEpLHIxe746P6vyUvtAjtCU7Cem/99+qDkB0OumCrvyak7I9xV3k68lxGQwOdZOeVHDhBtznzumDiz/z3NYfpyDD6dmbMR+j+SCM5ywegmmxcRIU3bR8al0qXv++3NdYkCoYRlyQgT81V6sLqbGlzRrex8LTI=",
+    "value" : "ewogICJ0aW1lc3RhbXAiIDogMTY0ODY2MjM3OTIyNSwKICAicHJvZmlsZUlkIiA6ICIyNTFjNWYxZWQ2ZDA0OGE4YmE4NzZmNzgwMGNhYzViMSIsCiAgInByb2ZpbGVOYW1lIiA6ICJJa29zM2siLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzVkNWM2MWViZDU1ZDE3MDcxOTQ5ZjNjNmQ1YjhmODljYzYzOGZhYmMwZDI4OTQ3MjQ2NmFhNTY5MjNiYTNkZCIKICAgIH0sCiAgICAiQ0FQRSIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjM0MGMwZTAzZGQyNGExMWIxNWE4YjMzYzJhN2U5ZTMyYWJiMjA1MWIyNDgxZDBiYTdkZWZkNjM1Y2E3YTkzMyIKICAgIH0KICB9Cn0="
   }
 }
