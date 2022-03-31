@@ -27,7 +27,7 @@ public class CommandPlayers extends Command {
     public void onCommand(Player sender, String[] args) throws Exception {
         if (args[1].equalsIgnoreCase("tablist")) {
             sender.getPlayers().clear();
-            sender.setPlayersState(false);
+            sender.setOptionState("playersState", false);
             sender.setPlayers(sender.getTabList().stream().map(p -> ChatColor.stripColor(p.getProfile().getName())).filter(n -> !n.isEmpty() && Pattern.compile("^[a-zA-Z0-9_]{3,16}$").matcher(n).matches()).collect(Collectors.toList()));
             if(sender.getPlayers().isEmpty()) {
                 ChatUtil.sendChatMessage("&cNo players found!", sender, true);
@@ -37,12 +37,12 @@ public class CommandPlayers extends Command {
             ChatUtil.sendChatMessage("&f" + out + " &7[&f" + sender.getPlayers().size() + "&7]", sender, true);
         } else if (args[1].equalsIgnoreCase("tabcomplete")) {
             sender.getPlayers().clear();
-            sender.setPlayersState(true);
+            sender.setOptionState("playersState", true);
             ChatUtil.sendChatMessage("&7Try to get players! &7(&4TabComplete&7)", sender, true);
             sender.getRemoteSession().sendPacket(new ClientTabCompletePacket("/tpa "));
         } else if (args[1].equalsIgnoreCase("tabcomplete2")) {
             sender.getPlayers().clear();
-            sender.setPlayersState(true);
+            sender.setOptionState("playersState", true);
             ChatUtil.sendChatMessage("&7Try to get players! &7(&4TabComplete&7)", sender, true);
             sender.getRemoteSession().sendPacket(new ClientTabCompletePacket("/msg "));
         } else if (args[1].equalsIgnoreCase("api")) {
@@ -68,7 +68,7 @@ public class CommandPlayers extends Command {
                 return;
             }
             ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + "The list with players was cleared successfully &8(" + sender.getThemeType().getColor(2) + sender.getPlayers().size() + "&8)", sender, true);
-            sender.setPlayersState(true);
+            sender.setOptionState("playersState", true);
             sender.getPlayers().clear();
         }
     }

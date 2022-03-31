@@ -7,6 +7,7 @@ import me.Ikos3k.proxy.objects.Exploit;
 import me.Ikos3k.proxy.protocol.objects.Player;
 import me.Ikos3k.proxy.utils.ChatUtil;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CommandCrash extends Command {
@@ -21,16 +22,19 @@ public class CommandCrash extends Command {
             return;
         }
 
-        Exploit exploit = BetterProxy.getInstance().getExploitManager().findExploit(args[1]);
-        if (exploit == null) {
-            ChatUtil.sendChatMessage("&4Unknown method!", sender, true);
-            return;
-        }
-
         if (sender.getBots().isEmpty() && !sender.isConnected()) {
             ChatUtil.sendChatMessage("&4You must be connected to the server!", sender, true);
             return;
         }
+
+        Optional<Exploit> optionalExploit = BetterProxy.getInstance().getExploitManager().findExploit(args[1]);
+
+        if (!optionalExploit.isPresent()) {
+            ChatUtil.sendChatMessage("&4Unknown method!", sender, true);
+            return;
+        }
+
+        Exploit exploit = optionalExploit.get();
 
         try {
             int arguments = exploit.getArguments().split(" ").length;

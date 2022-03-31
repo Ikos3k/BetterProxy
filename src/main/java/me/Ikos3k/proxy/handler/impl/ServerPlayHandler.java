@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import me.Ikos3k.proxy.BetterProxy;
 import me.Ikos3k.proxy.handler.ServerHandler;
 import me.Ikos3k.proxy.objects.Command;
+import me.Ikos3k.proxy.objects.Macro;
 import me.Ikos3k.proxy.protocol.ProtocolType;
 import me.Ikos3k.proxy.protocol.data.ItemStack;
 import me.Ikos3k.proxy.protocol.data.Position;
@@ -159,13 +160,12 @@ public class ServerPlayHandler extends ServerHandler {
         }
 
         if (player.isConnected() && !player.isFreecam()) {
-            if (player.isHidePlayers() && player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol() &&
+            if (player.isOptionEnabled("hidePlayers") && player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol() &&
                 packet instanceof CustomPacket && ((CustomPacket) packet).getCustomPacketID() == 0x02) {
-                PacketBuffer empty = PacketUtil.createEmptyPacketBuffer();
-                empty.writeArray(((CustomPacket) packet).getCustomData());
+                PacketBuffer buffer = ((CustomPacket) packet).getPacketBuffer();
 
-                int targetID = empty.readVarInt(); //target entity id
-                int type = empty.readVarInt(); //action type
+                int targetID = buffer.readVarInt(); //target entity id
+                int type = buffer.readVarInt(); //action type
 
                 if (type == 0) {
                     ChatUtil.sendChatMessage("hide " + targetID, player, false);
@@ -177,11 +177,11 @@ public class ServerPlayHandler extends ServerHandler {
                 player.getBots().forEach(bot -> bot.getSession().fastSendPacket(packet));
             }
 
-            if(player.isRecordingMacro()) {
+            if(player.isOptionEnabled("recordingMacro")) {
                 if(player.getMacros().size() > 0) {
-                    player.getMacros()
-                        .get(player.getMacros().size() - 1)
-                        .getPackets().add(packet);
+                    Macro macro = player.getMacros().get(player.getMacros().size() - 1);
+                    PacketUtil.sendTitle(player, player.getThemeType().getColor(1) + "[MACRO id: " + player.getThemeType().getColor(2) +  macro.getId() + player.getThemeType().getColor(1) + "]", "&7packets: " + player.getThemeType().getColor(2) + player.getMacros().get(player.getMacros().size() - 1).getPackets().size(), 0, 10, 0);
+                    macro.getPackets().add(packet);
                 }
             }
 

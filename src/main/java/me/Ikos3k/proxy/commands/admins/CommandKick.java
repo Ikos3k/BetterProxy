@@ -7,6 +7,8 @@ import me.Ikos3k.proxy.protocol.objects.Player;
 import me.Ikos3k.proxy.protocol.packet.impl.server.play.ServerDisconnectPacket;
 import me.Ikos3k.proxy.utils.ChatUtil;
 
+import java.util.Optional;
+
 public class CommandKick extends Command {
     public CommandKick() {
         super("kick", null, null, "[player] [reason]", ConnectedType.NONE);
@@ -19,11 +21,13 @@ public class CommandKick extends Command {
             reason = (i != 2 ? reason + " " : "") + args[i];
         }
 
-        Player player = BetterProxy.getInstance().getPlayerManager().getPlayer(args[1]);
-        if (player == null) {
+        Optional<Player> optionalPlayer = BetterProxy.getInstance().getPlayerManager().getPlayer(args[1]);
+        if (!optionalPlayer.isPresent()) {
             ChatUtil.sendChatMessage("&cThe specified player is offline!", sender, true);
             return;
         }
+
+        Player player = optionalPlayer.get();
 
         if (sender.getUsername().equals(args[1])) {
             ChatUtil.sendChatMessage("&cYou can't kick yourself out!", sender, true);

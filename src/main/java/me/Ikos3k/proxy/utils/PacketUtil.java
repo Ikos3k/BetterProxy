@@ -60,13 +60,13 @@ public class PacketUtil {
         switch (gamemode) {
             case SURVIVAL:
             case ADVENTURE:
-                player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, false, false, false, 0, 0));
+                player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(true, false, false, false, 0, 0));
                 break;
             case CREATIVE:
-                player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(true, true, true, true, 0.1f, 0.1f));
+                player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, true, true, true, 0.1f, 0.1f));
                 break;
             case SPECTATOR:
-                player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(true, false, false, false, 0.1f, 0.1f));
+                player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, false, true, false, 0.1f, 0.1f));
                 break;
         }
         player.getSession().sendPacket(new ServerChangeGameStatePacket(new Effect(3, gamemode.getId())));
@@ -132,7 +132,7 @@ public class PacketUtil {
     }
 
     public static void spawnParticle(Session session, int particleID, boolean longDistance, Position pos, float offsetX, float offsetY, float offsetZ, float particleData, int particleCount) {
-        session.sendPacket(new Packet.Builder()
+        Packet.Builder particlePacket = new Packet.Builder()
             .add(INT, particleID)
             .add(BOOLEAN, longDistance)
             .add(FLOAT, (float) pos.getX())
@@ -142,7 +142,12 @@ public class PacketUtil {
             .add(FLOAT, offsetY)
             .add(FLOAT, offsetZ)
             .add(FLOAT, particleData)
-            .add(INT, particleCount)
-        .build(0x2A));
+            .add(INT, particleCount);
+
+        if (session.getProtocolID() == ProtocolType.PROTOCOL_1_8_X.getProtocol()){
+            session.sendPacket(particlePacket.build(0x2A));
+        } else if(session.getProtocolID() == ProtocolType.PROTOCOL_1_12_2.getProtocol()) {
+            session.sendPacket(particlePacket.build(0x22));
+        }
     }
 }

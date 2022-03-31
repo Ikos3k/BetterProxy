@@ -15,6 +15,7 @@ import me.Ikos3k.proxy.protocol.packet.Packet;
 import me.Ikos3k.proxy.protocol.packet.PacketBuffer;
 import me.Ikos3k.proxy.protocol.packet.PacketDirection;
 import me.Ikos3k.proxy.protocol.packet.impl.CustomPacket;
+import me.Ikos3k.proxy.utils.ColorUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -71,7 +72,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
             bufDUPLICATE.readBytes(data);
 
             if(data.length < 200) {
-                System.err.println("[" + channelHandlerContext.channel().remoteAddress() + "] [size: " + data.length + "] Packet data " + packet.getClass().getSimpleName() + "(" + packetID + "): " + Arrays.toString(data));
+                System.out.println(ColorUtil.ANSI_YELLOW + "[" + channelHandlerContext.channel().remoteAddress() + "] [size: " + data.length + "] Packet data " + packet.getClass().getSimpleName() + "(" + packetID + "): " + ColorUtil.ANSI_RESET + Arrays.toString(data));
             }
 
             bufDUPLICATE.clear();
@@ -84,7 +85,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
         }
 
         if (config.debugger && config.debugType == DebugType.LEGIBLE && !(packet instanceof CustomPacket)) {
-            System.err.println("[" + channelHandlerContext.channel().remoteAddress() + "] Packet data " + packet);
+            System.out.println(ColorUtil.ANSI_YELLOW + "[" + ColorUtil.ANSI_BRIGHT_YELLOW + channelHandlerContext.channel().remoteAddress() + ColorUtil.ANSI_YELLOW + "] Packet data " + packet);
         }
 
         if (packetBuffer.isReadable()) {

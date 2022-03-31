@@ -111,7 +111,7 @@ public class PlayerConnection {
                                         ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Engine: " + player.getThemeType().getColor(1) + ((ServerCustomPayloadPacket) packet).getData().readString().split(" ")[0], player, false);
                                     }
                                 } else if (player.isConnected() && player.getRemoteSession().getConnectionState() == ConnectionState.PLAY) {
-                                    if (player.isListenChunks() && packet instanceof CustomPacket) {
+                                    if (player.isOptionEnabled("listenChunks") && packet instanceof CustomPacket) {
                                         if ((((player).getSession().getProtocolID() == 47 && ((CustomPacket) packet).getCustomPacketID() == 0x26) ||
                                                 ((player).getSession().getProtocolID() != 47 && ((CustomPacket) packet).getCustomPacketID() == 0x20))) {
                                             player.getListenedChunks().add(packet);
@@ -120,8 +120,8 @@ public class PlayerConnection {
                                     }
 
                                     if (packet instanceof ServerTabCompletePacket) {
-                                        if (player.isPlayersState()) {
-                                            player.setPlayersState(false);
+                                        if (player.isOptionEnabled("playersState")) {
+                                            player.setOptionState("playersState", false);
                                             for (String m : ((ServerTabCompletePacket) packet).getMatches()) {
                                                 player.getPlayers().add(m);
                                             }
@@ -132,8 +132,8 @@ public class PlayerConnection {
                                             ChatUtil.sendChatMessage("&f" + player.getPlayers().toString().replace("[", "").replace("]", "") + " &8[&f" + player.getPlayers().size() + "&8]", player, true);
                                         }
 
-                                        if (player.isPluginsState()) {
-                                            player.setPluginsState(false);
+                                        if (player.isOptionEnabled("pluginsState")) {
+                                            player.setOptionState("pluginsState", false);
                                             List<String> matches = new ArrayList<>();
                                             for (String m : ((ServerTabCompletePacket) packet).getMatches()) {
                                                 if (m.contains(":")) {
@@ -171,6 +171,8 @@ public class PlayerConnection {
                                         return;
                                     }
 
+                                    PacketUtil.sendActionBar(player.getThemeType().getColor(2) + "last received packet: " + player.getThemeType().getColor(1) + packet.getClass().getSimpleName() + (packet instanceof CustomPacket ? " &8(" + player.getThemeType().getColor(2) + ((CustomPacket) packet).getCustomPacketID() + "&8) " : " ") + player.getThemeType().getColor(1) + player.getLastPacket().getLastMs() + "ms", player);
+
                                     player.getSession().sendPacket(packet);
                                 }
                             }
@@ -190,8 +192,8 @@ public class PlayerConnection {
 
         if(player.getSession() != null) {
             player.getSession().sendPacket(new ServerChatPacket(new TextComponent(ChatUtil.fixColor(player.getThemeType().getColor(1) + ">> &8Connection to the server was lost: " + player.getThemeType().getColor(1) + player.getServerData().getHost() + (cause != null ? " &8cause: " + player.getThemeType().getColor(1) + ChatColor.stripColor(cause) : "")))
-                    .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(player.getThemeType().getColor(1) + "click to reconnect &8[" + player.getThemeType().getColor(2) + player.getServerData().getHost() + (!player.getServerData().getHost().contains(player.getServerData().getIp()) ? "(" + player.getServerData().getIp() + ")&8]" : "")))))
-                    .setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, player.getPrefixCMD() + "join " + player.getServerData().getHost() + " " + username + " false false"))));
+                .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(player.getThemeType().getColor(1) + "click to reconnect &8[" + player.getThemeType().getColor(2) + player.getServerData().getHost() + (!player.getServerData().getHost().contains(player.getServerData().getIp()) ? "(" + player.getServerData().getIp() + ")&8]" : "")))))
+                .setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, player.getPrefixCMD() + "join " + player.getServerData().getHost() + " " + username + " false false"))));
         }
 
         player.getRemoteSession().getChannel().close();

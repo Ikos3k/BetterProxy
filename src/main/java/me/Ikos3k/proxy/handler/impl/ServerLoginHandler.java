@@ -6,6 +6,7 @@ import me.Ikos3k.proxy.handler.ServerHandler;
 import me.Ikos3k.proxy.objects.Account;
 import me.Ikos3k.proxy.protocol.ProtocolType;
 import me.Ikos3k.proxy.protocol.data.ConnectionState;
+import me.Ikos3k.proxy.protocol.data.Effect;
 import me.Ikos3k.proxy.protocol.data.ItemStack;
 import me.Ikos3k.proxy.protocol.objects.Player;
 import me.Ikos3k.proxy.protocol.packet.Packet;
@@ -13,6 +14,7 @@ import me.Ikos3k.proxy.protocol.packet.impl.client.login.ClientLoginStartPacket;
 import me.Ikos3k.proxy.protocol.packet.impl.server.login.ServerLoginDisconnectPacket;
 import me.Ikos3k.proxy.protocol.packet.impl.server.login.ServerLoginSetCompressionPacket;
 import me.Ikos3k.proxy.protocol.packet.impl.server.login.ServerLoginSuccessPacket;
+import me.Ikos3k.proxy.protocol.packet.impl.server.play.ServerChangeGameStatePacket;
 import me.Ikos3k.proxy.protocol.packet.impl.server.play.ServerHeldItemChangePacket;
 import me.Ikos3k.proxy.protocol.packet.impl.server.play.ServerSetSlotPacket;
 import me.Ikos3k.proxy.utils.*;
@@ -89,10 +91,15 @@ public class ServerLoginHandler extends ServerHandler {
                             .map(ProtocolType::getPrefix).collect(Collectors.joining(ChatUtil.fixColor("&8, " + player.getThemeType().getColor(2)))), player, false);
                     ChatUtil.sendChatMessage(player.getThemeType().getColor(1) + ">> &8Log in using the command: " + player.getThemeType().getColor(1) + player.getPrefixCMD() + "login [password]", player, false);
 
+                    if(player.getSession().getProtocolID() == ProtocolType.PROTOCOL_1_12_2.getProtocol()) {
+                        player.getSession().sendPacket(new ServerChangeGameStatePacket(new Effect(5, 101)));
+                    }
+
                     PacketUtil.sendBoosBar(player, ChatUtil.fixColor("&fWelcome to " + player.getThemeType().getColor(1) + "BetterProxy &fby &4Ikos3k"));
                     return;
                 }
             }
+
             player.getSession().sendPacket(new ServerLoginDisconnectPacket(ChatUtil.fixColor("&4You don't have access...")));
         }
     }

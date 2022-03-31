@@ -23,9 +23,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 public class Player {
@@ -40,15 +38,11 @@ public class Player {
     private List<String> players = new ArrayList<>();
     private ThemeType themeType = ThemeType.DEFAULT;
     private TimeType timeType = TimeType.DEFAULT;
-    private boolean listenChunks = false;
     private Inventory currentInventory;
     private List<Macro> macros = new ArrayList<>();
-    private boolean recordingMacro;
     private List<Integer> traceMacro = new ArrayList<>();
-    private boolean hidePlayers;
+    private Map<String, Boolean> options = new HashMap<>();
     private Session remoteSession;
-    private boolean pluginsState;
-    private boolean playersState;
     private String prefixCMD = "#";
     private ServerData serverData;
     private Position pos;
@@ -135,6 +129,17 @@ public class Player {
         }
     }
 
+    public void updateSkin(Skin skin) {
+        if (skin == null) {
+            ChatUtil.sendChatMessage("&7The player does not have a premium account", this, true);
+            return;
+        }
+
+        this.skin = skin;
+        ChatUtil.sendChatMessage("&7You have successfully set skin to " + themeType.getColor(1) + skin.getGameProfile().getName(), this, true);
+        ChatUtil.sendChatMessage("&cYou need to reconnect to the proxy!", this, true);
+    }
+
     public void disconnect() {
         if (this.session != null) {
             if (this.session.getPacketHandler() != null) {
@@ -159,14 +164,11 @@ public class Player {
         return remoteSession != null && connectedType == ConnectedType.CONNECTED;
     }
 
-    public void updateSkin(Skin skin) {
-        if (skin == null) {
-            ChatUtil.sendChatMessage("&7The player does not have a premium account", this, true);
-            return;
-        }
+    public boolean isOptionEnabled(String option) {
+        return options.getOrDefault(option, false);
+    }
 
-        this.skin = skin;
-        ChatUtil.sendChatMessage("&7You have successfully set skin to " + themeType.getColor(1) + skin.getGameProfile().getName(), this, true);
-        ChatUtil.sendChatMessage("&cYou need to reconnect to the proxy!", this, true);
+    public void setOptionState(String option, boolean state) {
+        options.put(option, state);
     }
 }

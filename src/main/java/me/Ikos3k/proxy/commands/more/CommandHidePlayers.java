@@ -12,7 +12,7 @@ public class CommandHidePlayers extends Command {
 
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {
-        sender.setHidePlayers(!sender.isHidePlayers());
-        ChatUtil.sendChatMessage("&7Hide players was successfully set to " + sender.getThemeType().getColor(1) + sender.isHidePlayers() + "&7!", sender, true);
+        sender.setOptionState("hidePlayers", !sender.isOptionEnabled("hidePlayers"));
+        ChatUtil.sendChatMessage("&7Hide players was successfully set to " + sender.getThemeType().getColor(1) + sender.isOptionEnabled("hidePlayers") + "&7!", sender, true);
     }
 }

@@ -7,7 +7,7 @@ import me.Ikos3k.proxy.protocol.Protocol;
 import me.Ikos3k.proxy.protocol.packet.Packet;
 import me.Ikos3k.proxy.protocol.packet.PacketBuffer;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -28,6 +28,6 @@ public class ServerHeldItemChangePacket extends Packet {
 
     @Override
     public List<Protocol> getProtocolList() {
-        return Collections.singletonList(new Protocol(0x09, 47));
+        return Arrays.asList(new Protocol(0x09, 47), new Protocol(0x3A, 340));
     }
 }

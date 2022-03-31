@@ -2,9 +2,9 @@
   "motd" : {
     "protocol" : 0,
     "playerList" :
-    [ "&f---------------------------------------------------",
+    [ "&f-------------------------------------------------------",
       "                     &8Supported versions:", " &e%supported_versions%",
-      "&f---------------------------------------------------"
+      "&f-------------------------------------------------------"
     ],
     "icon" : "icon.png",
     "versionInfo" : "&4BetterProxy",
@@ -13,9 +13,9 @@
   },
   "debug" : {
     "debugType" : "LEGIBLE",
-    "debugger" : false,
-    "showCustomPackets" : true
+    "debugger" : true,
+    "showCustomPackets" : false
   },
   "port" : 1337,
-  "proxyVersion" : "3.1"
+  "proxyVersion" : "3.2"
 }

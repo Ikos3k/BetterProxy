@@ -29,6 +29,7 @@ public class CommandManager extends Manager<Command> {
             ChatUtil.sendChatMessage(sender.getThemeType().getColor(1) + "You must login! &c" + sender.getPrefixCMD() + "login <password>", sender, true);
             return;
         }
+
         if (!optionalCommand.isPresent()) {
             optionalCommand = elements.stream().filter(cmd -> cmd.getAlias() != null && (sender.getPrefixCMD() + cmd.getAlias()).equalsIgnoreCase(args[0])).findFirst();
             if (!optionalCommand.isPresent()) {
@@ -51,10 +52,9 @@ public class CommandManager extends Manager<Command> {
         }
         if (command.getConnected() == ConnectedType.DISCONNECTED && sender.isConnected()) {
             ChatUtil.sendChatMessage(new BaseComponent[] {
-                    new TextComponent(ChatUtil.fixColor("&4You cannot be connected to the server!"))
-
-                .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(sender.getThemeType().getColor(1) + " click to disconnect from server: " + sender.getServerData().getHost()))))
-                .setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, sender.getPrefixCMD() + "q")) }, sender, true);
+                new TextComponent(ChatUtil.fixColor("&4You cannot be connected to the server!"))
+                    .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent(ChatUtil.fixColor(sender.getThemeType().getColor(1) + " click to disconnect from server: " + sender.getServerData().getHost()))))
+                    .setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, sender.getPrefixCMD() + "q")) }, sender, true);
             return;
         }
 

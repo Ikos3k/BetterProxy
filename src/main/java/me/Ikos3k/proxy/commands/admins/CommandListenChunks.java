@@ -19,10 +19,10 @@ public class CommandListenChunks extends Command {
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {
         if (args[1].equals("listen")) {
-            sender.setListenChunks(!sender.isListenChunks());
-            ChatUtil.sendChatMessage("listening chunks: " + sender.getThemeType().getColor(1) + sender.isListenChunks(), sender, false);
+            sender.setOptionState("listenChunks", !sender.isOptionEnabled("listenChunks"));
+            ChatUtil.sendChatMessage("listening chunks: " + sender.getThemeType().getColor(1) + sender.isOptionEnabled("listenChunks"), sender, false);
         } else if (args[1].equals("save")) {
-            sender.setListenChunks(false);
+            sender.setOptionState("listenChunks", false);
 
             if (sender.getListenedChunks().isEmpty()) {
                 ChatUtil.sendChatMessage("&cThe list is empty", sender, false);

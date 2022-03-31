@@ -6,6 +6,8 @@ import me.Ikos3k.proxy.objects.Manager;
 import me.Ikos3k.proxy.protocol.objects.Player;
 import me.Ikos3k.proxy.protocol.objects.Session;
 
+import java.util.Optional;
+
 @Getter
 public class PlayerManager extends Manager<Player> {
     public void createPlayer(Session session) {
@@ -16,21 +18,12 @@ public class PlayerManager extends Manager<Player> {
         elements.remove(player);
     }
 
-    public Player getPlayer(String name) {
-        for (Player p : elements) {
-            if (p.getUsername().equals(name)) {
-                return p;
-            }
-        }
-        return null;
+    public Optional<Player> getPlayer(String name) {
+       return elements.stream().filter(p -> p.getUsername().equals(name)).findFirst();
     }
 
-    public Player getPlayer(Channel channel) {
-        for (Player p : elements) {
-            if (p.getSession().getChannel() == channel) {
-                return p;
-            }
-        }
-        return null;
+    public Optional<Player> getPlayer(Channel channel) {
+        return elements.stream()
+                .filter(p -> p.getSession().getChannel() == channel).findFirst();
     }
 }

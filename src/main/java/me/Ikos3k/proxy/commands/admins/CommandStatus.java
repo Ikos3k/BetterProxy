@@ -13,7 +13,7 @@ import java.lang.management.ManagementFactory;
 
 public class CommandStatus extends Command {
     public CommandStatus() {
-        super("status", null, null, "", ConnectedType.NONE);
+        super("status", "info", null, "", ConnectedType.NONE);
     }
 
     @Override

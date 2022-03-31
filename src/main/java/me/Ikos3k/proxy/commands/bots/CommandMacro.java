@@ -18,8 +18,8 @@ public class CommandMacro extends Command {
     @Override
     public void onCommand(Player sender, String[] args) throws Exception {
         if(args[1].equalsIgnoreCase("record") || args[1].equalsIgnoreCase("rec")) {
-            sender.setRecordingMacro(!sender.isRecordingMacro());
-            if(sender.isRecordingMacro()) {
+            sender.setOptionState("recordingMacro", !sender.isOptionEnabled("recordingMacro"));
+            if(sender.isOptionEnabled("recordingMacro")) {
                 sender.getMacros().add(new Macro(sender.getMacros().size() + 1));
                 ChatUtil.sendChatMessage("start recording", sender, false);
             } else {
@@ -29,8 +29,9 @@ public class CommandMacro extends Command {
             ChatUtil.sendChatMessage("playing macro " + args[2], sender, false);
             int macroID = Integer.parseInt(args[2]);
 
-            if (macroID <= 0) {
-                ChatUtil.sendChatMessage("unknown macro id!", sender, false);
+            if(macroID <= 0 || macroID > sender.getMacros().size()) {
+                ChatUtil.sendChatMessage("&cunknown macro id!", sender, false);
+                return;
             }
 
             Macro macro = sender.getMacros().get(macroID - 1);
@@ -43,6 +44,11 @@ public class CommandMacro extends Command {
             }).start();
         } else if (args[1].equalsIgnoreCase("show")) {
             int macroID = Integer.parseInt(args[2]);
+
+            if(macroID <= 0 || macroID > sender.getMacros().size()) {
+                ChatUtil.sendChatMessage("&cunknown macro id!", sender, false);
+                return;
+            }
 
             sender.getMacros().get(macroID - 1).getPackets().stream()
                     .filter(packet -> packet instanceof ClientPlayerPositionPacket)
@@ -83,8 +89,8 @@ public class CommandMacro extends Command {
                 }
             }
         } else if (args[1].equalsIgnoreCase("clear")) {
-            sender.getMacros().clear();
             sender.getTraceMacro().clear();
+            sender.getMacros().clear();
         }
     }
 }

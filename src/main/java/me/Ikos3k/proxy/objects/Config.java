@@ -13,12 +13,12 @@ public class Config {
     @JsonInfo(object = "motd")
     public String versionInfo = "&4BetterProxy";
     public String line1 = "     &f✖ &l&m\\-\\-\\-\\-&r&f&l>> &6BetterProxy &f&l<<&m-/-/-/-/&r&f ✖&r";
-    public String line2 = "        &c----&e/ &6✯ &eProxy by ANONIMUS &6✯ &e\\&c----";
+    public String line2 = "           &c----&e/ &6✯ &eProxy by Ikos3k &6✯ &e\\&c----";
     public List<String> playerList = Arrays.asList(
-            "&f---------------------------------------------------",
+            "&f-------------------------------------------------------",
             "                     &8Supported versions:",
             " &e%supported_versions%",
-            "&f---------------------------------------------------");
+            "&f-------------------------------------------------------");
 
     public String icon = "icon.png";
     public int protocol = 0;
@@ -29,5 +29,5 @@ public class Config {
     public boolean debugger = true;
 
     @JsonInfo()
-    public String proxyVersion = "3.0";
+    public String proxyVersion = "3.2";
 }

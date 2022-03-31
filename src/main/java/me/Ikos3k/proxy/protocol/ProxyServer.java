@@ -22,6 +22,7 @@ import me.Ikos3k.proxy.protocol.packet.PacketDirection;
 import me.Ikos3k.proxy.protocol.packet.impl.client.HandshakePacket;
 import me.Ikos3k.proxy.protocol.packet.impl.server.play.ServerKeepAlivePacket;
 
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -51,13 +52,17 @@ public class ProxyServer {
 
                             @Override
                             public void channelInactive(ChannelHandlerContext ctx) {
-                                playerManager.getPlayer(ctx.channel()).disconnect();
+                                playerManager.getPlayer(ctx.channel()).ifPresent(Player::disconnect);
                             }
 
                             @Override
                             protected void channelRead0(ChannelHandlerContext ctx, Packet packet) {
-                                Player player = playerManager.getPlayer(ctx.channel());
-                                Session session = player.getSession();
+                                Optional<Player> player = playerManager.getPlayer(ctx.channel());
+                                if(!player.isPresent()) {
+                                    return;
+                                }
+
+                                Session session = player.get().getSession();
                                 if (packet instanceof HandshakePacket) {
                                     final HandshakePacket handshake = (HandshakePacket) packet;
                                     session.setProtocolID(handshake.getProtocolId());
@@ -65,11 +70,11 @@ public class ProxyServer {
                                     switch (handshake.getNextState()) {
                                         case 1:
                                             session.setConnectionState(ConnectionState.STATUS);
-                                            session.setPacketHandler(new ServerStatusHandler(player));
+                                            session.setPacketHandler(new ServerStatusHandler(player.get()));
                                             break;
                                         case 2:
                                             session.setConnectionState(ConnectionState.LOGIN);
-                                            session.setPacketHandler(new ServerLoginHandler(player));
+                                            session.setPacketHandler(new ServerLoginHandler(player.get()));
                                             break;
                                         default:
                                             session.getChannel().close();
@@ -89,6 +94,6 @@ public class ProxyServer {
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> playerManager.elements.stream()
             .filter(p -> p.getSession().getConnectionState() == ConnectionState.PLAY)
             .forEach(p -> p.getSession().sendPacket(new ServerKeepAlivePacket(System.currentTimeMillis()))),
-3, 3, TimeUnit.SECONDS);
+        3, 3, TimeUnit.SECONDS);
     }
 }

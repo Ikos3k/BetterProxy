@@ -56,8 +56,7 @@ public class WorldUtil {
                     player.getSession().sendPacket(new CustomPacket(player.getSession().getProtocolID() == 47 ? 0x26 : 0x20, data));
                     i++;
                 }
-            } catch (IOException ignored) {
-            }
+            } catch (IOException ignored) {}
         }
 
         player.getSession().sendPacket(new ServerPlayerAbilitiesPacket(false, false, false, false, 0f, 0f));
